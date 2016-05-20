@@ -1,0 +1,23 @@
+MAP8
+0	abcdef
+1	bc
+3	abgcd
+7	abc
+8	abcdefg
+a	abcefg
+b	abcdefgh
+c	defa
+d	abcdefh
+e	adefg
+f	aefg
+h	bcefg
+i	ef
+l	def
+m	abcefh
+n	abcef
+o	abcdef
+r	abcefgh
+t	aefh
+u	bcdef
+v	bcdefh
+-	g
