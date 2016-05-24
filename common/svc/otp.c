@@ -50,11 +50,6 @@ void svc_otp_get_label(uint8_t index, char *out) {
 	out[2] = 0;
 }
 
-static void otp_item_decrypt(otp_item_t *dest, otp_item_t *src) {
-	hal_aes_decrypt((void*)dest, (void*)src);
-	hal_aes_decrypt(((void*)dest)+16, ((void*)src)+16);
-}
-
 int32_t svc_otp_get_token(uint8_t index) {
 	timeout = g_timeout;
 	otp_item_t *it = &(otp_store[index]);
