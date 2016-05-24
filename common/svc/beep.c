@@ -29,9 +29,9 @@ void svc_aux_timer_beep_handler(void) {
 	}
 }
 
-static uint16_t SECTION_INFOMEM beep_key_freq = 2000;
+static uint16_t SECTION_INFOMEM beep_key_freq = 550;
 static uint8_t  SECTION_INFOMEM beep_key_enable = 1;
-static uint16_t beep_key_duration = 5;
+static uint16_t SECTION_INFOMEM beep_key_duration = 5;
 
 void svc_beep_key(void) {
 	svc_melody_stop();
@@ -40,7 +40,10 @@ void svc_beep_key(void) {
 	}
 }
 
-uint8_t SECTION_INFOMEM beep_hour_enable = 1;
+static uint16_t SECTION_INFOMEM beep_hour_freq = 2000;
+static uint8_t  SECTION_INFOMEM beep_hour_enable = 1;
+static uint16_t SECTION_INFOMEM beep_hour_duration = 10;
+
 
 void svc_beep_hour(void) {
 	static uint8_t hour_last = 255;
@@ -49,7 +52,7 @@ void svc_beep_hour(void) {
 	hal_rtc_get(&td);
 	
 	if((td.h != hour_last) && beep_hour_enable) {
-		svc_beep_timed(beep_key_freq, 96);
+		svc_beep_timed(beep_hour_freq, beep_hour_duration);
 		hour_last = td.h;
 	}
 }
@@ -84,4 +87,20 @@ void svc_beep_hour_set_enable(uint8_t e) {
 
 uint8_t svc_beep_hour_get_enable(void) {
 	return beep_hour_enable;
+}
+
+uint16_t svc_beep_hour_get_freq(void) {
+	return beep_hour_freq;
+}
+
+uint16_t svc_beep_hour_get_duration(void) {
+	return beep_hour_duration;
+}
+
+void svc_beep_hour_set_freq(uint16_t f) {
+	beep_hour_freq = f;
+}
+
+void svc_beep_hour_set_duration(uint16_t d) {
+	beep_hour_duration = d;
 }

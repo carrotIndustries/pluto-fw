@@ -100,6 +100,58 @@ static const svc_menu_item_adj_t menu_item_keybeep_duration = {
 	.handler_set = keybeep_duration_set,
 };
 
+static int32_t hourbeep_freq_get(void *ud) {
+	return svc_beep_hour_get_freq();
+}
+
+static void hourbeep_freq_set(uint8_t dig, int8_t dir, void *user_data) {
+	int16_t inc = dir*ipow(10, dig);
+	int16_t va = svc_beep_hour_get_freq();
+	va = CLAMP(va+inc, 400, 9999);
+	svc_beep_hour_set_freq(va);
+}
+
+static const svc_menu_item_adj_t menu_item_hourbeep_freq = {
+	.type = SVC_MENU_ITEM_T_ADJ,
+	.header = "hf",
+	.text = " hrf",
+	.digits = 4,
+	.handler_get = hourbeep_freq_get,
+	.handler_set = hourbeep_freq_set,
+};
+
+static int32_t hourbeep_duration_get(void *ud) {
+	return svc_beep_hour_get_duration();
+}
+
+static void hourbeep_duration_set(uint8_t dig, int8_t dir, void *user_data) {
+	int16_t inc = dir*ipow(10, dig);
+	int16_t va = svc_beep_hour_get_duration();
+	va = CLAMP(va+inc, 1, 100);
+	svc_beep_hour_set_duration(va);
+}
+
+
+static const svc_menu_item_adj_t menu_item_hourbeep_duration = {
+	.type = SVC_MENU_ITEM_T_ADJ,
+	.header = "hd",
+	.text = " hrd",
+	.digits = 2,
+	.handler_get = hourbeep_duration_get,
+	.handler_set = hourbeep_duration_set,
+};
+
+static void hourbeep_test(void *ud) {
+	svc_beep_timed(svc_beep_hour_get_freq(), svc_beep_hour_get_duration());
+}
+
+static const svc_menu_item_text_t menu_item_hourbeep_test = {
+	.type = SVC_MENU_ITEM_T_TEXT,
+	.text = " hrt",
+	.handler = hourbeep_test
+};
+
+
 static int32_t backlight_timeout_get(void *ud) {
 	return svc_backlight_timeout_get();
 }
@@ -153,6 +205,9 @@ static const svc_menu_item_text_t *menu_items[] = {
 	(void*)&menu_item_keybeep_freq,
 	(void*)&menu_item_keybeep_duration,
 	(void*)&menu_item_hourbeep,
+	(void*)&menu_item_hourbeep_freq,
+	(void*)&menu_item_hourbeep_duration,
+	(void*)&menu_item_hourbeep_test,
 	(void*)&menu_item_backlight_timeout,
 	(void*)&menu_item_backlight_brightness,
 	(void*)&menu_item_up,

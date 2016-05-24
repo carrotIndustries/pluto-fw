@@ -15,3 +15,7 @@ void svc_beep_hour(void);
 
 void svc_beep_hour_set_enable(uint8_t e);
 uint8_t svc_beep_hour_get_enable(void);
+uint16_t svc_beep_hour_get_freq(void);
+uint16_t svc_beep_hour_get_duration(void);
+void svc_beep_hour_set_freq(uint16_t f);
+void svc_beep_hour_set_duration(uint16_t d);
