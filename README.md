@@ -143,8 +143,9 @@ You're welcome to improve the security of the secret storage.
 Since the MSP430FR6972 uses FRAM for nonvolatile storage, writing 
 nonvolatile data is as easy as writing to RAM. All nonvolatile 
 variables are linked into a dedicated section, that can be left 
-unmodified when updating the firmware. Currently, alarms, countdown 
-timers, OTP secrets and some settings are stored in nonvolatile memory.
+unmodified when updating the firmware. That's what the "program-noload"
+target is for. Currently, alarms, countdown timers, OTP secrets and 
+some settings are stored in nonvolatile memory.
 
 #How do I build?
 ##Dependencies for both target and simulator
