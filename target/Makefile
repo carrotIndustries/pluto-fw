@@ -49,7 +49,7 @@ $(OUTDIR)/$(TARGET).bin : $(OUTDIR)/$(TARGET).elf
 	$(OBJCOPY) -O binary $< $@
 
 $(OUTDIR)/$(TARGET)_noload.elf : $(OUTDIR)/$(TARGET).elf
-	$(CP) --set-section-flags .infoMEM=noload $< $@
+	$(OBJCOPY) --set-section-flags .infoMEM=noload $< $@
 
 $(OUTDIR)/$(TARGET).elf: $(sort $(OBJECTS))
 	$(CC) $(OBJECTS) $(LDFLAGS) $(LIBS) -o $@
