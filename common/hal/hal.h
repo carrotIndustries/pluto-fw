@@ -12,6 +12,12 @@ void hal_lcd_dig_set_blink_mask(uint16_t mask);
 void hal_lcd_clear(void);
 void hal_lcd_update(void);
 
+typedef enum {
+	HAL_LCD_MODE_IMMEDIATE,
+	HAL_LCD_MODE_BUFFERED
+} hal_lcd_mode_t;
+void hal_lcd_set_mode(hal_lcd_mode_t mode);
+
 void hal_backlight_set(uint8_t bright);
 void hal_beep(uint16_t freq);
 

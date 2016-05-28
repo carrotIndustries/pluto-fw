@@ -269,7 +269,8 @@ static void menu_enter(uint8_t view, const app_t *app) {
 
 static app_view_t views[] = {
 	{
-		.main = app_app_time_display_main
+		.main = app_app_time_display_main,
+		.enter = app_app_time_display_enter,
 	},
 	{
 		.enter = menu_enter,

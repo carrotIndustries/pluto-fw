@@ -23,6 +23,7 @@ void svc_main_proc(svc_main_proc_event_t event) {
 	}
 	if(!(event & SVC_MAIN_PROC_EVENT_AUX_TIMER) || svc_aux_timer_get_call_main()) {
 		app_current_update();
+		hal_lcd_set_mode(HAL_LCD_MODE_BUFFERED);
 		if(app_view_changed) {
 			if(app_current->views[app_current->priv->view_current].enter) {
 				app_current->views[app_current->priv->view_current].enter(app_current->priv->view_current, app_current);

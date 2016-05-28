@@ -15,8 +15,11 @@ typedef struct {
 	svc_lang_t *lang;
 	svc_menu_state_t conf_state;
 	uint8_t display_date;
+	uint8_t needs_clear;
+	hal_rtc_timedate_t td_last;
 } priv_t;
 
 #define PRIV(a) ((priv_t*)((a)->priv))
 
 void app_app_time_display_main(uint8_t view, const app_t *app, svc_main_proc_event_t event);
+void app_app_time_display_enter(uint8_t view, const app_t *app);

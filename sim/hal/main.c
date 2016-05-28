@@ -280,3 +280,7 @@ void hal_aes_decrypt(uint8_t *dest, uint8_t *src) {
 void hal_sha1(const uint8_t *input, uint16_t len, uint8_t *output) {
 	mbedtls_sha1(input, len, output);
 }
+
+void hal_lcd_set_mode(hal_lcd_mode_t m) {
+	
+}

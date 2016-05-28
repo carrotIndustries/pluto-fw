@@ -7,10 +7,15 @@
 
 static uint8_t buf[29];
 static uint8_t bbuf[29];
+static hal_lcd_mode_t mode = HAL_LCD_MODE_BUFFERED;
 
 __attribute__((always_inline)) static inline void lcd_enable_seg(uint8_t seg) {
 	uint16_t *p = (void*)&LCDCPCTL0;
 	p[seg/16] |= (1<<(seg%16));
+}
+
+void hal_lcd_set_mode(hal_lcd_mode_t m) {
+	mode = m;
 }
 
 void lcd_init(void)
@@ -72,11 +77,21 @@ void hal_lcd_seg_set(uint8_t seg, bool state) {
 	uint8_t m = tgt_lcd_map[seg];
 	uint8_t bit = m&7;
 	uint8_t mem = m>>3;
-	if(state) {
-		buf[mem] |= SHIFTONE(bit);
+	if(mode == HAL_LCD_MODE_BUFFERED) {
+		if(state) {
+			buf[mem] |= SHIFTONE(bit);
+		}
+		else {
+			buf[mem] &= ~SHIFTONE(bit);
+		}
 	}
-	else {
-		buf[mem] &= ~SHIFTONE(bit);
+	else if(mode == HAL_LCD_MODE_IMMEDIATE) {
+		if(state) {
+			LCDMEM[mem] |= SHIFTONE(bit);
+		}
+		else {
+			LCDMEM[mem] &= ~SHIFTONE(bit);
+		}
 	}
 }
 
@@ -84,11 +99,21 @@ void hal_lcd_seg_set_blink(uint8_t seg, bool state) {
 	uint8_t m = tgt_lcd_map[seg];
 	uint8_t bit = m&7;
 	uint8_t mem = m>>3;
-	if(state) {
-		bbuf[mem] |= SHIFTONE(bit);
+	if(mode == HAL_LCD_MODE_BUFFERED) {
+		if(state) {
+			bbuf[mem] |= SHIFTONE(bit);
+		}
+		else {
+			bbuf[mem] &= ~SHIFTONE(bit);
+		}
 	}
-	else {
-		bbuf[mem] &= ~SHIFTONE(bit);
+	else if(mode == HAL_LCD_MODE_IMMEDIATE) {
+		if(state) {
+			LCDBMEM[mem] |= SHIFTONE(bit);
+		}
+		else {
+			LCDBMEM[mem] &= ~SHIFTONE(bit);
+		}
 	}
 }
 
@@ -113,13 +138,22 @@ void hal_lcd_dig_set_blink_mask(uint16_t mask) {
 }
 
 void hal_lcd_clear(void) {
-	memset(buf, 0, sizeof(buf));
-	memset(bbuf, 0, sizeof(bbuf));
+	if(mode == HAL_LCD_MODE_BUFFERED) {
+		memset(buf, 0, sizeof(buf));
+		memset(bbuf, 0, sizeof(bbuf));
+	}
+	else if(mode == HAL_LCD_MODE_IMMEDIATE) {
+		LCDCMEMCTL |= LCDCLRBM | LCDCLRM;
+		while(LCDCMEMCTL & (LCDCLRBM | LCDCLRM))
+			;
+	}
 }
 
 void hal_lcd_update(void) {
-	for(uint8_t i = 0; i < 29;i++) {
-		LCDMEM[i] = buf[i];
-		LCDBMEM[i] = bbuf[i];
+	if(mode == HAL_LCD_MODE_BUFFERED) {
+		for(uint8_t i = 0; i < 29;i++) {
+			LCDMEM[i] = buf[i];
+			LCDBMEM[i] = bbuf[i];
+		}
 	}
 }
