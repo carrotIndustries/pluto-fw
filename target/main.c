@@ -28,6 +28,9 @@ void clk_init(void) {
 
 	CSCTL0_H = 0; /* lock access */
 }
+
+static volatile uint8_t fake_event = 0;
+
 int main(void)
 {
 	PM5CTL0 &= ~LOCKLPM5;
@@ -73,6 +76,10 @@ int main(void)
 		}
 		if(aux_timer_event) {
 			ev |= SVC_MAIN_PROC_EVENT_AUX_TIMER;
+		}
+		if(fake_event) {
+			ev |= fake_event;
+			fake_event = 0;
 		}
 		if(ev) {
 			P9OUT |= BIT5;
