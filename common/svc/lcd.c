@@ -1,6 +1,7 @@
 #include "svc.h"
 #include "maps.h"
 #include "common/hal/hal.h"
+#include "itoa_tab.h"
 #include <ctype.h>
 
 static const svc_lcd_map_t *digit_maps[] = {
@@ -81,6 +82,21 @@ void svc_lcd_puti(uint8_t dig, uint8_t len, uint32_t value) {
 		svc_lcd_putc(dig, '0'+(value%10));
 		value /= 10;
 		dig--;
+	}
+}
+
+void svc_lcd_puti_fast(uint8_t dig, uint8_t len, uint8_t value) {
+	if(value<60) {
+		switch(len) {
+			case 1:
+				svc_lcd_putc(dig, svc_itoa_tab[value][1]);
+			break;
+			
+			case 2:
+				svc_lcd_putc(dig+1, svc_itoa_tab[value][1]);
+				svc_lcd_putc(dig+0, svc_itoa_tab[value][0]);
+			break;
+		}
 	}
 }
 

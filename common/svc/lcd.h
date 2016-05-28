@@ -15,5 +15,6 @@ typedef struct {
 void svc_lcd_putc(uint8_t dig, char c);
 void svc_lcd_puts(uint8_t dig, const char *s);
 void svc_lcd_puti(uint8_t dig, uint8_t len, uint32_t value);
+void svc_lcd_puti_fast(uint8_t dig, uint8_t len, uint8_t value);
 void svc_lcd_puti_signed(uint8_t dig, uint8_t len, int32_t value);
 void svc_lcd_putix(uint8_t dig, uint8_t len, uint16_t value);

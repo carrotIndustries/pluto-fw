@@ -25,10 +25,10 @@ void app_app_time_display_main(uint8_t view, const app_t *app, svc_main_proc_eve
 			case BASE_DEC :
 				hal_lcd_seg_set(HAL_LCD_SEG_COLON, 1); 
 				hal_lcd_seg_set_blink(HAL_LCD_SEG_COLON, 1); 
-				svc_lcd_puti(0, 2, td.h);
-				svc_lcd_puti(2, 2, td.m);
-				svc_lcd_puti(4, 2, td.s);
-				svc_lcd_puti(6, 2, td.dom);
+				svc_lcd_puti_fast(0, 2, td.h);
+				svc_lcd_puti_fast(2, 2, td.m);
+				svc_lcd_puti_fast(4, 2, td.s);
+				svc_lcd_puti_fast(6, 2, td.dom);
 			break;
 			
 			case BASE_HEX :
@@ -66,7 +66,7 @@ void app_app_time_display_main(uint8_t view, const app_t *app, svc_main_proc_eve
 				hal_lcd_seg_set(HAL_LCD_SEG(4, 5), td.s>((60/8)*7));
 				hal_lcd_seg_set(HAL_LCD_SEG(4, 0), td.s>((60/8)*8));
 				
-				svc_lcd_puti(6, 2, td.dom);
+				svc_lcd_puti_fast(6, 2, td.dom);
 			break;
 			
 		}

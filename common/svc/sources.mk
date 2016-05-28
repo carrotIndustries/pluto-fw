@@ -24,6 +24,8 @@ MAPS_HEADER = ../common/svc/maps.h
 SRC += $(MAPS_C)
 
 GEN_MAP = ../common/svc/gen_map.py
+GEN_ITOA_TAB = ../common/svc/gen_itoa_tab.py
+ITOA_TAB_C = ../common/svc/itoa_tab.c
 GEN_MAP_H = ../common/svc/gen_map_header.py
 
 $(MAPS_C): %.c: %.map $(GEN_MAP)
@@ -31,6 +33,11 @@ $(MAPS_C): %.c: %.map $(GEN_MAP)
 
 $(MAPS_HEADER) : $(MAPS) $(GEN_MAP_H)
 	$(GEN_MAP_H) $(filter %.map,$^) > $@
+
+$(ITOA_TAB_C): $(GEN_ITOA_TAB)
+	$(GEN_ITOA_TAB) > $@
+
+SRC += $(ITOA_TAB_C)
 
 MELODIES_C =  ../common/svc/melodies.c
 MELODIES_RTTTL = ../common/svc/melodies.rtttl
