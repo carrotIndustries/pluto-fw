@@ -284,3 +284,7 @@ void hal_sha1(const uint8_t *input, uint16_t len, uint8_t *output) {
 void hal_lcd_set_mode(hal_lcd_mode_t m) {
 	
 }
+
+void hal_lcd_set_blink(uint8_t st) {
+	
+}

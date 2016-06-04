@@ -101,9 +101,11 @@ void svc_menu_run(const svc_menu_t *menu, svc_menu_state_t *state, svc_main_proc
 				}
 			}
 			if(event & SVC_MAIN_PROC_EVENT_KEY_UP) {
+				svc_lcd_blink_disable();
 				it->handler_set(it->digits-state->adj_digit-1, 1, it->user_data);
 			}
 			else {
+				svc_lcd_blink_disable();
 				it->handler_set(it->digits-state->adj_digit-1, -1, it->user_data);
 			}
 			

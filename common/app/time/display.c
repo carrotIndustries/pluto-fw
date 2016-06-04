@@ -11,6 +11,9 @@ void app_app_time_display_main(uint8_t view, const app_t *app, svc_main_proc_eve
 	hal_rtc_timedate_t td;
 	hal_rtc_get(&td);
 	hal_rtc_timedate_t *td_last = &(PRIV(app)->td_last);
+	if(svc_lcd_get_force_redraw()) {
+		PRIV(app)->needs_clear = 1;
+	}
 	if(PRIV(app)->needs_clear) {
 		PRIV(app)->needs_clear = 1;
 		memset(td_last, 0xff, sizeof(hal_rtc_timedate_t)); //force update of all digits

@@ -58,6 +58,15 @@ void lcd_init(void)
 	LCDCCTL0 |= LCDON;
 }
 
+void hal_lcd_set_blink(uint8_t st) {
+	if(st) {
+		LCDCBLKCTL |= LCDBLKMOD_1;
+	}
+	else {
+		LCDCBLKCTL &= ~LCDBLKMOD_3;
+	}
+}
+
 static const uint8_t stab[] = {
 	1<<0,
 	1<<1,

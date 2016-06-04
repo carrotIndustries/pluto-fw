@@ -104,6 +104,7 @@ void svc_alarm_draw_popup(void) {
 			hal_lcd_seg_set(HAL_LCD_SEG_COLON, 0);
 			svc_lcd_puts(0, "alrm");
 			svc_lcd_puti(4, 2, alarm_pending);
+			svc_lcd_force_redraw();
 		}
 		
 	}

@@ -18,3 +18,7 @@ void svc_lcd_puti(uint8_t dig, uint8_t len, uint32_t value);
 void svc_lcd_puti_fast(uint8_t dig, uint8_t len, uint8_t value);
 void svc_lcd_puti_signed(uint8_t dig, uint8_t len, int32_t value);
 void svc_lcd_putix(uint8_t dig, uint8_t len, uint16_t value);
+void svc_lcd_blink_disable(void);
+void svc_lcd_blink_process(void);
+void svc_lcd_force_redraw(void);
+uint8_t svc_lcd_get_force_redraw(void);

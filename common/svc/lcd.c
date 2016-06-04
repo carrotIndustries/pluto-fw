@@ -128,3 +128,29 @@ void svc_lcd_putix(uint8_t dig, uint8_t len, uint16_t value) {
 		dig--;
 	}
 }
+
+static uint8_t blink_timeout = 0;
+
+void svc_lcd_blink_disable(void) {
+	blink_timeout = 6;
+	hal_lcd_set_blink(0);
+}
+
+void svc_lcd_blink_process(void) {
+	if(blink_timeout) {
+		blink_timeout--;
+	}
+	hal_lcd_set_blink(1);
+}
+
+static uint8_t force_redraw = 0;
+
+void svc_lcd_force_redraw(void) {
+	force_redraw = 1;
+}
+
+uint8_t svc_lcd_get_force_redraw(void) {
+	uint8_t r = force_redraw;
+	force_redraw = 0;
+	return r;
+}
