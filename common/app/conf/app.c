@@ -194,6 +194,28 @@ static const svc_menu_item_adj_t menu_item_backlight_brightness = {
 	.handler_set = backlight_brightness_set,
 };
 
+static uint8_t lcd_contrast;
+
+static int32_t lcd_contrast_get(void *ud) {
+	return lcd_contrast;
+}
+
+static void lcd_contrast_set(uint8_t dig, int8_t dir, void *user_data) {
+	int16_t inc = dir*ipow(10, dig);
+	lcd_contrast = CLAMP(lcd_contrast+inc, 0, 15);
+	hal_lcd_set_contrast(lcd_contrast);
+}
+
+
+static const svc_menu_item_adj_t menu_item_lcd_contrast = {
+	.type = SVC_MENU_ITEM_T_ADJ,
+	.header = "lc",
+	.text = " con",
+	.digits = 2,
+	.handler_get = lcd_contrast_get,
+	.handler_set = lcd_contrast_set,
+};
+
 static const svc_menu_item_text_t menu_item_up = {
 	.type = SVC_MENU_ITEM_T_TEXT,
 	.text = "----up",
@@ -210,6 +232,7 @@ static const svc_menu_item_text_t *menu_items[] = {
 	(void*)&menu_item_hourbeep_test,
 	(void*)&menu_item_backlight_timeout,
 	(void*)&menu_item_backlight_brightness,
+	(void*)&menu_item_lcd_contrast,
 	(void*)&menu_item_up,
 };
 

@@ -288,3 +288,6 @@ void hal_lcd_set_mode(hal_lcd_mode_t m) {
 void hal_lcd_set_blink(uint8_t st) {
 	
 }
+
+void hal_lcd_set_contrast(uint8_t level) {
+}

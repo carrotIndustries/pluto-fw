@@ -18,11 +18,16 @@ void hal_lcd_set_mode(hal_lcd_mode_t m) {
 	mode = m;
 }
 
+void hal_lcd_set_contrast(uint8_t level) {
+	LCDCVCTL &= ~VLCD_15;
+	LCDCVCTL |= (level&0xf)<<9;
+}
+
 void lcd_init(void)
 {
 	LCDCCTL0 = LCDDIV_21 | LCDPRE__8 | LCD3MUX;
 	LCDCBLKCTL = LCDBLKPRE__16384 | LCDBLKMOD_1;
-	LCDCVCTL = LCD2B | LCDCPEN | VLCD_11;
+	LCDCVCTL = LCD2B | LCDCPEN | VLCD_1;
 
 	PCONF(6, 3, FUNC3);
 	PCONF(6, 4, FUNC3);
