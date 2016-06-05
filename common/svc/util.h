@@ -43,3 +43,4 @@ typedef enum {
 const char *svc_dow_to_string(uint8_t dow, svc_lang_t lang);
 int ipow(int base, int exp);
 void* secure_memset(void *v, int c, size_t n);
+uint32_t atani(int32_t x, int32_t y);

@@ -18,6 +18,7 @@ OBJECTS = $(addprefix $(OUTDIR)/,$(CFILES:.c=.o))
 CC      	= msp430-elf-gcc
 OBJCOPY 	= msp430-elf-objcopy
 GD          = msp430-elf-gdb
+SZ          = msp430-elf-size
 RM      	= rm -rf
 MKDIR		= mkdir -p
 

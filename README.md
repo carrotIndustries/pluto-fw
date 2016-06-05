@@ -196,4 +196,5 @@ of the MSP430 HAL.
 - [liboath](http://www.nongnu.org/oath-toolkit/liboath-api/liboath-oath.html)
   for TOTP generation
 - [Example of bit-banging the I²C Master protocol](https://en.wikipedia.org/wiki/I%C2%B2C#Example_of_bit-banging_the_I.C2.B2C_Master_protocol) No idea why this ended up in Wikipedia. However, it's one of the 
- better soft I²C master implementations out there.  
+ better soft I²C master implementations out there.
+- [XY vector to integer degree fast algorithm](http://www.romanblack.com/integer_degree.htm) for heading calculation

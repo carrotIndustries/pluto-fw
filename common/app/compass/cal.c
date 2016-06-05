@@ -109,6 +109,26 @@ static const svc_menu_item_text_t menu_item_up = {
 	.handler = menu_exit
 };
 
+static void menu_store(void *ud) {
+	priv_t *pr = PRIV(app_current);
+	svc_compass_cal_in_t ci = {
+		.x0 = minmax_get_center(&(pr->cal_x)),
+		.y0 = minmax_get_center(&(pr->cal_y)),
+		.z0 = minmax_get_center(&(pr->cal_z)),
+		
+		.sx = minmax_get_span(&(pr->cal_x)),
+		.sy = minmax_get_span(&(pr->cal_y)),
+		.sz = minmax_get_span(&(pr->cal_z)),
+	};
+	svc_compass_set_cal(&ci);
+}
+
+static const svc_menu_item_text_t menu_item_store = {
+	.type = SVC_MENU_ITEM_T_TEXT,
+	.text = "store",
+	.handler = menu_store
+};
+
 
 static const svc_menu_item_unknown_t *menu_items[] = {
 	(void*)&menu_item_x_c,
@@ -117,6 +137,7 @@ static const svc_menu_item_unknown_t *menu_items[] = {
 	(void*)&menu_item_x_s,
 	(void*)&menu_item_y_s,
 	(void*)&menu_item_z_s,
+	(void*)&menu_item_store,
 	(void*)&menu_item_up,
 };
 

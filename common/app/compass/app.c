@@ -3,7 +3,7 @@
 static void axis_draw(svc_menu_state_t *state, svc_menu_item_unknown_t *item, void *user_data) {
 	intptr_t axis = (intptr_t)user_data;
 	hal_compass_result_t r;
-	if(svc_compass_read(&r)) {
+	if(svc_compass_read_cal(&r)) {
 		svc_lcd_puts(1, "err");
 	}
 	else {
@@ -46,6 +46,24 @@ static const svc_menu_item_text_t menu_item_z = {
 	.user_data = (void*)2
 };
 
+static void heading_draw(svc_menu_state_t *state, svc_menu_item_unknown_t *item, void *user_data) {
+	hal_compass_result_t r;
+	if(svc_compass_read_cal(&r)) {
+		svc_lcd_puts(1, "err");
+	}
+	else {
+		int16_t heading = atani(-r.y, -r.x);
+		svc_lcd_puti(0, 4, CLAMP_ABS(heading, 9999));
+	}
+	svc_lcd_putc(7, 'h');
+};
+
+static const svc_menu_item_text_t menu_item_heading = {
+	.type = SVC_MENU_ITEM_T_TEXT,
+	.text = "",
+	.handler_draw = heading_draw,
+};
+
 
 static void menu_exit(void *ud) {
 	PRIV(app_current)->main_menu_state.item_current = 0;
@@ -73,6 +91,7 @@ static const svc_menu_item_text_t menu_item_cal = {
 
 
 static const svc_menu_item_unknown_t *menu_items[] = {
+	(void*)&menu_item_heading,
 	(void*)&menu_item_x,
 	(void*)&menu_item_y,
 	(void*)&menu_item_z,
