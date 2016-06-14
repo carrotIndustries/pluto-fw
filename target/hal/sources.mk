@@ -13,6 +13,7 @@ SRC += hal/lcd.c \
        hal/compass.c \
        hal/aes/aes256.c \
        hal/crypto.c \
+       hal/debug.c \
        $(SMAPS_C)
 
 $(SMAPS_C): %.c: %.map $(GEN_SMAP)

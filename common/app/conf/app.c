@@ -1,15 +1,4 @@
-#include "common/app/app.h"
-#include "common/app/apps.h"
-#include "common/svc/svc.h"
-#include "common/hal/hal.h"
-#include "common/hal/lcd_segments.h"
-
-typedef struct {
-	APP_PRIV_COMMON
-	svc_menu_state_t st;
-} priv_t;
-
-#define PRIV(a) ((priv_t*)((a)->priv))
+#include "app.h"
 
 static void conf_exit(void *ud) {
 	PRIV(app_current)->st.item_current = 0;
@@ -222,6 +211,16 @@ static const svc_menu_item_text_t menu_item_up = {
 	.handler = conf_exit
 };
 
+static void debug_enter(void *ud) {
+	app_set_view(app_current, 1);
+}
+
+static const svc_menu_item_text_t menu_item_debug = {
+	.type = SVC_MENU_ITEM_T_TEXT,
+	.text = "dbg",
+	.handler = debug_enter
+};
+
 static const svc_menu_item_text_t *menu_items[] = {
 	(void*)&menu_item_keybeep,
 	(void*)&menu_item_keybeep_freq,
@@ -233,6 +232,7 @@ static const svc_menu_item_text_t *menu_items[] = {
 	(void*)&menu_item_backlight_timeout,
 	(void*)&menu_item_backlight_brightness,
 	(void*)&menu_item_lcd_contrast,
+	(void*)&menu_item_debug,
 	(void*)&menu_item_up,
 };
 
@@ -249,14 +249,19 @@ static void main(uint8_t view, const app_t *app, svc_main_proc_event_t event) {
 	svc_menu_run(&menu, &(PRIV(app)->st), event);
 }
 
-static app_view_t view = {
-	.main = main
+static app_view_t views[] = {
+	{
+		.main = main
+	},
+	{
+		.main = app_app_conf_debug_main,
+	}
 };
 
-static priv_t priv = {0, 0};
+static priv_t priv = {0};
 
 const app_t app_app_conf = {
 	.n_views = 1,
 	.priv = (app_priv_t*)(&priv),
-	.views = &view
+	.views = views
 };

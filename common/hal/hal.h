@@ -56,3 +56,6 @@ void hal_aes_clear_key(void);
 void hal_aes_init(void);
 void hal_aes_decrypt(uint8_t *dest, uint8_t *src);
 void hal_sha1(const uint8_t *input, uint16_t len, uint8_t *output);
+
+#define HAL_DEBUG_N 2
+uint16_t hal_debug_read(uint8_t index);

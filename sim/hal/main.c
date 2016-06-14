@@ -291,3 +291,7 @@ void hal_lcd_set_blink(uint8_t st) {
 
 void hal_lcd_set_contrast(uint8_t level) {
 }
+
+uint16_t hal_debug_read(uint8_t index) {
+	return index*2;
+}
