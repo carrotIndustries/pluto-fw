@@ -241,10 +241,10 @@ static const svc_menu_item_choice_t menu_item_cal_sign = {
 };
 
 static const svc_menu_item_unknown_t *menu_items[] = {
+	(void*)&menu_item_base,
 	(void*)&menu_item_time,
 	(void*)&menu_item_date,
 	(void*)&menu_item_lang,
-	(void*)&menu_item_base,
 	(void*)&menu_item_cal_sign,
 	(void*)&menu_item_cal,
 	(void*)&menu_item_up,
