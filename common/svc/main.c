@@ -34,7 +34,7 @@ void svc_main_proc(svc_main_proc_event_t event) {
 		app_current->views[app_current->priv->view_current].main(app_current->priv->view_current, app_current, event);
 	}
 	
-	if(svc_chro_get_state() == SVC_CHRO_STATE_RUN || svc_chro_get_state() == SVC_CHRO_STATE_HOLD) {
+	if(svc_chro_get_any_running()) {
 		hal_lcd_seg_set(HAL_LCD_SEG_LAP, 1);
 		hal_lcd_seg_set_blink(HAL_LCD_SEG_LAP, 1);
 	}
