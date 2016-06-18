@@ -261,7 +261,7 @@ static app_view_t views[] = {
 static priv_t priv = {0};
 
 const app_t app_app_conf = {
-	.n_views = 1,
+	.n_views = 2,
 	.priv = (app_priv_t*)(&priv),
 	.views = views
 };
