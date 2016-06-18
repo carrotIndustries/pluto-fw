@@ -56,6 +56,11 @@ static const svc_menu_item_text_t menu_item7 = {
 	.handler = launch,
 	.user_data = (void *)&app_app_otp,
 };
+static const svc_menu_item_text_t menu_item8 = {
+	.text = "speed",
+	.handler = launch,
+	.user_data = (void *)&app_app_speed,
+};
 
 static const svc_menu_item_text_t *menu_items[] = {
 	(void*)&menu_item0,
@@ -66,6 +71,7 @@ static const svc_menu_item_text_t *menu_items[] = {
 	(void*)&menu_item5,
 	(void*)&menu_item6,
 	(void*)&menu_item7,
+	(void*)&menu_item8,
 };
 
 static const svc_menu_t menu = {
