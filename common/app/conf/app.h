@@ -9,6 +9,7 @@ typedef struct {
 	APP_PRIV_COMMON
 	svc_menu_state_t st;
 	uint8_t debug_item_current;
+	uint16_t debug_value;
 } priv_t;
 
 #define PRIV(a) ((priv_t*)((a)->priv))

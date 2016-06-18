@@ -13,6 +13,9 @@ void app_app_conf_debug_main(uint8_t view, const app_t *app, svc_main_proc_event
 		app_set_view(app, 0);
 		PRIV(app)->debug_item_current = 0;
 	}
+	else if(event & SVC_MAIN_PROC_EVENT_KEY_ENTER) {
+		PRIV(app)->debug_value = hal_debug_read(PRIV(app)->debug_item_current);
+	}
 	svc_lcd_puts(8, "db");
 	if(PRIV(app)->debug_item_current == HAL_DEBUG_N) {
 		svc_lcd_puts(0, "----up");
@@ -23,7 +26,7 @@ void app_app_conf_debug_main(uint8_t view, const app_t *app, svc_main_proc_event
 	}
 	else {
 		svc_lcd_puti(6, 2, PRIV(app)->debug_item_current);
-		svc_lcd_putix(0, 4, hal_debug_read(PRIV(app)->debug_item_current));
+		svc_lcd_putix(0, 4, PRIV(app)->debug_value);
 	}
 	
 }
