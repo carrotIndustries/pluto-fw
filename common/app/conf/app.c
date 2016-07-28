@@ -140,6 +140,92 @@ static const svc_menu_item_text_t menu_item_hourbeep_test = {
 	.handler = hourbeep_test
 };
 
+static uint8_t hourbeep_quiet_get(void *ud) {
+	return svc_beep_hour_quiet_get_enable();
+}
+
+static void hourbeep_quiet_set(uint8_t choice, void *ud) {
+	svc_beep_hour_quiet_set_enable(choice);
+}
+
+static const svc_menu_item_choice_t menu_item_hourbeep_quiet = {
+	.type = SVC_MENU_ITEM_T_CHOICE,
+	.text = " hrq",
+	.choice_pos = 4,
+	.n_choices = 2,
+	.choices = {
+		"of",
+		"on",
+	},
+	.handler_set = hourbeep_quiet_set,
+	.handler_get = hourbeep_quiet_get
+};
+
+static int32_t hourbeep_quiet_get_time(uint8_t start) {
+	svc_beep_hour_quiet_t bq;
+	svc_beep_hour_quiet_get_time(start, &bq);
+	return bq.m + (bq.h * 100);
+}
+
+static int32_t hourbeep_quiet_get_start_time(void *ud) {
+	return hourbeep_quiet_get_time(0);
+}
+
+static int32_t hourbeep_quiet_get_stop_time(void *ud) {
+	return hourbeep_quiet_get_time(1);
+}
+
+static void hourbeep_quiet_set_time(uint8_t start, int8_t dig, uint8_t dir) {
+	svc_beep_hour_quiet_t bq;
+	svc_beep_hour_quiet_get_time(start, &bq);
+	switch (dig) {
+	case 1:
+		dir *= 10;
+		break;
+	}
+
+	switch(dig) {
+	case 3 :
+	case 2 :
+		ADD_MOD(bq.h, dir, 24);
+		break;
+
+	case 1 :
+	case 0 :
+		ADD_MOD(bq.m, dir, 60);
+		break;
+	default :
+		return;
+	}
+
+	svc_beep_hour_quiet_set_time(start, bq.h, bq.m);
+}
+
+static void hourbeep_quiet_set_start_time(uint8_t dig, int8_t dir, void *ud) {
+	hourbeep_quiet_set_time(0, dig, dir);
+}
+
+static void hourbeep_quiet_set_stop_time(uint8_t dig, int8_t dir, void *ud) {
+	hourbeep_quiet_set_time(1, dig, dir);
+}
+
+static const svc_menu_item_adj_t menu_item_hourbeep_quiet_begin = {
+	.type = SVC_MENU_ITEM_T_ADJ,
+	.header = "qb",
+	.text = " hqb",
+	.digits = 4,
+	.handler_get = hourbeep_quiet_get_start_time,
+	.handler_set = hourbeep_quiet_set_start_time,
+};
+
+static const svc_menu_item_adj_t menu_item_hourbeep_quiet_end = {
+	.type = SVC_MENU_ITEM_T_ADJ,
+	.header = "qn",
+	.text = " hqn",
+	.digits = 4,
+	.handler_get = hourbeep_quiet_get_stop_time,
+	.handler_set = hourbeep_quiet_set_stop_time,
+};
 
 static int32_t backlight_timeout_get(void *ud) {
 	return svc_backlight_timeout_get();
@@ -229,6 +315,9 @@ static const svc_menu_item_text_t *menu_items[] = {
 	(void*)&menu_item_hourbeep_freq,
 	(void*)&menu_item_hourbeep_duration,
 	(void*)&menu_item_hourbeep_test,
+	(void*)&menu_item_hourbeep_quiet,
+	(void*)&menu_item_hourbeep_quiet_begin,
+	(void*)&menu_item_hourbeep_quiet_end,
 	(void*)&menu_item_backlight_timeout,
 	(void*)&menu_item_backlight_brightness,
 	(void*)&menu_item_lcd_contrast,

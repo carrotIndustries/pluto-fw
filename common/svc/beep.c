@@ -2,6 +2,7 @@
 #include "melody.h"
 #include "common/hal/hal.h"
 #include "aux_timer.h"
+#include <string.h>
 #include "platform.h"
 
 static uint16_t beep_freq;
@@ -43,17 +44,38 @@ void svc_beep_key(void) {
 static uint16_t SECTION_INFOMEM beep_hour_freq = 2000;
 static uint8_t  SECTION_INFOMEM beep_hour_enable = 1;
 static uint16_t SECTION_INFOMEM beep_hour_duration = 10;
-
+static uint8_t  SECTION_INFOMEM beep_hour_quiet_enable = 0;
+static svc_beep_hour_quiet_t beep_hour_quiet[2] = {
+	{.h=21, .m=59},
+	{.h=06, .m=59}
+};
+static uint8_t beep_hour_muted = 0;
 
 void svc_beep_hour(void) {
 	static uint8_t hour_last = 255;
-	
+
 	hal_rtc_timedate_t td;
 	hal_rtc_get(&td);
-	
-	if((td.h != hour_last) && beep_hour_enable) {
+
+	if (td.h == hour_last)
+		return;
+
+	hour_last = td.h;
+
+	if (beep_hour_quiet_enable) {
+		if ((td.h == beep_hour_quiet[0].h) &&
+			(td.m == beep_hour_quiet[0].m))
+			beep_hour_muted = 1;
+		if ((td.h == beep_hour_quiet[1].h) &&
+			(td.m == beep_hour_quiet[1].m))
+			beep_hour_muted = 0;
+	}
+
+	if (beep_hour_quiet_enable && beep_hour_muted)
+		return;
+
+	if (beep_hour_enable) {
 		svc_beep_timed(beep_hour_freq, beep_hour_duration);
-		hour_last = td.h;
 	}
 }
 
@@ -103,4 +125,29 @@ void svc_beep_hour_set_freq(uint16_t f) {
 
 void svc_beep_hour_set_duration(uint16_t d) {
 	beep_hour_duration = d;
+}
+
+uint8_t svc_beep_hour_quiet_get_enable(void) {
+	return beep_hour_quiet_enable;
+}
+
+void svc_beep_hour_quiet_set_enable(uint8_t e) {
+	beep_hour_quiet_enable = !!e;
+}
+
+void svc_beep_hour_quiet_get_time(uint8_t start, svc_beep_hour_quiet_t *out) {
+	memcpy(out, &(beep_hour_quiet[!!start]), sizeof(svc_beep_hour_quiet_t));
+}
+
+void svc_beep_hour_quiet_set_time(uint8_t start, uint8_t h, uint8_t m) {
+	hal_rtc_timedate_t td;
+	start = !!start;
+
+	beep_hour_quiet[start].h = h;
+	beep_hour_quiet[start].m = m;
+
+	hal_rtc_get(&td);
+
+	if ((td.h >= h) && (td.m >= m))
+		beep_hour_muted = start;
 }
