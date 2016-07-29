@@ -45,11 +45,7 @@ static uint16_t SECTION_INFOMEM beep_hour_freq = 2000;
 static uint8_t  SECTION_INFOMEM beep_hour_enable = 1;
 static uint16_t SECTION_INFOMEM beep_hour_duration = 10;
 static uint8_t  SECTION_INFOMEM beep_hour_quiet_enable = 0;
-static svc_beep_hour_quiet_t beep_hour_quiet[2] = {
-	{.h=21, .m=59},
-	{.h=06, .m=59}
-};
-static uint8_t beep_hour_muted = 0;
+static uint8_t  beep_hour_quiet[2] = {21, 06};
 
 void svc_beep_hour(void) {
 	static uint8_t hour_last = 255;
@@ -58,21 +54,21 @@ void svc_beep_hour(void) {
 	hal_rtc_get(&td);
 
 	if (td.h == hour_last)
-		return;
+            return;
 
 	hour_last = td.h;
 
 	if (beep_hour_quiet_enable) {
-		if ((td.h == beep_hour_quiet[0].h) &&
-			(td.m == beep_hour_quiet[0].m))
-			beep_hour_muted = 1;
-		if ((td.h == beep_hour_quiet[1].h) &&
-			(td.m == beep_hour_quiet[1].m))
-			beep_hour_muted = 0;
+		if (beep_hour_quiet[0] < beep_hour_quiet[1]) {
+			if ((td.h >= beep_hour_quiet[0]) &&
+				(td.h <= beep_hour_quiet[1]))
+				return;
+		} else if (beep_hour_quiet[0] > beep_hour_quiet[1]) {
+			if ((td.h >= beep_hour_quiet[0]) ||
+				(td.h <= beep_hour_quiet[1]))
+				return;
+		}
 	}
-
-	if (beep_hour_quiet_enable && beep_hour_muted)
-		return;
 
 	if (beep_hour_enable) {
 		svc_beep_timed(beep_hour_freq, beep_hour_duration);
@@ -135,19 +131,11 @@ void svc_beep_hour_quiet_set_enable(uint8_t e) {
 	beep_hour_quiet_enable = !!e;
 }
 
-void svc_beep_hour_quiet_get_time(uint8_t start, svc_beep_hour_quiet_t *out) {
-	memcpy(out, &(beep_hour_quiet[!!start]), sizeof(svc_beep_hour_quiet_t));
+uint16_t svc_beep_hour_quiet_get_interval(void) {
+	return ((beep_hour_quiet[0] * 100) + beep_hour_quiet[1]);
 }
 
-void svc_beep_hour_quiet_set_time(uint8_t start, uint8_t h, uint8_t m) {
-	hal_rtc_timedate_t td;
-	start = !!start;
-
-	beep_hour_quiet[start].h = h;
-	beep_hour_quiet[start].m = m;
-
-	hal_rtc_get(&td);
-
-	if ((td.h >= h) && (td.m >= m))
-		beep_hour_muted = start;
+void svc_beep_hour_quiet_set_interval(uint8_t s, uint8_t e) {
+	beep_hour_quiet[0] = s;
+	beep_hour_quiet[1] = e;
 }

@@ -20,14 +20,6 @@
 	} \
 	} while (0)
 
-#define ADD_MOD(x, a, mod) do {					\
-		(x) += (a);								\
-		if ((x) > (mod)) {						\
-			(x) += (mod);						\
-		}										\
-		(x) %= (mod);							\
-	} while (0)
-
 #define MIN(a, b)  (((a) < (b)) ? (a) : (b))
 #define MAX(a, b)  (((a) > (b)) ? (a) : (b))
 #define CLAMP(x, low, high)  (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))

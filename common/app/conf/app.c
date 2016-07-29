@@ -161,70 +161,45 @@ static const svc_menu_item_choice_t menu_item_hourbeep_quiet = {
 	.handler_get = hourbeep_quiet_get
 };
 
-static int32_t hourbeep_quiet_get_time(uint8_t start) {
-	svc_beep_hour_quiet_t bq;
-	svc_beep_hour_quiet_get_time(start, &bq);
-	return bq.m + (bq.h * 100);
+static int32_t hourbeep_quiet_get_interval(void *ud) {
+	return (int32_t)svc_beep_hour_quiet_get_interval();
 }
 
-static int32_t hourbeep_quiet_get_start_time(void *ud) {
-	return hourbeep_quiet_get_time(0);
-}
+static void hourbeep_quiet_set_interval(uint8_t dig, int8_t dir, void *user_data) {
+	uint16_t interval = svc_beep_hour_quiet_get_interval();
+	uint8_t s = interval / 100;
+	uint8_t e = interval % 100;
 
-static int32_t hourbeep_quiet_get_stop_time(void *ud) {
-	return hourbeep_quiet_get_time(1);
-}
-
-static void hourbeep_quiet_set_time(uint8_t start, int8_t dig, uint8_t dir) {
-	svc_beep_hour_quiet_t bq;
-	svc_beep_hour_quiet_get_time(start, &bq);
-	switch (dig) {
-	case 1:
+	switch(dig) {
+	case 3 :
+	case 1 :
 		dir *= 10;
-		break;
 	}
 
 	switch(dig) {
 	case 3 :
 	case 2 :
-		ADD_MOD(bq.h, dir, 24);
+		s = CLAMP(s + dir, 0, 23);
 		break;
 
 	case 1 :
 	case 0 :
-		ADD_MOD(bq.m, dir, 60);
+		e = CLAMP(e + dir, 0, 23);
 		break;
 	default :
 		return;
 	}
 
-	svc_beep_hour_quiet_set_time(start, bq.h, bq.m);
+	svc_beep_hour_quiet_set_interval(s, e);
 }
 
-static void hourbeep_quiet_set_start_time(uint8_t dig, int8_t dir, void *ud) {
-	hourbeep_quiet_set_time(0, dig, dir);
-}
-
-static void hourbeep_quiet_set_stop_time(uint8_t dig, int8_t dir, void *ud) {
-	hourbeep_quiet_set_time(1, dig, dir);
-}
-
-static const svc_menu_item_adj_t menu_item_hourbeep_quiet_begin = {
+static const svc_menu_item_adj_t menu_item_hourbeep_quiet_interval = {
 	.type = SVC_MENU_ITEM_T_ADJ,
-	.header = "qb",
-	.text = " hqb",
+	.header = "qi",
+	.text = " hiq",
 	.digits = 4,
-	.handler_get = hourbeep_quiet_get_start_time,
-	.handler_set = hourbeep_quiet_set_start_time,
-};
-
-static const svc_menu_item_adj_t menu_item_hourbeep_quiet_end = {
-	.type = SVC_MENU_ITEM_T_ADJ,
-	.header = "qn",
-	.text = " hqn",
-	.digits = 4,
-	.handler_get = hourbeep_quiet_get_stop_time,
-	.handler_set = hourbeep_quiet_set_stop_time,
+	.handler_get = hourbeep_quiet_get_interval,
+	.handler_set = hourbeep_quiet_set_interval,
 };
 
 static int32_t backlight_timeout_get(void *ud) {
@@ -316,8 +291,7 @@ static const svc_menu_item_text_t *menu_items[] = {
 	(void*)&menu_item_hourbeep_duration,
 	(void*)&menu_item_hourbeep_test,
 	(void*)&menu_item_hourbeep_quiet,
-	(void*)&menu_item_hourbeep_quiet_begin,
-	(void*)&menu_item_hourbeep_quiet_end,
+	(void*)&menu_item_hourbeep_quiet_interval,
 	(void*)&menu_item_backlight_timeout,
 	(void*)&menu_item_backlight_brightness,
 	(void*)&menu_item_lcd_contrast,
