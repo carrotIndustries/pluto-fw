@@ -45,7 +45,7 @@ static uint16_t SECTION_INFOMEM beep_hour_freq = 2000;
 static uint8_t  SECTION_INFOMEM beep_hour_enable = 1;
 static uint16_t SECTION_INFOMEM beep_hour_duration = 10;
 static uint8_t  SECTION_INFOMEM beep_hour_quiet_enable = 0;
-static uint8_t  beep_hour_quiet[2] = {21, 06};
+static uint8_t  SECTION_INFOMEM beep_hour_quiet[2] = {21, 06};
 
 void svc_beep_hour(void) {
 	static uint8_t hour_last = 255;
@@ -131,8 +131,9 @@ void svc_beep_hour_quiet_set_enable(uint8_t e) {
 	beep_hour_quiet_enable = !!e;
 }
 
-uint16_t svc_beep_hour_quiet_get_interval(void) {
-	return ((beep_hour_quiet[0] * 100) + beep_hour_quiet[1]);
+void svc_beep_hour_quiet_get_interval(uint8_t *s, uint8_t *e) {
+	*s = beep_hour_quiet[0];
+	*e = beep_hour_quiet[1];
 }
 
 void svc_beep_hour_quiet_set_interval(uint8_t s, uint8_t e) {

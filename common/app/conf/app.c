@@ -162,13 +162,17 @@ static const svc_menu_item_choice_t menu_item_hourbeep_quiet = {
 };
 
 static int32_t hourbeep_quiet_get_interval(void *ud) {
-	return (int32_t)svc_beep_hour_quiet_get_interval();
+	uint8_t s, e;
+
+	svc_beep_hour_quiet_get_interval(&s, &e);
+
+	return (int32_t)((s * 100) + e);
 }
 
 static void hourbeep_quiet_set_interval(uint8_t dig, int8_t dir, void *user_data) {
-	uint16_t interval = svc_beep_hour_quiet_get_interval();
-	uint8_t s = interval / 100;
-	uint8_t e = interval % 100;
+	uint8_t s, e;
+
+	svc_beep_hour_quiet_get_interval(&s, &e);
 
 	switch(dig) {
 	case 3 :
