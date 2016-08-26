@@ -5,11 +5,11 @@
 #include "common/hal/lcd_segments.h"
 #include <string.h>
 #include "platform.h"
-#define N_ALARMS 25
+#define N_ALARMS 10
 
 static svc_alarm_t SECTION_INFOMEM svc_alarms[N_ALARMS] = {
 	{.h=19, .m=21, .days=0xff, .enable=1}
-	
+
 };
 const uint8_t svc_alarms_n = N_ALARMS;
 
@@ -81,10 +81,10 @@ static uint8_t svc_alarm_match(svc_alarm_t *al, hal_rtc_timedate_t *td) {
 
 void svc_alarm_process(void) {
 	static uint8_t min_last = 255;
-	
+
 	hal_rtc_timedate_t td;
 	hal_rtc_get(&td);
-	
+
 	if(td.m != min_last) {
 		for(uint8_t i=0; i<svc_alarms_n; i++) {
 			if(svc_alarm_match(&(svc_alarms[i]), &td)) {
@@ -106,7 +106,7 @@ void svc_alarm_draw_popup(void) {
 			svc_lcd_puti(4, 2, alarm_pending);
 			svc_lcd_force_redraw();
 		}
-		
+
 	}
 	div = (div+1)%8;
 }
