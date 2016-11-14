@@ -5,6 +5,12 @@
 
 static volatile hal_rtc_timedate_t timedate_l;
 
+#define BEFORE_LEAPSECOND 0
+#define DURING_LEAPSECOND 1
+#define AFTER_LEAPSECOND 2
+
+static volatile int leapSecond_status = BEFORE_LEAPSECOND;
+
 #define RTC_LOCK WITH(RTCCTL0_H = RTCKEY_H, RTCCTL0_H = 0)
 
 void rtc_init(void)
@@ -86,6 +92,33 @@ void __attribute__((interrupt ((RTC_VECTOR)))) RTC_ISR(void)
 {
 	RTCIV = 0;
 	if(RTCCTL1 & RTCRDY) {
+		
+		// test for leap second
+		if (RTCHOUR == 0 &&
+			RTCMIN == 0 &&
+			RTCSEC == 0 &&
+			RTCDAY == 1 &&
+			RTCMON == 1 &&
+			RTCYEAR == 2017 &&
+			leapSecond_status == BEFORE_LEAPSECOND) {			
+			leapSecond_status = DURING_LEAPSECOND;
+
+			//set date + time back one second
+			RTC_LOCK {
+				RTCCTL0_L &= ~RTCRDYIE_L;
+				RTCCTL1 |= RTCHOLD;
+				RTCHOUR = 23;
+				RTCMIN = 59;
+				RTCSEC = 59;
+				RTCDAY = 31;
+				RTCMON = 12;
+				RTCYEAR = 2016;
+				RTCDOW = wday(2016, 12, 31);
+				RTCCTL1 &= ~RTCHOLD;
+				RTCCTL0_L |= RTCRDYIE_L;
+			};
+		}
+		
 		timedate_l.h = RTCHOUR;
 		timedate_l.m = RTCMIN;
 		timedate_l.s = RTCSEC;
@@ -94,5 +127,29 @@ void __attribute__((interrupt ((RTC_VECTOR)))) RTC_ISR(void)
 		timedate_l.dom = RTCDAY;
 		timedate_l.month = RTCMON;
 		timedate_l.year = RTCYEAR;
+		
+		if (RTCHOUR == 0 &&
+			RTCMIN == 0 &&
+			RTCSEC == 0 &&
+			RTCDAY == 1 &&
+			RTCMON == 1 &&
+			RTCYEAR == 2017 &&
+			leapSecond_status == DURING_LEAPSECOND) {			
+			leapSecond_status = AFTER_LEAPSECOND;
+		}
+		
+		if (leapSecond_status == DURING_LEAPSECOND) {
+			timedate_l.s = 60;
+		}
+
+		if (RTCHOUR == 0 &&
+			RTCMIN == 0 &&
+			RTCSEC == 1 &&
+			RTCDAY == 1 &&
+			RTCMON == 1 &&
+			RTCYEAR == 2017 &&
+			leapSecond_status == AFTER_LEAPSECOND) {			
+			leapSecond_status = BEFORE_LEAPSECOND;	/* reset status, in case time is reset to before leapsecond again */
+		}
 	}
 }
