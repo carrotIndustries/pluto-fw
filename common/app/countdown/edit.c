@@ -18,7 +18,7 @@ static void menu_exit(void *ud) {
 static int32_t time_get(void *ud) {
 	svc_countdown_t cd;
 	svc_countdown_get(PRIV(app_current)->countdown_current, &cd);
-	return cd.s + cd.m*100 + cd.h*10000;
+	return cd.s + cd.m*100L + cd.h*10000L;
 }
 
 static void time_set(uint8_t dig, int8_t dir, void *user_data) {
