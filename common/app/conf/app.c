@@ -140,6 +140,71 @@ static const svc_menu_item_text_t menu_item_hourbeep_test = {
 	.handler = hourbeep_test
 };
 
+static uint8_t hourbeep_quiet_get(void *ud) {
+	return svc_beep_hour_quiet_get_enable();
+}
+
+static void hourbeep_quiet_set(uint8_t choice, void *ud) {
+	svc_beep_hour_quiet_set_enable(choice);
+}
+
+static const svc_menu_item_choice_t menu_item_hourbeep_quiet = {
+	.type = SVC_MENU_ITEM_T_CHOICE,
+	.text = " hrq",
+	.choice_pos = 4,
+	.n_choices = 2,
+	.choices = {
+		"of",
+		"on",
+	},
+	.handler_set = hourbeep_quiet_set,
+	.handler_get = hourbeep_quiet_get
+};
+
+static int32_t hourbeep_quiet_get_interval(void *ud) {
+	uint8_t s, e;
+
+	svc_beep_hour_quiet_get_interval(&s, &e);
+
+	return (int32_t)((s * 100) + e);
+}
+
+static void hourbeep_quiet_set_interval(uint8_t dig, int8_t dir, void *user_data) {
+	uint8_t s, e;
+
+	svc_beep_hour_quiet_get_interval(&s, &e);
+
+	switch(dig) {
+	case 3 :
+	case 1 :
+		dir *= 10;
+	}
+
+	switch(dig) {
+	case 3 :
+	case 2 :
+		s = CLAMP(s + dir, 0, 23);
+		break;
+
+	case 1 :
+	case 0 :
+		e = CLAMP(e + dir, 0, 23);
+		break;
+	default :
+		return;
+	}
+
+	svc_beep_hour_quiet_set_interval(s, e);
+}
+
+static const svc_menu_item_adj_t menu_item_hourbeep_quiet_interval = {
+	.type = SVC_MENU_ITEM_T_ADJ,
+	.header = "qi",
+	.text = " hiq",
+	.digits = 4,
+	.handler_get = hourbeep_quiet_get_interval,
+	.handler_set = hourbeep_quiet_set_interval,
+};
 
 static int32_t backlight_timeout_get(void *ud) {
 	return svc_backlight_timeout_get();
@@ -229,6 +294,8 @@ static const svc_menu_item_text_t *menu_items[] = {
 	(void*)&menu_item_hourbeep_freq,
 	(void*)&menu_item_hourbeep_duration,
 	(void*)&menu_item_hourbeep_test,
+	(void*)&menu_item_hourbeep_quiet,
+	(void*)&menu_item_hourbeep_quiet_interval,
 	(void*)&menu_item_backlight_timeout,
 	(void*)&menu_item_backlight_brightness,
 	(void*)&menu_item_lcd_contrast,
