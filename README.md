@@ -25,7 +25,7 @@ Linux. User interface (LCD screen and buttons) is provided by a Gtk+
 application the firmware connects to using a pair of ZeroMQ sockets. In 
 spite of being technically inaccurate, this mode of operation is called 
 'simulator'.
-This requirement lends requires dividing the firmware in three layers:
+This requirement requires dividing the firmware in three layers:
 
 ##Hardware Abstraction Layer (hal)
 This layer provides the interface to the underlying hardware. Currently, there are HALs for 
