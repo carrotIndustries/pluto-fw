@@ -86,7 +86,7 @@ static const svc_menu_item_text_t menu_item_time = {
 
 static void speed_draw(svc_menu_state_t *state, svc_menu_item_unknown_t *item, void *user_data) {
 	svc_lcd_puts(8, "km");
-	svc_chro_t *ch;
+	svc_chro_t ch;
 	svc_chro_get(1, &ch);
 	svc_chro_convert(&ch);
 	uint16_t ss = svc_chro_get_subsec_total(&ch);
