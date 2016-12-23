@@ -7,7 +7,7 @@ static void axis_draw(svc_menu_state_t *state, svc_menu_item_unknown_t *item, vo
 		svc_lcd_puts(1, "err");
 	}
 	else {
-		int16_t v;
+		int16_t v = 0;
 		switch(axis) {
 			case 0:
 				v = r.x;
@@ -111,7 +111,7 @@ static void main(uint8_t view, const app_t *app, svc_main_proc_event_t event) {
 }
 
 
-static priv_t priv = {0, 0};
+static priv_t priv = {0};
 
 static app_view_t views[] = {
 	{

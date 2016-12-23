@@ -91,7 +91,7 @@ static void main(uint8_t view, const app_t *app, svc_main_proc_event_t event) {
 }
 
 
-static priv_t priv = {0, 0};
+static priv_t priv = {0};
 
 static app_view_t views[] = {
 	{

@@ -27,7 +27,7 @@ OBJ  = $(COBJ) $(SOBJ)
 
 OPTIMIZE=-O0 -fdata-sections -ffunction-sections
 DEBUG   =-g3
-CFLAGS  =$(DEBUG)  $(OPTIMIZE) $(shell pkg-config --cflags libpulse) -MP -MMD -pthread -Wall
+CFLAGS  =$(DEBUG)  $(OPTIMIZE) $(shell pkg-config --cflags libpulse) -MP -MMD -pthread -Wall -Wno-main
 LDFLAGS = -lzmq -lm $(shell pkg-config --libs libpulse) -pthread -lmbedcrypto
 
 $(EXECUTABLE): $(OBJ)

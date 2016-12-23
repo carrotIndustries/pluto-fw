@@ -40,7 +40,7 @@ static void axis_draw(svc_menu_state_t *state, svc_menu_item_unknown_t *item, vo
 	else {
 		fp = minmax_get_center;
 	}
-	int16_t v;
+	int16_t v = 0;
 	switch(axis) {
 		case 0:
 			v = fp(&(p->cal_x));

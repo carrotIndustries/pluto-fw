@@ -34,7 +34,7 @@ uint8_t svc_compass_read_cal(hal_compass_result_t *out) {
 	return 0;
 }
 
-uint8_t svc_compass_set_cal(svc_compass_cal_in_t *cal) {
+void svc_compass_set_cal(svc_compass_cal_in_t *cal) {
 	gcal.x0 = cal->x0;
 	gcal.y0 = cal->y0;
 	gcal.z0 = cal->z0;

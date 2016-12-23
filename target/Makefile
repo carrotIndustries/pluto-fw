@@ -5,7 +5,7 @@ MCU = msp430fr6972
 INC = -I.
 OUTDIR = output/target
 DEFINES =
-CFLAGS = $(DEFINES) -mmcu=$(MCU) -g3 -O3 -Wunused -ffunction-sections -MP -MMD #-Wall
+CFLAGS = $(DEFINES) -mmcu=$(MCU) -g3 -O3 -Wunused -ffunction-sections -MP -MMD -Wall -Wno-main
 # ASFLAGS = -mmcu=$(MCU) -x assembler-with-cpp -Wa,-gstabs
 LDFLAGS = -mmcu=$(MCU) -Tmsp430fr6972.ld -Wl,-Map=$(OUTDIR)/$(TARGET).map,--gc-sections
 

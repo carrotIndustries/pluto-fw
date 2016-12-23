@@ -15,7 +15,7 @@ typedef struct {
 } svc_compass_cal_in_t;
 
 uint8_t svc_compass_read(hal_compass_result_t *out);
-uint8_t svc_compass_set_cal(svc_compass_cal_in_t *cal);
+void svc_compass_set_cal(svc_compass_cal_in_t *cal);
 uint8_t svc_compass_read_cal(hal_compass_result_t *out);
 void svc_compass_process(void);
 

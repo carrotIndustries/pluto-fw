@@ -91,7 +91,7 @@ static app_view_t view = {
 	.main = main
 };
 
-static priv_t priv = {0, 0};
+static priv_t priv = {0};
 
 const app_t app_app_launcher = {
 	.n_views = 1,
