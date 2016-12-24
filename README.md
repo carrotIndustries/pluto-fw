@@ -1,3 +1,5 @@
+Pluto will be at the 33C3, for more info check the [wiki page](https://events.ccc.de/congress/2016/wiki/Projects:Pluto).
+
 Pluto is a programmable digital watch that re-uses case and LCD 
 panel of the Casio® F-91W.  This is the software repo, for the 
 hardware side of things and a more information, see the
