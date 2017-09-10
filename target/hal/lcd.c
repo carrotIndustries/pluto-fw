@@ -61,7 +61,7 @@ void lcd_init(void)
 	LCDCMEMCTL |= LCDCLRM | LCDCLRBM;
 
 	LCDCCTL0 |= LCDON;
-	hal_lcd_set_contrast(10);
+	hal_lcd_set_contrast(15);
 }
 
 void hal_lcd_set_blink(uint8_t st) {

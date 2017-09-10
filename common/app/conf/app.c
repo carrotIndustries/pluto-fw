@@ -248,7 +248,7 @@ static const svc_menu_item_adj_t menu_item_backlight_brightness = {
 	.handler_set = backlight_brightness_set,
 };
 
-static uint8_t lcd_contrast;
+static uint8_t lcd_contrast = 15;
 
 static int32_t lcd_contrast_get(void *ud) {
 	return lcd_contrast;
