@@ -1,5 +1,3 @@
-Pluto will be at the 33C3, for more info check the [wiki page](https://events.ccc.de/congress/2016/wiki/Projects:Pluto).
-
 Pluto is a programmable digital watch that re-uses case and LCD 
 panel of the Casio® F-91W.  This is the software repo, for the 
 hardware side of things and a more information, see the
@@ -7,7 +5,7 @@ hardware side of things and a more information, see the
 This document is incomplete as it only covers the most important aspects of the firmware, the rest is 
 left as an exercise to the reader.
 
-#Features
+# Features
 - Displays time in decimal/binary/hexadecimal base
 - Multiple alarms
 - Multiple countdown timers
@@ -21,30 +19,30 @@ left as an exercise to the reader.
 - Useless customisation (Key beep frequency, etc.)
 - greater than 1 year battery life (estimate based on current consumption)
 
-#Architectural overview
+# Architectural overview
 To simplify development, the pluto firmware can be compiled to run on 
 Linux. User interface (LCD screen and buttons) is provided by a Gtk+ 
 application the firmware connects to using a pair of ZeroMQ sockets. In 
 spite of being technically inaccurate, this mode of operation is called 
 'simulator'.
-This requirement requires dividing the firmware in three layers:
+This requires dividing the firmware in three layers:
 
-##Hardware Abstraction Layer (hal)
+## Hardware Abstraction Layer (hal)
 This layer provides the interface to the underlying hardware. Currently, there are HALs for 
 the MSP430FR6972 target and the simulator running on Linux. Only the hardware-dependent aspects 
 are implemented here, the hardware-independent aspects are left to the 
 next layer to avoid code duplication.
 
-##Services (svc)
+## Services (svc)
 The services layer implements hardware-independent features like 
 playing back RTTTL ringtones, providing the LCD character set and
 handling menu operation.
 
-##Application (app)
+## Application (app)
 The application layer provides the user interface. Currently, the 
 application layer is dependent on the F-91W's LCD layout.
 
-#Simulator
+# Simulator
 As explained earlier, the firmware can be compiled to run on Linux. 
 This way, the firmware has been developed before the hardware being 
 available. Not having to fiddle with the tiny watch hardware makes 
@@ -67,7 +65,7 @@ This list is very likely to be incomplete, nevertheless the simulator
 has proven to be quite useful. Obligatory screenshot:
 ![Simulator GUI](simulator.png)
 
-#Target
+# Target
 To conserve power and get anywhere near an acceptable battery life, the 
 firmware has to make aggressive use of the MSP430 low power features. 
 Most of the time, the MCU is asleep in LPM3 mode. In this mode, only 
@@ -91,22 +89,22 @@ up by interrupts:
 All ISRs except for the last one exit the low-power mode, so the main 
 loop will get called.
 
-#Detailed architecture
-##HAL
+# Detailed architecture
+## HAL
 The HAL provides a unified interface to the target's and simulator's 
 features:
-###LCD
+### LCD
 The HAL groups the LCD into digits. A digit is either a 
 7-segment-like digit or a bunch of indicators.
 The simulator's HAL sends the segments to be set over to the display 
-process as a ZeroMQ message. The target HAS has to use a mapping table 
+process as a ZeroMQ message. The target has has to use a mapping table 
 that maps HAL LCD segments to the appropriate COM and SEG lines.
-###Other features
+### Other features
 The remaining features are pretty mundane, in case you want to 
 implement a new hal, take a look at common/hal/hal.h to find out what 
 you need to implement.
 
-##Events
+## Events
 To meet above power requirements, the pluto firmware is event-based. 
 Once the main loop gets called, it figures out why it's been called and 
 populates a bitfield typed `svc_main_proc_event_t` accordingly and 
@@ -114,7 +112,7 @@ hands over to `svc_main_proc`. After handling services-related things
 like processing alarms and countdown timers, it'll dispatch the event 
 to the currently active app.
 
-##Apps, Views and Menus
+## Apps, Views and Menus
 An app provides a distinct set of features to the users. It doesn't contain any 
 business logic, that's what the services are for. An app is divided 
 into multiple views. A view is roughly equivalent to one level in menu 
@@ -127,12 +125,12 @@ relies on the application to translate incrementing and decrementing a
 single digit into an actual numeric value taking into account clipping 
 and other constraints.
 
-##LCD
+## LCD
 The services layer uses a character table for each kind of LCD digit to 
 provide the best possible character rendering for each segment. It 
 provides functions for writing strings and integers to the LCD.
 
-##OTP generation
+## OTP generation
 Right now, the OTP generator is WIP, since there isn't a way to 
 synchronize the OTP clock and uploading secrets involves taking apart 
 the watch and flashing the firmware. To protect the OTP secrets, 
@@ -142,7 +140,7 @@ PIN's SHA-1 hash. One has to take care to pad the secrets with random
 bytes, so that an attacker can't tell whether a PIN is correct or not. 
 You're welcome to improve the security of the secret storage.
 
-##Persistent settings
+## Persistent settings
 Since the MSP430FR6972 uses FRAM for nonvolatile storage, writing 
 nonvolatile data is as easy as writing to RAM. All nonvolatile 
 variables are linked into a dedicated section, that can be left 
@@ -150,13 +148,13 @@ unmodified when updating the firmware. That's what the "program-noload"
 target is for. Currently, alarms, countdown timers, OTP secrets and 
 some settings are stored in nonvolatile memory.
 
-#How do I build?
-##Dependencies for both target and simulator
+# How do I build?
+## Dependencies for both target and simulator
  - python 3 (3.5 tested)
  - python-rtttl for parsing RTTTL ringtones
  - make
 
-##Dependencies for simulator
+## Dependencies for simulator
  - C compiler (gcc tested)
  - zeromq (for communication between firmware and GUI)
  - pulseaudio (for buzzer simulation)
@@ -165,14 +163,14 @@ some settings are stored in nonvolatile memory.
  - Gtk+ 3 (GUI)
  - pygobject (GUI)
 
-##Dependencies for target
+## Dependencies for target
  - msp430-elf toolchain
  - mspdebug for firmware programming
 
 With these dependencies satisfied, the pluto firmware should build on 
 any reasonably up-to-date Linux distribution. 
 
-##Building and running simulator
+## Building and running simulator
 ```
 $ cd sim
 $ make
@@ -180,7 +178,7 @@ $ ./emu.py&
 $ ./sim
 ```
 
-##Building for target
+## Building for target
 ```
 $ cd target
 $ make
@@ -188,11 +186,11 @@ $ make program
 ```
 You may have to modify the Makefile to suit your particular programmer.
 
-#Credits
+# Credits
 Thanks go to [sh-ow](https://github.com/sh-ow) for implementing parts 
 of the MSP430 HAL.
 
-#Included third-party software
+# Included third-party software
 - [mbedtls](https://tls.mbed.org/) SHA-1 for use in HMAC
 - [MSP430 driverlib](http://www.ti.com/tool/mspdriverlib) AES256 
   peripheral driver
