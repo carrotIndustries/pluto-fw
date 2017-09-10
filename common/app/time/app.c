@@ -1,8 +1,6 @@
 #include "app.h"
 #include "platform.h"
 
-
-
 static void menu_exit(void *ud) {
 	app_set_view(app_current, 0);
 }
@@ -64,6 +62,7 @@ static void adj_enter(void *ud) {
 
 static void adj_time_leave(void *ud) {
 	hal_rtc_set_time(&tt);
+	svc_seconds_since_last_set_reset();
 }
 
 static void adj_date_leave(void *ud) {
@@ -240,6 +239,26 @@ static const svc_menu_item_choice_t menu_item_cal_sign = {
 	.handler_get = cal_sign_get,
 };
 
+static void acal_enter(void *ud) {
+	app_set_view(app_current, 2);
+}
+
+static const svc_menu_item_text_t menu_item_acal = {
+	.type = SVC_MENU_ITEM_T_TEXT,
+	.text = "acal",
+	.handler = acal_enter
+};
+
+static void adjh_enter(void *ud) {
+	app_set_view(app_current, 3);
+}
+
+static const svc_menu_item_text_t menu_item_adj = {
+	.type = SVC_MENU_ITEM_T_TEXT,
+	.text = " adj",
+	.handler = adjh_enter
+};
+
 static const svc_menu_item_unknown_t *menu_items[] = {
 	(void*)&menu_item_base,
 	(void*)&menu_item_time,
@@ -247,6 +266,8 @@ static const svc_menu_item_unknown_t *menu_items[] = {
 	(void*)&menu_item_lang,
 	(void*)&menu_item_cal_sign,
 	(void*)&menu_item_cal,
+	(void*)&menu_item_acal,
+	(void*)&menu_item_adj,
 	(void*)&menu_item_up,
 };
 
@@ -275,6 +296,13 @@ static app_view_t views[] = {
 	{
 		.enter = menu_enter,
 		.main = main_conf
+	},
+	{
+		.enter = app_app_time_acal_enter,
+		.main = app_app_time_acal_main,
+	},
+	{
+		.main = app_app_time_adj_main,
 	}
 };
 

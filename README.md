@@ -19,6 +19,21 @@ left as an exercise to the reader.
 - Useless customisation (Key beep frequency, etc.)
 - greater than 1 year battery life (estimate based on current consumption)
 
+## Assisted calibration
+Aside from being a cool nerd gadget pluto's main purpose is accurately
+telling the time. To do so, the RTC needs to be calibrated to
+compensate for the crystal's error. To simplify this, the
+firmware can now assist the user by keeping track of how long it's been
+since the time has last been set. The process goes like this (`acal` in
+the time menu):
+
+- **ME**asure: press enter when the minute changs on the reference clock, the time difference will be shown
+- **S**econds since **L**ast set: shows how long it's been since the time has been set in units of 100 seconds
+- P**PM**: shows the calculated deviation in units of 10ppb, may display "over" when the valued exceeds the displayable range
+- **CAL**ibration **st**ore: takes the calculated ppm value, subtracts it from the current calibration value and updates the calibration
+- **ADJ**ust: corrects the time by the measured value. Correction only takes place when the correction value can be applied without overflow, PM flashed while correction is pending.
+
+
 # Architectural overview
 To simplify development, the pluto firmware can be compiled to run on 
 Linux. User interface (LCD screen and buttons) is provided by a Gtk+ 
@@ -73,7 +88,7 @@ the low-frequency clock ACLK (sourced from 32.768 kHz crystal) and
 low-power peripherals, like LCD and RTC are active. The MCU gets woken 
 up by interrupts:
 
-- Watchdog timer used as 4Hz tick source, used for display updating and time 
+- RTC as 4Hz tick source, used for display updating and time 
   base for countdown timers.
 - ~100Hz debounce timer: This timer only runs, when the aforementioned 
   button polling ISR detects a pressed button.

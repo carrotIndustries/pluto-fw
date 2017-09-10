@@ -12,6 +12,8 @@ SRC += ../common/svc/lcd.c \
        ../common/svc/compass.c \
        ../common/svc/init.c \
        ../common/svc/otp.c \
+       ../common/svc/seconds_since_last_set.c \
+       ../common/svc/rtc_adj.c \
 
 include ../common/svc/otp/sources.mk
 

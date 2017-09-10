@@ -4,6 +4,7 @@
 #include "common/hal/hal.h"
 
 static volatile hal_rtc_timedate_t timedate_l;
+uint8_t tick_event=0;
 
 #define RTC_LOCK WITH(RTCCTL0_H = RTCKEY_H, RTCCTL0_H = 0)
 
@@ -12,6 +13,7 @@ void rtc_init(void)
 	RTC_LOCK {
 		RTCCTL1 = RTCMODE;
 		RTCCTL0_L = RTCRDYIE_L;
+		RTCPS1CTL = RT1IP_4 | RT1PSIE;
 	}
 }
 
@@ -84,8 +86,8 @@ int16_t hal_rtc_cal_get(void)
 
 void __attribute__((interrupt ((RTC_VECTOR)))) RTC_ISR(void)
 {
-	RTCIV = 0;
-	if(RTCCTL1 & RTCRDY) {
+	int16_t iv = RTCIV;
+	if((iv == RTCIV_RTCRDYIFG) && RTCCTL1 & RTCRDY) {
 		timedate_l.h = RTCHOUR;
 		timedate_l.m = RTCMIN;
 		timedate_l.s = RTCSEC;
@@ -94,5 +96,9 @@ void __attribute__((interrupt ((RTC_VECTOR)))) RTC_ISR(void)
 		timedate_l.dom = RTCDAY;
 		timedate_l.month = RTCMON;
 		timedate_l.year = RTCYEAR;
+	}
+	if(iv == RTCIV_RT1PSIFG) {
+		tick_event = 1;
+		LPM3_EXIT;
 	}
 }

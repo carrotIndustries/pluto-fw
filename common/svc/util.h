@@ -22,6 +22,7 @@
 
 #define MIN(a, b)  (((a) < (b)) ? (a) : (b))
 #define MAX(a, b)  (((a) > (b)) ? (a) : (b))
+#define ABS(a)     (((a) < 0) ? -(a) : (a))
 #define CLAMP(x, low, high)  (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
 #define CLAMP_ABS(x, lim) (CLAMP((x), (-lim), (lim)))
 

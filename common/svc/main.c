@@ -21,6 +21,8 @@ void svc_main_proc(svc_main_proc_event_t event) {
 		svc_compass_process();
 		svc_otp_process();
 		svc_lcd_blink_process();
+		svc_seconds_since_last_set_process();
+		svc_rtc_adj_process();
 	}
 	if(!(event & SVC_MAIN_PROC_EVENT_AUX_TIMER) || svc_aux_timer_get_call_main()) {
 		app_current_update();
@@ -55,6 +57,14 @@ void svc_main_proc(svc_main_proc_event_t event) {
 		hal_lcd_seg_set(HAL_LCD_SEG_BARS, 0);
 	}
 	
+	if(svc_rtc_adj_get_pending()) {
+		hal_lcd_seg_set(HAL_LCD_SEG_PM, 1);
+		hal_lcd_seg_set_blink(HAL_LCD_SEG_PM, 1);
+	}
+	else {
+		hal_lcd_seg_set(HAL_LCD_SEG_PM, 0);
+	}
+
 	if(event & SVC_MAIN_PROC_EVENT_TICK) {
 		svc_countdown_draw_popup();
 		svc_alarm_draw_popup();

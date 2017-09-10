@@ -34,7 +34,7 @@ static volatile uint8_t fake_event = 0;
 int main(void)
 {
 	PM5CTL0 &= ~LOCKLPM5;
-	wdt_init();
+	wdt_clear();
 	clk_init();
 	io_init();
 	rtc_init();
@@ -84,6 +84,7 @@ int main(void)
 		}
 		if(ev) {
 			P9OUT |= BIT5;
+			wdt_clear();
 			svc_main_proc(ev);
 			hal_lcd_update();
 			P9OUT &= ~BIT5;
