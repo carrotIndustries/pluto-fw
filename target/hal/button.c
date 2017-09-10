@@ -71,6 +71,7 @@ uint8_t get_button_press(uint8_t button_mask)
 	__no_operation();
 	button_mask &= button_press;
 	button_press ^= button_mask;
+	__nop();
 	__eint();
 	return button_mask;
 }
@@ -81,6 +82,7 @@ uint8_t get_button_rpt(uint8_t button_mask)
 	__no_operation();
 	button_mask &= button_rpt;
 	button_rpt ^= button_mask;
+	__nop();
 	__eint();
 	return button_mask;
 }

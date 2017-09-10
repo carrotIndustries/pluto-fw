@@ -45,7 +45,8 @@ int main(void)
 	hal_compass_init();
 	hal_backlight_set(0);
 	svc_init();
-	
+
+	__nop();
 	__eint();
 	svc_lcd_puts(0, "13374213ru");
 
