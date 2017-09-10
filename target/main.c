@@ -71,8 +71,8 @@ int main(void)
 			ev |= SVC_MAIN_PROC_EVENT_KEY_ENTER_LONG;
 		}
 		
-		if(wdt_event) {
-			ev |= SVC_MAIN_PROC_EVENT_WDT;
+		if(tick_event) {
+			ev |= SVC_MAIN_PROC_EVENT_TICK;
 		}
 		if(aux_timer_event) {
 			ev |= SVC_MAIN_PROC_EVENT_AUX_TIMER;
@@ -87,8 +87,8 @@ int main(void)
 			hal_lcd_update();
 			P9OUT &= ~BIT5;
 		}
-		if(ev & SVC_MAIN_PROC_EVENT_WDT) {
-			wdt_event = 0;
+		if(ev & SVC_MAIN_PROC_EVENT_TICK) {
+			tick_event = 0;
 		}
 		if(ev & SVC_MAIN_PROC_EVENT_AUX_TIMER) {
 			aux_timer_event = 0;

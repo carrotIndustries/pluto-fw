@@ -16,7 +16,7 @@ void svc_main_proc(svc_main_proc_event_t event) {
 		svc_aux_timer_handler();
 	}
 	svc_backlight_process(event);
-	if(event & SVC_MAIN_PROC_EVENT_WDT) {
+	if(event & SVC_MAIN_PROC_EVENT_TICK) {
 		svc_countdown_process();
 		svc_compass_process();
 		svc_otp_process();
@@ -55,7 +55,7 @@ void svc_main_proc(svc_main_proc_event_t event) {
 		hal_lcd_seg_set(HAL_LCD_SEG_BARS, 0);
 	}
 	
-	if(event & SVC_MAIN_PROC_EVENT_WDT) {
+	if(event & SVC_MAIN_PROC_EVENT_TICK) {
 		svc_countdown_draw_popup();
 		svc_alarm_draw_popup();
 	}

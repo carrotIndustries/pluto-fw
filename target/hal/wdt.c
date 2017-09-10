@@ -3,7 +3,7 @@
 #include "common/hal/lcd_segments.h"
 #include "common/svc/svc.h"
 
-uint8_t wdt_event=0;
+uint8_t tick_event=0;
 
 void wdt_init(void)
 {
@@ -13,6 +13,6 @@ void wdt_init(void)
 
 void __attribute__((interrupt ((WDT_VECTOR)))) WDTServiceRoutine(void) {
 	SFRIFG1 &= ~WDTIFG;
-	wdt_event = 1;
+	tick_event = 1;
 	LPM3_EXIT;
 }

@@ -168,7 +168,7 @@ int main(void) {
 		svc_main_proc_event_t ev = 0;
 		switch(rxbuf[0]) {
 			case 'W' :
-				ev = SVC_MAIN_PROC_EVENT_WDT;
+				ev = SVC_MAIN_PROC_EVENT_TICK;
 			break;
 			
 			case 'K' :

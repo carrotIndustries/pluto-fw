@@ -31,7 +31,7 @@ void svc_backlight_process(svc_main_proc_event_t ev) {
 		timer = g_timeout*4;
 	}
 	
-	if(ev & SVC_MAIN_PROC_EVENT_WDT) { //decrement
+	if(ev & SVC_MAIN_PROC_EVENT_TICK) { //decrement
 		if(timer) {
 			timer--;
 		}
