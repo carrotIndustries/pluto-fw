@@ -62,7 +62,7 @@ static const svc_menu_item_text_t menu_item_ssls = {
 #define PPM_OVER 32767
 
 static int16_t get_ppm() { //actually, 10ppb
-	int32_t x = (100000000L*meas_delta)/svc_seconds_since_last_set_get();
+	int32_t x = (100000000L*meas_delta)/(int32_t)svc_seconds_since_last_set_get();
 	if(ABS(x) >= 32767)
 		x = PPM_OVER;
 	return x;
