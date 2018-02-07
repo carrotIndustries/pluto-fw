@@ -61,7 +61,6 @@ int main(void)
 		if(get_button_short(BTN_ALARM)) {
 			ev |= SVC_MAIN_PROC_EVENT_KEY_ENTER;
 		}
-		
 		if(get_button_long(BTN_LIGHT)) {
 			ev |= SVC_MAIN_PROC_EVENT_KEY_UP_LONG;
 		}
@@ -71,7 +70,6 @@ int main(void)
 		if(get_button_long(BTN_ALARM)) {
 			ev |= SVC_MAIN_PROC_EVENT_KEY_ENTER_LONG;
 		}
-		
 		if(tick_event) {
 			ev |= SVC_MAIN_PROC_EVENT_TICK;
 		}
@@ -95,7 +93,7 @@ int main(void)
 		if(ev & SVC_MAIN_PROC_EVENT_AUX_TIMER) {
 			aux_timer_event = 0;
 		}
-		
+
 		LPM3;
 	}
 	return 0;

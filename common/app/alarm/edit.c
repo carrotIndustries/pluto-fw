@@ -35,12 +35,12 @@ static void time_set(uint8_t dig, int8_t dir, void *user_data) {
 		case 2 :
 			al.h = CLAMP(al.h+dir, 0, 23);
 		break ;
-		
+
 		case 1 :
 		case 0 :
 			al.m = CLAMP(al.m+dir, 0, 59);
 		break ;
-		
+
 		default :
 			return;
 	}
@@ -110,27 +110,27 @@ static void days_draw(svc_menu_state_t *state, svc_menu_item_unknown_t *item, vo
 	//mo
 	hal_lcd_seg_set(HAL_LCD_SEG(0, 4), 1);
 	hal_lcd_seg_set(HAL_LCD_SEG(0, 5), al.days & (1<<0));
-	
+
 	//tu
 	hal_lcd_seg_set(HAL_LCD_SEG(0, 2), 1);
 	hal_lcd_seg_set(HAL_LCD_SEG(0, 1), al.days & (1<<1));
-	
+
 	//we
 	hal_lcd_seg_set(HAL_LCD_SEG(1, 4), 1);
 	hal_lcd_seg_set(HAL_LCD_SEG(1, 5), al.days & (1<<2));
-	
+
 	//th
 	hal_lcd_seg_set(HAL_LCD_SEG(1, 2), 1);
 	hal_lcd_seg_set(HAL_LCD_SEG(1, 1), al.days & (1<<3));
-	
+
 	//fr
 	hal_lcd_seg_set(HAL_LCD_SEG(2, 4), 1);
 	hal_lcd_seg_set(HAL_LCD_SEG(2, 5), al.days & (1<<4));
-	
+
 	//sa
 	hal_lcd_seg_set(HAL_LCD_SEG(2, 2), 1);
 	hal_lcd_seg_set(HAL_LCD_SEG(2, 1), al.days & (1<<5));
-	
+
 	//su
 	hal_lcd_seg_set(HAL_LCD_SEG(3, 4), 1);
 	hal_lcd_seg_set(HAL_LCD_SEG(3, 5), al.days & (1<<6));

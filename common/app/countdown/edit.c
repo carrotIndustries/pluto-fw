@@ -24,7 +24,7 @@ static int32_t time_get(void *ud) {
 static void time_set(uint8_t dig, int8_t dir, void *user_data) {
 	svc_countdown_t cd;
 	svc_countdown_get(PRIV(app_current)->countdown_current, &cd);
-	
+
 	switch(dig) {
 		case 5:
 		case 3:
@@ -37,17 +37,17 @@ static void time_set(uint8_t dig, int8_t dir, void *user_data) {
 		case 4 :
 			cd.h = CLAMP(cd.h+dir, 0, 23);
 		break ;
-		
+
 		case 3 :
 		case 2 :
 			cd.m = CLAMP(cd.m+dir, 0, 59);
 		break ;
-		
+
 		case 1 :
 		case 0 :
 			cd.s = CLAMP(cd.s+dir, 0, 59);
 		break ;
-		
+
 		default :
 			return;
 	}
@@ -78,7 +78,6 @@ static const svc_menu_item_adj_t menu_item_time = {
 	.handler_set = time_set,
 	.handler_draw = time_draw,
 };
-
 
 static const svc_menu_item_text_t menu_item_up = {
 	.type = SVC_MENU_ITEM_T_TEXT,
@@ -128,7 +127,6 @@ static uint8_t melody_get(void *ud) {
 static void melody_set(uint8_t choice, void *ud) {
 	svc_countdown_set_melody(PRIV(app_current)->countdown_current, choice);
 }
-
 
 static svc_menu_item_choice_t menu_item_melody = {
 	.type = SVC_MENU_ITEM_T_CHOICE,

@@ -21,7 +21,6 @@ void svc_menu_run(const svc_menu_t *menu, svc_menu_state_t *state, svc_main_proc
 						it->handler(it->user_data);
 					}
 				}
-				
 			}
 		}
 		else if(event & SVC_MAIN_PROC_EVENT_KEY_ENTER) {
@@ -33,7 +32,7 @@ void svc_menu_run(const svc_menu_t *menu, svc_menu_state_t *state, svc_main_proc
 						it->handler(it->user_data);
 					}
 				} break;
-				
+
 				case SVC_MENU_ITEM_T_CHOICE : {
 					svc_menu_item_choice_t *it = (void*)it_u;
 					uint8_t c = it->handler_get(it->user_data);
@@ -42,7 +41,7 @@ void svc_menu_run(const svc_menu_t *menu, svc_menu_state_t *state, svc_main_proc
 						it->handler_set(c, it->user_data);
 					}
 				} break;
-				
+
 				case SVC_MENU_ITEM_T_ADJ : {
 					svc_menu_item_adj_t *it = (void*)it_u;
 					state->adj_mode = 1;
@@ -54,17 +53,16 @@ void svc_menu_run(const svc_menu_t *menu, svc_menu_state_t *state, svc_main_proc
 			}
 		}
 		svc_menu_item_unknown_t *it_u = menu->items[*item_current];
-		
-		
+
 		if(menu->header) {
 			svc_lcd_puts(menu->header_pos, menu->header);
 		}
-		
+
 		switch(it_u->type) {
 			case SVC_MENU_ITEM_T_TEXT : {
 				svc_menu_item_text_t *it = (void*)it_u;
 				svc_lcd_puts(0, it->text);
-				
+
 			} break;
 			case SVC_MENU_ITEM_T_CHOICE : {
 				svc_menu_item_choice_t *it = (void*)it_u;
@@ -108,15 +106,15 @@ void svc_menu_run(const svc_menu_t *menu, svc_menu_state_t *state, svc_main_proc
 				svc_lcd_blink_disable();
 				it->handler_set(it->digits-state->adj_digit-1, -1, it->user_data);
 			}
-			
 		}
+
 		if(event & SVC_MAIN_PROC_EVENT_KEY_ENTER_LONG) {
 			state->adj_mode = 0;
 			if(it->handler_leave) {
 				it->handler_leave(it->user_data);
 			}
 		}
-		
+
 		svc_lcd_puti(0, it->digits, it->handler_get(it->user_data));
 		if(event & SVC_MAIN_PROC_EVENT_KEY_ENTER) {
 			INC_MOD(state->adj_digit, it->digits+1);

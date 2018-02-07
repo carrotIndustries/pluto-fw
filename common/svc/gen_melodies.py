@@ -21,5 +21,3 @@ with open(sys.argv[1], "r") as mfile :
 		print(" mldy_%d,"%i)
 	print("};")
 	print("const uint8_t svc_melodies_n = %d;\n"%len(lines));
-
-

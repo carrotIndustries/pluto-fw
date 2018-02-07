@@ -31,7 +31,7 @@ void svc_aux_timer_melody_handler(void) {
 		repeat_delay--;
 		return;
 	}
-	
+
 	if(note_cur) {
 		if(note_cur->duration == 0) {
 			hal_beep(0);

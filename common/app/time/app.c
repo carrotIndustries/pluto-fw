@@ -40,17 +40,17 @@ static void time_set(uint8_t dig, int8_t dir, void *user_data) {
 		case 4 :
 			tt.h = CLAMP(tt.h+dir, 0, 23);
 		break ;
-		
+
 		case 3 :
 		case 2 :
 			tt.m = CLAMP(tt.m+dir, 0, 59);
 		break ;
-		
+
 		case 1 :
 		case 0 :
 			tt.s = CLAMP(tt.s+dir, 0, 59);
 		break ;
-		
+
 		default :
 			return;
 	}
@@ -80,7 +80,6 @@ static const svc_menu_item_adj_t menu_item_time = {
 	.handler_leave = adj_time_leave
 };
 
-
 static int32_t date_get(void *ud) {
 	return tt.dom + tt.month*100L + tt.year*10000L;
 }
@@ -93,11 +92,11 @@ static void date_set(uint8_t dig, int8_t di, void *user_data) {
 		case 1:
 			dir *= 10;
 		break;
-		
+
 		case 6:
 			dir *= 100;
 		break;
-		
+
 		case 7:
 			dir *= 1000;
 		break;
@@ -109,17 +108,17 @@ static void date_set(uint8_t dig, int8_t di, void *user_data) {
 		case 4 :
 			tt.year = CLAMP(tt.year+dir, 2000, 9999);
 		break ;
-		
+
 		case 3 :
 		case 2 :
 			tt.month = CLAMP(tt.month+dir, 1, 12);
 		break ;
-		
+
 		case 1 :
 		case 0 :
 			tt.dom = CLAMP(tt.dom+dir, 1, 31);
 		break ;
-		
+
 		default :
 			return;
 	}
@@ -169,8 +168,6 @@ static const svc_menu_item_text_t menu_item_up = {
 	.handler = menu_exit
 };
 
-
-
 static int16_t cal_value = 0;
 static uint8_t cal_sign;
 
@@ -212,8 +209,6 @@ static void cal_enter(void *ud) {
 		cal_sign = 1;
 	}
 }
-
-
 
 static const svc_menu_item_adj_t menu_item_cal = {
 	.type = SVC_MENU_ITEM_T_ADJ,
@@ -286,7 +281,6 @@ static void main_conf(uint8_t view, const app_t *app, svc_main_proc_event_t even
 static void menu_enter(uint8_t view, const app_t *app) {
 	PRIV(app)->conf_state.item_current = 0;
 }
-
 
 static app_view_t views[] = {
 	{
