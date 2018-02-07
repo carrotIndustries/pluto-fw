@@ -8,6 +8,8 @@
 
 void svc_main_proc(svc_main_proc_event_t event) {
 	if(event & (SVC_MAIN_PROC_EVENT_KEY_ANY | SVC_MAIN_PROC_EVENT_KEY_ANY_LONG)) {
+		if(svc_alarm_get_pending() || svc_countdown_get_pending()) /* eat event if alarm/countdown shall be disabled (omnomnom) */
+			event &= ~(SVC_MAIN_PROC_EVENT_KEY_ANY | SVC_MAIN_PROC_EVENT_KEY_ANY_LONG);
 		svc_alarm_clear_pending();
 		svc_countdown_clear_pending();
 		svc_beep_key();
