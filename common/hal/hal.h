@@ -23,6 +23,8 @@ void hal_lcd_set_contrast(uint8_t level);
 
 void hal_backlight_set(uint8_t bright);
 void hal_beep(uint16_t freq);
+uint8_t hal_beep_get_enabled();
+void hal_beep_set_enabled(uint8_t enabled);
 
 typedef struct {
 	uint8_t h;
@@ -57,5 +59,5 @@ void hal_aes_init(void);
 void hal_aes_decrypt(uint8_t *dest, uint8_t *src);
 void hal_sha1(const uint8_t *input, uint16_t len, uint8_t *output);
 
-#define HAL_DEBUG_N 2
+#define HAL_DEBUG_N 1
 uint16_t hal_debug_read(uint8_t index);

@@ -30,6 +30,17 @@ void hal_beep(uint16_t freq) {
 	beep_set_freq(freq);
 }
 
+static uint8_t g_beep_enabled=1;
+uint8_t hal_beep_get_enabled()
+{
+	return g_beep_enabled;
+}
+
+void hal_beep_set_enabled(uint8_t enabled)
+{
+	g_beep_enabled = enabled;
+}
+
 static void cat_seg(char *s, uint8_t seg) {
 	switch(seg) {
 		case HAL_LCD_SEG_24H :

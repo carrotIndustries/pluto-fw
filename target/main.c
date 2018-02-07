@@ -9,6 +9,7 @@
 #include "hal/compass.h"
 #include "hal/aes/aes256.h"
 #include "common/hal/lcd_segments.h"
+#include "common/hal/hal.h"
 #include "common/svc/svc.h"
 #include "common/svc/otp/oath.h"
 
@@ -29,6 +30,7 @@ void clk_init(void) {
 	CSCTL0_H = 0; /* lock access */
 }
 
+/* insert events with debugger by manipulating this variable */
 static volatile uint8_t fake_event = 0;
 
 int main(void)
@@ -41,14 +43,25 @@ int main(void)
 	lcd_init();
 	button_init();
 	aux_timer_init();
-	beep_init();
+	/* if last reboot reason was BOR, disable beep */
+	uint16_t reset_reason = hal_debug_read(0);
+	if(reset_reason == SYSRSTIV_BOR)
+		beep_init(0);
+	else
+		beep_init(1);
 	hal_compass_init();
 	hal_backlight_set(0);
 	svc_init();
 
 	__nop();
 	__eint();
-	svc_lcd_puts(0, "13374213ru");
+
+	/* print reset reason on screen if there is some */
+	if(reset_reason) {
+		svc_lcd_puts(8, "RS");
+		svc_lcd_putix(4, 2, reset_reason&0xFF);
+		LPM3;
+	}
 
 	while(1) {
 		svc_main_proc_event_t ev = 0;
