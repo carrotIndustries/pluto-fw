@@ -256,13 +256,13 @@ static const svc_menu_item_text_t menu_item_adj = {
 
 static const svc_menu_item_unknown_t *menu_items[] = {
 	(void*)&menu_item_base,
+	(void*)&menu_item_acal,
 	(void*)&menu_item_time,
 	(void*)&menu_item_date,
 	(void*)&menu_item_lang,
-	(void*)&menu_item_cal_sign,
-	(void*)&menu_item_cal,
-	(void*)&menu_item_acal,
 	(void*)&menu_item_adj,
+	(void*)&menu_item_cal,
+	(void*)&menu_item_cal_sign,
 	(void*)&menu_item_up,
 };
 

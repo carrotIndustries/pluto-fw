@@ -2,11 +2,14 @@
 #include "rtc.h"
 #include "common/svc/util.h"
 #include "common/hal/hal.h"
+#include "platform.h"
 
 static volatile hal_rtc_timedate_t timedate_l;
 uint8_t tick_event=0;
 
 #define RTC_LOCK WITH(RTCCTL0_H = RTCKEY_H, RTCCTL0_H = 0)
+
+static int16_t SECTION_INFOMEM rtc_cal_save = 0;
 
 void rtc_init(void)
 {
@@ -15,6 +18,7 @@ void rtc_init(void)
 		RTCCTL0_L = RTCRDYIE_L;
 		RTCPS1CTL = RT1IP_4 | RT1PSIE;
 	}
+	hal_rtc_cal_set(rtc_cal_save);
 }
 
 void hal_rtc_get(hal_rtc_timedate_t *result)
@@ -67,6 +71,7 @@ void hal_rtc_set_date(hal_rtc_timedate_t *date)
 
 void hal_rtc_cal_set(int16_t cal)
 {
+	rtc_cal_save = cal;
 	RTC_LOCK {
 		if(cal < 0)
 			RTCOCAL = (-1 * cal) & 0xff;
