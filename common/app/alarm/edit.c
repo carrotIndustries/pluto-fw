@@ -157,6 +157,13 @@ static void melody_set(uint8_t choice, void *ud) {
 	svc_alarm_set_melody(PRIV(app_current)->alarm_current, choice);
 }
 
+static void melody_draw(svc_menu_state_t *state, svc_menu_item_unknown_t *item, void *user_data) {
+	svc_alarm_t al;
+	svc_alarm_get(PRIV(app_current)->alarm_current, &al);
+	svc_lcd_putsn(4, 2, svc_melodies[al.melody].title);
+	svc_lcd_puti(6, 2, PRIV(app_current)->alarm_current);
+}
+
 static svc_menu_item_choice_t menu_item_melody = {
 	.type = SVC_MENU_ITEM_T_CHOICE,
 	.text = " mel",
@@ -165,7 +172,7 @@ static svc_menu_item_choice_t menu_item_melody = {
 	.choices = {""},
 	.handler_set = melody_set,
 	.handler_get = melody_get,
-	.handler_draw = draw_current,
+	.handler_draw = melody_draw
 };
 
 static const svc_menu_item_unknown_t *menu_items[] = {

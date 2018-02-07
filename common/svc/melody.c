@@ -10,8 +10,8 @@ static uint8_t repeat_delay;
 
 
 void svc_melody_play_repeat(uint8_t melody, uint8_t rep) {
-	note_cur = svc_melodies[melody];
-	note_start = svc_melodies[melody];
+	note_cur = svc_melodies[melody].notes;
+	note_start = svc_melodies[melody].notes;
 	note_timer = 0;
 	repeat = rep;
 	repeat_delay = 0;

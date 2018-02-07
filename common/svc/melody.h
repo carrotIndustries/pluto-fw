@@ -6,7 +6,12 @@ typedef struct {
 	uint16_t duration;
 } svc_melody_note_t;
 
-extern const svc_melody_note_t *svc_melodies[];
+typedef struct {
+	char title[2];
+	const svc_melody_note_t *notes;
+} svc_melody_t;
+
+extern const svc_melody_t svc_melodies[];
 extern const uint8_t svc_melodies_n;
 
 void svc_melody_play(uint8_t melody);

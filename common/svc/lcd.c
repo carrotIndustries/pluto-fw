@@ -76,6 +76,12 @@ void svc_lcd_puts(uint8_t dig, const char *s) {
 	}
 }
 
+void svc_lcd_putsn(uint8_t dig, uint8_t len, const char *s) {
+	while(len--) {
+		svc_lcd_putc(dig++, *s++);
+	}
+}
+
 void svc_lcd_puti(uint8_t dig, uint8_t len, uint32_t value) {
 	dig += len-1;
 	while(len--) {
