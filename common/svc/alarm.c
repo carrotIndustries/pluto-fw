@@ -74,7 +74,6 @@ void svc_alarm_init(void) {
 	}
 }
 
-
 static uint8_t svc_alarm_match(svc_alarm_t *al, hal_rtc_timedate_t *td) {
 	return (al->enable) && (al->h == td->h) && (al->m == td->m) && (al->days & (1<<td->dow));
 }

@@ -33,7 +33,7 @@ void app_app_time_display_main(uint8_t view, const app_t *app, svc_main_proc_eve
 		hal_lcd_clear();
 	}
 	if(PRIV(app)->display_date) {
-		hal_lcd_seg_set(HAL_LCD_SEG_COLON, 0); 
+		hal_lcd_seg_set(HAL_LCD_SEG_COLON, 0);
 		svc_lcd_puti(0, 4, td.year);
 		svc_lcd_puti(4, 2, td.month);
 		svc_lcd_puti(6, 2, td.dom);
@@ -41,7 +41,7 @@ void app_app_time_display_main(uint8_t view, const app_t *app, svc_main_proc_eve
 	else {
 		switch(*(PRIV(app)->base)) {
 			case BASE_DEC :
-				hal_lcd_seg_set(HAL_LCD_SEG_COLON, 1); 
+				hal_lcd_seg_set(HAL_LCD_SEG_COLON, 1);
 				hal_lcd_seg_set_blink(HAL_LCD_SEG_COLON, 1);
 				if(td.h != td_last->h)
 					svc_lcd_puti_fast(0, 2, td.h);
@@ -52,10 +52,10 @@ void app_app_time_display_main(uint8_t view, const app_t *app, svc_main_proc_eve
 				if(td.dom != td_last->dom)
 					svc_lcd_puti_fast(6, 2, td.dom);
 			break;
-			
+
 			case BASE_HEX :
-				hal_lcd_seg_set(HAL_LCD_SEG_COLON, 1); 
-				hal_lcd_seg_set_blink(HAL_LCD_SEG_COLON, 1); 
+				hal_lcd_seg_set(HAL_LCD_SEG_COLON, 1);
+				hal_lcd_seg_set_blink(HAL_LCD_SEG_COLON, 1);
 				if(td.h != td_last->h)
 					svc_lcd_putix(0, 2, td.h);
 				if(td.m != td_last->m)
@@ -65,12 +65,12 @@ void app_app_time_display_main(uint8_t view, const app_t *app, svc_main_proc_eve
 				if(td.dom != td_last->dom)
 					svc_lcd_putix(6, 2, td.dom);
 			break;
-			
+
 			case BASE_BIN :
 				hal_lcd_seg_set(HAL_LCD_SEG(1, 6), 1);
 				hal_lcd_seg_set(HAL_LCD_SEG(2, 6), 1);
 				hal_lcd_seg_set(HAL_LCD_SEG(3, 6), 1);
-				
+
 				if(td.h != td_last->h) {
 					hal_lcd_seg_set(HAL_LCD_SEG(3, 1), td.h&(1<<0));
 					hal_lcd_seg_set(HAL_LCD_SEG(3, 5), td.h&(1<<1));
@@ -78,7 +78,7 @@ void app_app_time_display_main(uint8_t view, const app_t *app, svc_main_proc_eve
 					hal_lcd_seg_set(HAL_LCD_SEG(2, 5), td.h&(1<<3));
 					hal_lcd_seg_set(HAL_LCD_SEG(1, 1), td.h&(1<<4));
 				}
-				
+
 				if(td.m != td_last->m) {
 					hal_lcd_seg_set(HAL_LCD_SEG(3, 2), td.m&(1<<0));
 					hal_lcd_seg_set(HAL_LCD_SEG(3, 4), td.m&(1<<1));
@@ -87,7 +87,7 @@ void app_app_time_display_main(uint8_t view, const app_t *app, svc_main_proc_eve
 					hal_lcd_seg_set(HAL_LCD_SEG(1, 2), td.m&(1<<4));
 					hal_lcd_seg_set(HAL_LCD_SEG(1, 4), td.m&(1<<5));
 				}
-				
+
 				if(td.s != td_last->s) {
 					hal_lcd_seg_set(HAL_LCD_SEG(5, 0), td.s>(60/8));
 					hal_lcd_seg_set(HAL_LCD_SEG(5, 1), td.s>((60/8)*2));
@@ -101,7 +101,7 @@ void app_app_time_display_main(uint8_t view, const app_t *app, svc_main_proc_eve
 				if(td.dom != td_last->dom)
 					svc_lcd_puti_fast(6, 2, td.dom);
 			break;
-			
+
 		}
 	}
 	if(td.dow != td_last->dow)
