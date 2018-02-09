@@ -43,12 +43,15 @@ int main(void)
 	lcd_init();
 	button_init();
 	aux_timer_init();
-	/* if last reboot reason was BOR, disable beep */
+
 	uint16_t reset_reason = hal_debug_read(0);
-	if(reset_reason == SYSRSTIV_BOR)
+	if(reset_reason) {
 		beep_init(0);
-	else
+	}
+	else {
 		beep_init(1);
+	}
+
 	hal_compass_init();
 	hal_backlight_set(0);
 	svc_init();
@@ -58,9 +61,13 @@ int main(void)
 
 	/* print reset reason on screen if there is some */
 	if(reset_reason) {
-		svc_lcd_puts(8, "RS");
+		svc_lcd_puts(8, "RE");
 		svc_lcd_putix(4, 2, reset_reason&0xFF);
-		LPM3;
+		hal_lcd_update();
+		while(!(get_button_short(BTN_ALARM))) {
+			wdt_clear();
+			LPM3;
+		}
 	}
 
 	while(1) {
