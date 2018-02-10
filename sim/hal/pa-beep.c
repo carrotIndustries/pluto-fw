@@ -9,7 +9,6 @@
 #define N_SAMPLES 65536
 
 static int latency = 50000; // start latency in micro seconds
-static int sampleoffs = 0;
 static short sampledata[N_SAMPLES];
 static pa_buffer_attr bufattr;
 static int underflows = 0;
