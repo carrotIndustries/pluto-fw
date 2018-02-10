@@ -44,6 +44,7 @@ program-noload : $(OUTDIR)/$(TARGET)_noload.elf
 
 size : $(OBJECTS)
 	$(SZ) $^ | sort -n
+	$(SZ) $(OUTDIR)/$(TARGET).elf
 
 # internal targets ############################################################
 $(OUTDIR)/$(TARGET).bin : $(OUTDIR)/$(TARGET).elf
