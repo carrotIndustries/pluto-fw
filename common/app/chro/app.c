@@ -20,12 +20,12 @@ static void main(uint8_t view, const app_t *app, svc_main_proc_event_t event) {
 		switch(st) {
 			case SVC_CHRO_STATE_RUN :
 				svc_chro_hold(0);
-			break;
-			
+				break;
+
 			case SVC_CHRO_STATE_HOLD :
 			case SVC_CHRO_STATE_STOP :
 				svc_chro_start(0);
-			break;
+				break;
 		}
 	}
 	else if(event & SVC_MAIN_PROC_EVENT_KEY_DOWN) {
@@ -33,38 +33,35 @@ static void main(uint8_t view, const app_t *app, svc_main_proc_event_t event) {
 			case SVC_CHRO_STATE_RUN :
 			case SVC_CHRO_STATE_HOLD :
 				svc_chro_stop(0);
-			break;
-			
+				break;
+
 			case SVC_CHRO_STATE_STOP :
 				svc_chro_reset(0);
-			break;
-		}		
-		
+				break;
+		}
 	}
 	else if(event & SVC_MAIN_PROC_EVENT_KEY_UP) {
 		app_exit();
 	}
-	
+
 	switch(st) {
 		case SVC_CHRO_STATE_RUN :
 			svc_lcd_puts(8, "ru");
-			
-		break;
-		
+			break;
+
 		case SVC_CHRO_STATE_HOLD :
 			svc_lcd_puts(8, "hl");
-		break;
-		
+			break;
+
 		case SVC_CHRO_STATE_STOP :
 			svc_lcd_puts(8, "st");
-		break;
+			break;
 	}
-	svc_lcd_puti(0, 2, ch.min); 
+	svc_lcd_puti(0, 2, ch.min);
 	svc_lcd_puti(2, 2, ch.sec);
 	svc_lcd_puti(4, 2, ch.subsec);
 	hal_lcd_seg_set(HAL_LCD_SEG_COLON, 1);
 	hal_lcd_seg_set_blink(HAL_LCD_SEG_COLON, st==SVC_CHRO_STATE_RUN);
-	
 }
 
 static app_view_t view = {
