@@ -161,6 +161,27 @@ static const svc_menu_item_choice_t menu_item_hourbeep_quiet = {
 	.handler_get = hourbeep_quiet_get
 };
 
+static uint8_t beep_enable_get(void *ud) {
+	return hal_beep_get_enabled();
+}
+
+static void beep_enable_set(uint8_t choice, void *ud) {
+	hal_beep_set_enabled(choice);
+}
+
+static const svc_menu_item_choice_t menu_item_beep_enable = {
+	.type = SVC_MENU_ITEM_T_CHOICE,
+	.text = " ben",
+	.choice_pos = 4,
+	.n_choices = 2,
+	.choices = {
+		"of",
+		"on",
+	},
+	.handler_set = beep_enable_set,
+	.handler_get = beep_enable_get
+};
+
 static int32_t hourbeep_quiet_get_interval(void *ud) {
 	uint8_t s, e;
 
@@ -290,6 +311,7 @@ static const svc_menu_item_text_t *menu_items[] = {
 	(void*)&menu_item_keybeep,
 	(void*)&menu_item_keybeep_freq,
 	(void*)&menu_item_keybeep_duration,
+	(void*)&menu_item_beep_enable,
 	(void*)&menu_item_hourbeep,
 	(void*)&menu_item_hourbeep_freq,
 	(void*)&menu_item_hourbeep_duration,

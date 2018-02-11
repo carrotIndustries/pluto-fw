@@ -33,12 +33,11 @@ static void main(uint8_t view, const app_t *app, svc_main_proc_event_t event) {
 	}
 	else {
 		svc_lcd_puts(0, " pla");
-		svc_lcd_puti(4, 2, PRIV(app)->item_current);
+		svc_lcd_putsn(4, 2, svc_melodies[PRIV(app)->item_current].title);
 		if(event & SVC_MAIN_PROC_EVENT_KEY_ENTER) {
 			svc_melody_play(PRIV(app)->item_current);
 		}
 	}
-	
 }
 
 static app_view_t view = {

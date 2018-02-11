@@ -8,6 +8,8 @@
 
 void svc_main_proc(svc_main_proc_event_t event) {
 	if(event & (SVC_MAIN_PROC_EVENT_KEY_ANY | SVC_MAIN_PROC_EVENT_KEY_ANY_LONG)) {
+		if(svc_alarm_get_pending() || svc_countdown_get_pending()) /* eat event if alarm/countdown shall be disabled (omnomnom) */
+			event &= ~(SVC_MAIN_PROC_EVENT_KEY_ANY | SVC_MAIN_PROC_EVENT_KEY_ANY_LONG);
 		svc_alarm_clear_pending();
 		svc_countdown_clear_pending();
 		svc_beep_key();
@@ -35,7 +37,7 @@ void svc_main_proc(svc_main_proc_event_t event) {
 		}
 		app_current->views[app_current->priv->view_current].main(app_current->priv->view_current, app_current, event);
 	}
-	
+
 	if(svc_chro_get_any_running()) {
 		hal_lcd_seg_set(HAL_LCD_SEG_LAP, 1);
 		hal_lcd_seg_set_blink(HAL_LCD_SEG_LAP, 1);
@@ -48,7 +50,7 @@ void svc_main_proc(svc_main_proc_event_t event) {
 	else {
 		hal_lcd_seg_set(HAL_LCD_SEG_BELL, 0);
 	}
-	
+
 	if((svc_countdown_get_n_running() > 0) || svc_countdown_get_pending()) {
 		hal_lcd_seg_set(HAL_LCD_SEG_BARS, 1);
 		hal_lcd_seg_set_blink(HAL_LCD_SEG_BARS, svc_countdown_get_pending());
@@ -56,7 +58,7 @@ void svc_main_proc(svc_main_proc_event_t event) {
 	else {
 		hal_lcd_seg_set(HAL_LCD_SEG_BARS, 0);
 	}
-	
+
 	if(svc_rtc_adj_get_pending()) {
 		hal_lcd_seg_set(HAL_LCD_SEG_PM, 1);
 		hal_lcd_seg_set_blink(HAL_LCD_SEG_PM, 1);
@@ -69,6 +71,6 @@ void svc_main_proc(svc_main_proc_event_t event) {
 		svc_countdown_draw_popup();
 		svc_alarm_draw_popup();
 	}
-	
+
 	svc_beep_hour();
 }

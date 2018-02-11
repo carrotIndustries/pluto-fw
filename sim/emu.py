@@ -7,14 +7,14 @@ import zmq
 
 
 class Display(Gtk.DrawingArea) :
-	
+
 	__gsignals__ = {
 		"key":(GObject.SIGNAL_RUN_FIRST , GObject.TYPE_NONE, (GObject.TYPE_CHAR, )),
 	}
-	
+
 	S_ON =    1<<0
 	S_BLINK = 1<<1
-	
+
 	def __init__(self, definition) :
 		Gtk.DrawingArea.__init__(self)
 		self.definition = definition
@@ -28,7 +28,7 @@ class Display(Gtk.DrawingArea) :
 		self.connect("button-press-event", self._bpress)
 		self.add_events(Gdk.EventMask.SCROLL_MASK|Gdk.EventMask.BUTTON_PRESS_MASK)
 		self.add_tick_callback(self._tick)
-	
+
 	def _tick(self, wi, clock) :
 		ti = clock.get_frame_time()
 		if ti-self.last_frame_time > 200000 :
@@ -37,25 +37,25 @@ class Display(Gtk.DrawingArea) :
 			self.last_frame_time = ti
 			self.queue_draw()
 		return True
-	
+
 	def _scroll(self, wi, ev) :
 		if ev.direction == Gdk.ScrollDirection.UP :
 			self.emit("key", "U")
 		elif ev.direction == Gdk.ScrollDirection.DOWN :
 			self.emit("key", "D")
-			
+
 	def _bpress(self, wi, ev) :
 		self.emit("key", "E")
-	
+
 	def set_backlight(self, v) :
 		self.backlight = bool(v)
 		self.redraw()
-	
+
 	def clear(self) :
 		for k in self.segment_states.keys() :
 			self.segment_states[k] = 0
 		self.redraw()
-	
+
 	def _set_segment(self, seg, v, m) :
 		if seg not in self.segment_states.keys() :
 			try :
@@ -67,25 +67,25 @@ class Display(Gtk.DrawingArea) :
 		else :
 			self.segment_states[seg] &= ~m
 		self.redraw()
-	
+
 	def set_segment(self, seg, v) :
 		self._set_segment(seg, v, self.S_ON)
-	
+
 	def set_segment_blink(self, seg, v) :
 		self._set_segment(seg, v, self.S_BLINK)
-	
+
 	def draw_background(self) :
-		
+
 		linpat = cairo.LinearGradient(0,0,0,self.height)
 		linpat.add_color_stop_rgb(0, 128/255,166/255,128/255)
 		linpat.add_color_stop_rgb(1, 104/255,135/255,104/255)
-		
+
 		self.cr.set_source(linpat)
-		
+
 		self.cr.rectangle(0, 0, self.width, self.height)
 		self.cr.fill()
-		
-		
+
+
 	def draw_backlight(self) :
 		linpat = cairo.LinearGradient(0,0,self.width,0)
 		linpat.add_color_stop_rgba(0, 0, 1, 0, .7)
@@ -93,11 +93,11 @@ class Display(Gtk.DrawingArea) :
 		self.cr.set_source(linpat)
 		self.cr.rectangle(0, 0, self.width, self.height)
 		self.cr.fill()
-	
+
 	def draw_display(self) :
 		width = self.definition["width"]
 		height = self.definition["height"]
-		
+
 		scale = min((self.width/width, self.height/height))
 		self.cr.translate((self.width-width*scale)/2, (self.height-height*scale)/2)
 
@@ -106,7 +106,7 @@ class Display(Gtk.DrawingArea) :
 		self.cr.set_line_join(cairo.LINE_JOIN_ROUND)
 		layout = PangoCairo.create_layout (self.cr)
 		layout.set_alignment(Pango.Alignment.CENTER)
-		
+
 		desc = Pango.font_description_from_string ("Cantarell 3")
 		layout.set_font_description( desc)
 		for segment in self.definition["segments"] :
@@ -129,11 +129,11 @@ class Display(Gtk.DrawingArea) :
 					c2[0] += c[0]
 					c2[1] += c[1]
 				self.cr.move_to((c1[0]+c2[0])/2, (c1[1]+c2[1])/2)
-				
+
 				self.cr.set_source_rgb(1,0,0)
 				PangoCairo.show_layout(self.cr, layout)
-			
-	
+
+
 	def paint(self, wi, cr) :
 		self.cr = cr
 		self.width = self.get_allocated_width()
@@ -143,10 +143,10 @@ class Display(Gtk.DrawingArea) :
 		if self.backlight :
 			self.draw_backlight()
 		self.draw_display()
-	
+
 	def redraw(self) :
 		self.queue_draw()
-		
+
 
 
 builder = Gtk.Builder()
@@ -160,24 +160,24 @@ window = builder.get_object("window1")
 class Handler :
 	def button_mode_clicked(self, widget) :
 		outsock.send(b"KD")
-	
+
 	def button_light_clicked(self, widget) :
 		outsock.send(b"KU")
-		
+
 	def button_alarm_clicked(self, widget) :
 		outsock.send(b"KE")
-	
+
 	def button_mode_clicked_long(self, widget) :
 		outsock.send(b"LD")
-	
+
 	def button_light_clicked_long(self, widget) :
 		outsock.send(b"LU")
-		
+
 	def button_alarm_clicked_long(self, widget) :
 		outsock.send(b"LE")
-		
-	
-	
+
+
+
 	def quit(self, widget) :
 		Gtk.main_quit()
 
@@ -211,8 +211,8 @@ def zmq_callback(queue, condition, display):
 			display.set_segment_blink(rx[2:], int(rx[1]))
 		elif cmd == "C" :
 			display.clear()
-			
-		
+
+
 	return True
 
 def wdt_callback() :

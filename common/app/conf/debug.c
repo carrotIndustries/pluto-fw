@@ -28,5 +28,4 @@ void app_app_conf_debug_main(uint8_t view, const app_t *app, svc_main_proc_event
 		svc_lcd_puti(6, 2, PRIV(app)->debug_item_current);
 		svc_lcd_putix(0, 4, PRIV(app)->debug_value);
 	}
-	
 }

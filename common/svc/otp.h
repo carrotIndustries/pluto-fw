@@ -3,7 +3,7 @@
 
 extern const uint8_t svc_otp_n_items;
 
-uint8_t svc_otp_unlock(uint16_t pin);
+void svc_otp_unlock(uint16_t pin);
 void svc_otp_lock(void);
 uint8_t svc_otp_is_locked(void);
 void svc_otp_set_time(uint32_t time);

@@ -22,44 +22,44 @@ static const svc_menu_item_text_t menu_item0 = {
 	.user_data = (void *)&app_app_time,
 };
 static const svc_menu_item_text_t menu_item1 = {
-	.text = "chro",
-	.handler = launch,
-	.user_data = (void *)&app_app_chro,
-};
-static const svc_menu_item_text_t menu_item2 = {
-	.text = "conf",
-	.handler = launch,
-	.user_data = (void *)&app_app_conf,
-};
-static const svc_menu_item_text_t menu_item3 = {
-	.text = " alarm",
-	.handler = launch,
-	.user_data = (void *)&app_app_alarm,
-};
-static const svc_menu_item_text_t menu_item4 = {
 	.text = "ctdn",
 	.handler = launch,
 	.user_data = (void *)&app_app_countdown,
 };
-static const svc_menu_item_text_t menu_item5 = {
+static const svc_menu_item_text_t menu_item2 = {
+	.text = " alarm",
+	.handler = launch,
+	.user_data = (void *)&app_app_alarm,
+};
+static const svc_menu_item_text_t menu_item3 = {
+	.text = "chro",
+	.handler = launch,
+	.user_data = (void *)&app_app_chro,
+};
+static const svc_menu_item_text_t menu_item4 = {
 	.text = " play",
 	.handler = launch,
 	.user_data = (void *)&app_app_play,
 };
-static const svc_menu_item_text_t menu_item6 = {
+static const svc_menu_item_text_t menu_item5 = {
 	.text = " compa",
 	.handler = launch,
 	.user_data = (void *)&app_app_compass,
 };
-static const svc_menu_item_text_t menu_item7 = {
-	.text = "   otp",
-	.handler = launch,
-	.user_data = (void *)&app_app_otp,
-};
-static const svc_menu_item_text_t menu_item8 = {
+static const svc_menu_item_text_t menu_item6 = {
 	.text = "speed",
 	.handler = launch,
 	.user_data = (void *)&app_app_speed,
+};
+static const svc_menu_item_text_t menu_item7 = {
+	.text = "conf",
+	.handler = launch,
+	.user_data = (void *)&app_app_conf,
+};
+static const svc_menu_item_text_t menu_item8 = {
+	.text = "   otp",
+	.handler = launch,
+	.user_data = (void *)&app_app_otp,
 };
 
 static const svc_menu_item_text_t *menu_items[] = {

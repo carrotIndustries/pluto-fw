@@ -41,7 +41,6 @@ static void main(uint8_t view, const app_t *app, svc_main_proc_event_t event) {
 			app_set_view(app, 1);
 		}
 	}
-	
 }
 
 static app_view_t views[] = {

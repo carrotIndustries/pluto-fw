@@ -30,32 +30,43 @@ void hal_beep(uint16_t freq) {
 	beep_set_freq(freq);
 }
 
+static uint8_t g_beep_enabled=1;
+uint8_t hal_beep_get_enabled()
+{
+	return g_beep_enabled;
+}
+
+void hal_beep_set_enabled(uint8_t enabled)
+{
+	g_beep_enabled = enabled;
+}
+
 static void cat_seg(char *s, uint8_t seg) {
 	switch(seg) {
 		case HAL_LCD_SEG_24H :
 			strcat(s, "24H");
 		break;
-		
+
 		case HAL_LCD_SEG_BARS :
 			strcat(s, "BARS");
 		break;
-		
+
 		case HAL_LCD_SEG_BELL :
 			strcat(s, "BELL");
 		break;
-		
+
 		case HAL_LCD_SEG_COLON :
 			strcat(s, "COLON");
 		break;
-		
+
 		case HAL_LCD_SEG_LAP :
 			strcat(s, "LAP");
 		break;
-		
+
 		case HAL_LCD_SEG_PM :
 			strcat(s, "PM");
 		break;
-		
+
 		default : { //normal digit
 			char t[] = "DIG0_A";
 			t[3] += (seg>>4)&0xf;
@@ -67,18 +78,18 @@ static void cat_seg(char *s, uint8_t seg) {
 
 void hal_lcd_seg_set(uint8_t seg, bool state) {
 	char s[20] = "S0";
-	
+
 	s[1] += state==true;
 	cat_seg(s, seg);
-	
+
 	zmq_send(insock, s, strlen(s), 0);
 }
 void hal_lcd_seg_set_blink(uint8_t seg, bool state) {
 	char s[20] = "s0";
-	
+
 	s[1] += state==true;
 	cat_seg(s, seg);
-	
+
 	zmq_send(insock, s, strlen(s), 0);
 }
 
@@ -112,7 +123,7 @@ void hal_lcd_dig_set_blink_mask(uint16_t mask) {
 		hal_lcd_dig_set_blink(i, mask&(1<<i));
 		i++;
 	}
-	
+
 }
 
 void hal_lcd_clear(void) {
@@ -127,7 +138,7 @@ void hal_aux_timer_set(uint8_t running) {
 static void *aux_timer_thread(void *arg) {
 	void *sock = zmq_socket(ctx, ZMQ_PUSH);
 	zmq_connect(sock, "ipc://aswemu-out");
-	
+
 	while(1) {
 		usleep(1000000/128);
 		if(aux_timer_run) {
@@ -142,7 +153,7 @@ int main(void) {
 	ctx = zmq_ctx_new();
 	insock = zmq_socket(ctx, ZMQ_PUB);
 	zmq_connect(insock, "ipc://aswemu-in");
-	
+
 	outsock = zmq_socket(ctx, ZMQ_PULL);
 	zmq_bind(outsock, "ipc://aswemu-out");
 	char secret[] = {1,2,3};
@@ -154,14 +165,12 @@ int main(void) {
 		    30,
 		    0, 6, &out);
 	printf("=%d\n", out);
-	
+
 	beep_startup();
 	svc_init();
 	pthread_t thr;
 	pthread_create(&thr, 0, aux_timer_thread, 0);
-	
-	uint8_t x=0;
-	uint16_t i = 0;
+
 	char rxbuf[32];
 	while(1) {
 		zmq_recv(outsock, rxbuf, sizeof(rxbuf), 0);
@@ -170,21 +179,21 @@ int main(void) {
 			case 'W' :
 				ev = SVC_MAIN_PROC_EVENT_TICK;
 			break;
-			
+
 			case 'K' :
 				switch(rxbuf[1]) {
 					case 'U' :
 						ev = SVC_MAIN_PROC_EVENT_KEY_UP;
 					break;
-					
+
 					case 'D' :
 						ev = SVC_MAIN_PROC_EVENT_KEY_DOWN;
 					break;
-					
+
 					case 'E' :
 						ev = SVC_MAIN_PROC_EVENT_KEY_ENTER;
 					break;
-					
+
 				}
 			break;
 			case 'L' :
@@ -192,22 +201,22 @@ int main(void) {
 					case 'U' :
 						ev = SVC_MAIN_PROC_EVENT_KEY_UP_LONG;
 					break;
-					
+
 					case 'D' :
 						ev = SVC_MAIN_PROC_EVENT_KEY_DOWN_LONG;
 					break;
-					
+
 					case 'E' :
 						ev = SVC_MAIN_PROC_EVENT_KEY_ENTER_LONG;
 					break;
-					
+
 				}
 			break;
-			
+
 			case 'A' :
 				ev = SVC_MAIN_PROC_EVENT_AUX_TIMER;
 			break;
-			
+
 		}
 		svc_main_proc(ev);
 	}
@@ -222,7 +231,7 @@ void hal_rtc_get(hal_rtc_timedate_t *result) {
 	result->h = tm.tm_hour;
 	result->m = tm.tm_min;
 	result->s = tm.tm_sec;
-	
+
 	result->dom = tm.tm_mday;
 	result->dow = (tm.tm_wday+6)%7;
 	result->month = tm.tm_mon;
@@ -254,7 +263,7 @@ uint8_t hal_compass_read(hal_compass_result_t *out) {
 }
 
 void hal_compass_set_power(uint8_t on) {
-	
+
 }
 
 static mbedtls_aes_context actx;
@@ -282,11 +291,11 @@ void hal_sha1(const uint8_t *input, uint16_t len, uint8_t *output) {
 }
 
 void hal_lcd_set_mode(hal_lcd_mode_t m) {
-	
+
 }
 
 void hal_lcd_set_blink(uint8_t st) {
-	
+
 }
 
 void hal_lcd_set_contrast(uint8_t level) {

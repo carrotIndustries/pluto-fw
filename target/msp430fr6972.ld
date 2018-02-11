@@ -448,5 +448,5 @@ SECTIONS
 /* Include peripherals memory map                                           */
 /****************************************************************************/
 
-INCLUDE msp430fr6972_symbols.ld
+INCLUDE "430/msp430fr6972_symbols.ld"
 

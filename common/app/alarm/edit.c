@@ -35,12 +35,12 @@ static void time_set(uint8_t dig, int8_t dir, void *user_data) {
 		case 2 :
 			al.h = CLAMP(al.h+dir, 0, 23);
 		break ;
-		
+
 		case 1 :
 		case 0 :
 			al.m = CLAMP(al.m+dir, 0, 59);
 		break ;
-		
+
 		default :
 			return;
 	}
@@ -110,27 +110,27 @@ static void days_draw(svc_menu_state_t *state, svc_menu_item_unknown_t *item, vo
 	//mo
 	hal_lcd_seg_set(HAL_LCD_SEG(0, 4), 1);
 	hal_lcd_seg_set(HAL_LCD_SEG(0, 5), al.days & (1<<0));
-	
+
 	//tu
 	hal_lcd_seg_set(HAL_LCD_SEG(0, 2), 1);
 	hal_lcd_seg_set(HAL_LCD_SEG(0, 1), al.days & (1<<1));
-	
+
 	//we
 	hal_lcd_seg_set(HAL_LCD_SEG(1, 4), 1);
 	hal_lcd_seg_set(HAL_LCD_SEG(1, 5), al.days & (1<<2));
-	
+
 	//th
 	hal_lcd_seg_set(HAL_LCD_SEG(1, 2), 1);
 	hal_lcd_seg_set(HAL_LCD_SEG(1, 1), al.days & (1<<3));
-	
+
 	//fr
 	hal_lcd_seg_set(HAL_LCD_SEG(2, 4), 1);
 	hal_lcd_seg_set(HAL_LCD_SEG(2, 5), al.days & (1<<4));
-	
+
 	//sa
 	hal_lcd_seg_set(HAL_LCD_SEG(2, 2), 1);
 	hal_lcd_seg_set(HAL_LCD_SEG(2, 1), al.days & (1<<5));
-	
+
 	//su
 	hal_lcd_seg_set(HAL_LCD_SEG(3, 4), 1);
 	hal_lcd_seg_set(HAL_LCD_SEG(3, 5), al.days & (1<<6));
@@ -157,6 +157,13 @@ static void melody_set(uint8_t choice, void *ud) {
 	svc_alarm_set_melody(PRIV(app_current)->alarm_current, choice);
 }
 
+static void melody_draw(svc_menu_state_t *state, svc_menu_item_unknown_t *item, void *user_data) {
+	svc_alarm_t al;
+	svc_alarm_get(PRIV(app_current)->alarm_current, &al);
+	svc_lcd_putsn(4, 2, svc_melodies[al.melody].title);
+	svc_lcd_puti(6, 2, PRIV(app_current)->alarm_current);
+}
+
 static svc_menu_item_choice_t menu_item_melody = {
 	.type = SVC_MENU_ITEM_T_CHOICE,
 	.text = " mel",
@@ -165,7 +172,7 @@ static svc_menu_item_choice_t menu_item_melody = {
 	.choices = {""},
 	.handler_set = melody_set,
 	.handler_get = melody_get,
-	.handler_draw = draw_current,
+	.handler_draw = melody_draw
 };
 
 static const svc_menu_item_unknown_t *menu_items[] = {

@@ -4,11 +4,14 @@
 #include "io.h"
 #include "common/hal/hal.h"
 
-uint16_t g_freq;
-uint8_t g_brightness;
+static uint16_t g_freq;
+static uint8_t g_brightness;
+static uint8_t g_beep_enabled=1;
 
-void beep_init(void)
+void beep_init(uint8_t beep_enabled)
 {
+	g_beep_enabled = beep_enabled;
+
 	PCONF(7, 3, (FUNC1 | OUL)); /* BEEP timer ctrl */
 
 	PCONF(1, 0, (FUNC1 | OUL)); /* LED1 timer ctrl */
@@ -17,6 +20,17 @@ void beep_init(void)
 	TA0CTL = TASSEL__SMCLK;
 	TA0CCR2 = 1; /* beep */
 }
+
+uint8_t hal_beep_get_enabled()
+{
+	return g_beep_enabled;
+}
+
+void hal_beep_set_enabled(uint8_t enabled)
+{
+	g_beep_enabled = enabled;
+}
+
 
 static void beep_backlight(uint16_t freq, uint8_t brightness) {
 	if(!freq && !brightness) { //no beep, no light
@@ -51,6 +65,8 @@ static void beep_backlight(uint16_t freq, uint8_t brightness) {
 }
 
 void hal_beep(uint16_t freq) {
+	if(!g_beep_enabled)
+		return;
 	g_freq = freq;
 	beep_backlight(g_freq, g_brightness);
 }

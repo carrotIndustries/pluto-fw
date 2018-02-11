@@ -24,7 +24,7 @@ static int32_t time_get(void *ud) {
 static void time_set(uint8_t dig, int8_t dir, void *user_data) {
 	svc_countdown_t cd;
 	svc_countdown_get(PRIV(app_current)->countdown_current, &cd);
-	
+
 	switch(dig) {
 		case 5:
 		case 3:
@@ -37,17 +37,17 @@ static void time_set(uint8_t dig, int8_t dir, void *user_data) {
 		case 4 :
 			cd.h = CLAMP(cd.h+dir, 0, 23);
 		break ;
-		
+
 		case 3 :
 		case 2 :
 			cd.m = CLAMP(cd.m+dir, 0, 59);
 		break ;
-		
+
 		case 1 :
 		case 0 :
 			cd.s = CLAMP(cd.s+dir, 0, 59);
 		break ;
-		
+
 		default :
 			return;
 	}
@@ -65,10 +65,6 @@ static void time_draw(svc_menu_state_t *state, svc_menu_item_unknown_t *item, vo
 	svc_lcd_puti(6, 2, PRIV(app_current)->countdown_current);
 };
 
-static void draw_current(svc_menu_state_t *state, svc_menu_item_unknown_t *item, void *user_data) {
-	svc_lcd_puti(6, 2, PRIV(app_current)->countdown_current);
-}
-
 static const svc_menu_item_adj_t menu_item_time = {
 	.type = SVC_MENU_ITEM_T_ADJ,
 	.text = "",
@@ -78,7 +74,6 @@ static const svc_menu_item_adj_t menu_item_time = {
 	.handler_set = time_set,
 	.handler_draw = time_draw,
 };
-
 
 static const svc_menu_item_text_t menu_item_up = {
 	.type = SVC_MENU_ITEM_T_TEXT,
@@ -119,16 +114,22 @@ static const svc_menu_item_text_t menu_item_start_stop = {
 	.handler_draw = start_stop_draw,
 };
 
+static void melody_set(uint8_t choice, void *ud) {
+	svc_countdown_set_melody(PRIV(app_current)->countdown_current, choice);
+}
+
 static uint8_t melody_get(void *ud) {
 	svc_countdown_t cd;
 	svc_countdown_get(PRIV(app_current)->countdown_current, &cd);
 	return cd.melody;
 }
 
-static void melody_set(uint8_t choice, void *ud) {
-	svc_countdown_set_melody(PRIV(app_current)->countdown_current, choice);
+static void melody_draw(svc_menu_state_t *state, svc_menu_item_unknown_t *item, void *user_data) {
+	svc_countdown_t cd;
+	svc_countdown_get(PRIV(app_current)->countdown_current, &cd);
+	svc_lcd_putsn(4, 2, svc_melodies[cd.melody].title);
+	svc_lcd_puti(6, 2, PRIV(app_current)->countdown_current);
 }
-
 
 static svc_menu_item_choice_t menu_item_melody = {
 	.type = SVC_MENU_ITEM_T_CHOICE,
@@ -138,7 +139,7 @@ static svc_menu_item_choice_t menu_item_melody = {
 	.choices = {""},
 	.handler_set = melody_set,
 	.handler_get = melody_get,
-	.handler_draw = draw_current,
+	.handler_draw = melody_draw,
 };
 
 static const svc_menu_item_unknown_t *menu_items[] = {
