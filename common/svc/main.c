@@ -19,11 +19,15 @@ void svc_main_proc(svc_main_proc_event_t event) {
 	}
 	svc_backlight_process(event);
 	if(event & SVC_MAIN_PROC_EVENT_TICK) {
-		svc_countdown_process();
+		static uint8_t div;
+		if(!div) { /* prescale to one second */
+			svc_countdown_process();
+			svc_otp_process();
+			svc_seconds_since_last_set_process();
+		}
+		div = (div+1)%4;
 		svc_compass_process();
-		svc_otp_process();
 		svc_lcd_blink_process();
-		svc_seconds_since_last_set_process();
 		svc_rtc_adj_process();
 	}
 	if(!(event & SVC_MAIN_PROC_EVENT_AUX_TIMER) || svc_aux_timer_get_call_main()) {
