@@ -1,3 +1,4 @@
+#pragma once
 #include "common/app/app.h"
 #include "common/app/apps.h"
 #include "common/svc/svc.h"

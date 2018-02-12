@@ -2,6 +2,7 @@
 import sys
 import os
 
+print("#pragma once")
 print("#include <stdint.h>")
 print('#include "common/svc/lcd.h"')
 
