@@ -57,7 +57,7 @@ typedef struct {
 typedef struct {
 	uint8_t n_items;
 	svc_menu_item_unknown_t **items;
-	svc_menu_item_unknown_t *item_up;
+	void (*handler_exit)(void);
 	char *header;
 	uint8_t header_pos;
 } svc_menu_t;

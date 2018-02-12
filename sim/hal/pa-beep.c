@@ -83,7 +83,7 @@ static void stream_underflow_cb(pa_stream *s, void *userdata) {
   if (underflows >= 6 && latency < 2000000) {
     latency = (latency*3)/2;
     bufattr.maxlength = pa_usec_to_bytes(latency,&ss);
-    bufattr.tlength = pa_usec_to_bytes(latency,&ss);  
+    bufattr.tlength = pa_usec_to_bytes(latency,&ss);
     pa_stream_set_buffer_attr(s, &bufattr, NULL, NULL);
     underflows = 0;
     printf("latency increased to %d\n", latency);

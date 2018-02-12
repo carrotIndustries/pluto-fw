@@ -1,6 +1,6 @@
 #include "app.h"
 
-static void conf_exit(void *ud) {
+static void conf_exit(void) {
 	PRIV(app_current)->st.item_current = 0;
 	app_exit();
 }
@@ -287,12 +287,6 @@ static const svc_menu_item_adj_t menu_item_lcd_contrast = {
 	.handler_set = lcd_contrast_set,
 };
 
-static const svc_menu_item_text_t menu_item_up = {
-	.type = SVC_MENU_ITEM_T_TEXT,
-	.text = "----up",
-	.handler = conf_exit
-};
-
 static void debug_enter(void *ud) {
 	app_set_view(app_current, 1);
 }
@@ -317,14 +311,13 @@ static const svc_menu_item_text_t *menu_items[] = {
 	(void*)&menu_item_backlight_timeout,
 	(void*)&menu_item_backlight_brightness,
 	(void*)&menu_item_lcd_contrast,
-	(void*)&menu_item_debug,
-	(void*)&menu_item_up,
+	(void*)&menu_item_debug
 };
 
 static const svc_menu_t menu = {
 	.n_items = ARRAY_SIZE(menu_items),
 	.items = (void*)menu_items,
-	.item_up = (void*)&menu_item_up,
+	.handler_exit = conf_exit,
 	.header = "cf",
 	.header_pos = 8
 };

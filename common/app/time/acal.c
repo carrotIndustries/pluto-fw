@@ -1,15 +1,8 @@
 #include "app.h"
 
-static void menu_exit(void *ud) {
+static void menu_exit(void) {
 	app_set_view(app_current, 1);
 }
-
-static const svc_menu_item_text_t menu_item_up = {
-	.type = SVC_MENU_ITEM_T_TEXT,
-	.text = "----up",
-	.handler = menu_exit
-};
-
 
 #define MEAS_INVALID 127
 static int8_t meas_delta = MEAS_INVALID;
@@ -132,14 +125,13 @@ static const svc_menu_item_unknown_t *menu_items[] = {
 	(void*)&menu_item_ssls,
 	(void*)&menu_item_ppm,
 	(void*)&menu_item_cal,
-	(void*)&menu_item_adj,
-	(void*)&menu_item_up,
+	(void*)&menu_item_adj
 };
 
 static const svc_menu_t menu = {
 	.n_items = ARRAY_SIZE(menu_items),
 	.items = (void*)menu_items,
-	.item_up = (void*)&menu_item_up,
+	.handler_exit = menu_exit,
 	.header = "ac",
 	.header_pos = 8
 };

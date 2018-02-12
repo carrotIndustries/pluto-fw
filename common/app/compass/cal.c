@@ -95,17 +95,10 @@ static const svc_menu_item_text_t menu_item_z_s = {
 	.user_data = (void*)(2|4)
 };
 
-
-static void menu_exit(void *ud) {
+static void menu_exit(void) {
 	PRIV(app_current)->cal_menu_state.item_current = 0;
 	app_set_view(app_current, 0);
 }
-
-static const svc_menu_item_text_t menu_item_up = {
-	.type = SVC_MENU_ITEM_T_TEXT,
-	.text = "----up",
-	.handler = menu_exit
-};
 
 static void menu_store(void *ud) {
 	priv_t *pr = PRIV(app_current);
@@ -135,13 +128,13 @@ static const svc_menu_item_unknown_t *menu_items[] = {
 	(void*)&menu_item_x_s,
 	(void*)&menu_item_y_s,
 	(void*)&menu_item_z_s,
-	(void*)&menu_item_store,
-	(void*)&menu_item_up,
+	(void*)&menu_item_store
 };
 
 static const svc_menu_t menu = {
 	.n_items = ARRAY_SIZE(menu_items),
 	.items = (void*)menu_items,
+	.handler_exit = menu_exit,
 	.header = "cc",
 	.header_pos = 8
 };

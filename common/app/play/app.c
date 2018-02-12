@@ -15,28 +15,20 @@ typedef struct {
 static void main(uint8_t view, const app_t *app, svc_main_proc_event_t event) {
 	hal_lcd_clear();
 	if(event & SVC_MAIN_PROC_EVENT_KEY_UP) {
-		INC_MOD(PRIV(app)->item_current, svc_melodies_n+1);
+		INC_MOD(PRIV(app)->item_current, svc_melodies_n);
 	}
 	else if (event & SVC_MAIN_PROC_EVENT_KEY_DOWN) {
-		DEC_MOD(PRIV(app)->item_current, svc_melodies_n+1);
+		DEC_MOD(PRIV(app)->item_current, svc_melodies_n);
 	}
 	else if (event & SVC_MAIN_PROC_EVENT_KEY_ENTER_LONG) {
 		app_exit();
 	}
 	svc_lcd_puts(8, "pl");
-	if(PRIV(app)->item_current == svc_melodies_n) {
-		svc_lcd_puts(0, "----up");
-		if(event & SVC_MAIN_PROC_EVENT_KEY_ENTER) {
-			PRIV(app)->item_current = 0;
-			app_exit();
-		}
-	}
-	else {
-		svc_lcd_puts(0, " pla");
-		svc_lcd_putsn(4, 2, svc_melodies[PRIV(app)->item_current].title);
-		if(event & SVC_MAIN_PROC_EVENT_KEY_ENTER) {
-			svc_melody_play(PRIV(app)->item_current);
-		}
+
+	svc_lcd_puts(0, " pla");
+	svc_lcd_putsn(4, 2, svc_melodies[PRIV(app)->item_current].title);
+	if(event & SVC_MAIN_PROC_EVENT_KEY_ENTER) {
+		svc_melody_play(PRIV(app)->item_current);
 	}
 }
 

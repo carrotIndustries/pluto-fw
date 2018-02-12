@@ -13,17 +13,10 @@ typedef struct {
 
 #define PRIV(a) ((priv_t*)((a)->priv))
 
-static void speed_exit(void *ud) {
+static void speed_exit(void) {
 	PRIV(app_current)->st.item_current = 0;
 	app_exit();
 }
-
-static const svc_menu_item_text_t menu_item_up = {
-	.type = SVC_MENU_ITEM_T_TEXT,
-	.text = "----up",
-	.handler = speed_exit
-};
-
 
 static void distance_draw(svc_menu_state_t *state, svc_menu_item_unknown_t *item, void *user_data) {
 	svc_lcd_puts(8,"di");
@@ -54,7 +47,7 @@ static void time_draw(svc_menu_state_t *state, svc_menu_item_unknown_t *item, vo
 	svc_chro_t ch;
 	svc_chro_get(1, &ch);
 	svc_chro_state_t st = svc_chro_get_state(1);
-	svc_lcd_puti(0, 2, ch.min); 
+	svc_lcd_puti(0, 2, ch.min);
 	svc_lcd_puti(2, 2, ch.sec);
 	uint16_t ss = (ch.subsec*100)/128;
 	svc_lcd_puti(4, 2, ss);
@@ -103,14 +96,13 @@ static const svc_menu_item_text_t menu_item_kmh = {
 static const svc_menu_item_text_t *menu_items[] = {
 	(void*)&menu_item_distance,
 	(void*)&menu_item_time,
-	(void*)&menu_item_kmh,
-	(void*)&menu_item_up,
+	(void*)&menu_item_kmh
 };
 
 static const svc_menu_t menu = {
 	.n_items = ARRAY_SIZE(menu_items),
 	.items = (void*)menu_items,
-	.item_up = (void*)&menu_item_up,
+	.handler_exit = speed_exit,
 	.header = "s ",
 	.header_pos = 8
 };

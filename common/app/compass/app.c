@@ -63,18 +63,11 @@ static const svc_menu_item_text_t menu_item_heading = {
 	.handler_draw = heading_draw,
 };
 
-
-static void menu_exit(void *ud) {
+static void menu_exit(void) {
 	PRIV(app_current)->main_menu_state.item_current = 0;
 	//app_set_view(app_current, 0);
 	app_exit();
 }
-
-static const svc_menu_item_text_t menu_item_up = {
-	.type = SVC_MENU_ITEM_T_TEXT,
-	.text = "----up",
-	.handler = menu_exit
-};
 
 static void menu_cal_enter(void *ud) {
 	PRIV(app_current)->main_menu_state.item_current = 0;
@@ -93,13 +86,13 @@ static const svc_menu_item_unknown_t *menu_items[] = {
 	(void*)&menu_item_x,
 	(void*)&menu_item_y,
 	(void*)&menu_item_z,
-	(void*)&menu_item_cal,
-	(void*)&menu_item_up,
+	(void*)&menu_item_cal
 };
 
 static const svc_menu_t menu = {
 	.n_items = ARRAY_SIZE(menu_items),
 	.items = (void*)menu_items,
+	.handler_exit = menu_exit,
 	.header = "co",
 	.header_pos = 8
 };

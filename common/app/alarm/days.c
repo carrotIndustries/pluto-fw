@@ -6,30 +6,26 @@ void app_app_alarm_days_main(uint8_t view, const app_t *app, svc_main_proc_event
 
 	hal_lcd_clear();
 	if(event & SVC_MAIN_PROC_EVENT_KEY_UP) {
-		INC_MOD(PRIV(app)->day_current, 8);
+		INC_MOD(PRIV(app)->day_current, 7);
 	}
 	else if (event & SVC_MAIN_PROC_EVENT_KEY_DOWN) {
-		DEC_MOD(PRIV(app)->day_current, 8);
+		DEC_MOD(PRIV(app)->day_current, 7);
 	}
+	else if(event & SVC_MAIN_PROC_EVENT_KEY_ENTER_LONG) {
+		app_set_view(app, 1);
+	}
+
 	svc_lcd_puts(8, "da");
 	svc_lcd_puti(6, 2, PRIV(app_current)->alarm_current);
-	if(PRIV(app)->day_current == 7) {
-		svc_lcd_puts(0, "----up");
-		if(event & SVC_MAIN_PROC_EVENT_KEY_ENTER) {
-			PRIV(app)->day_current = 0;
-			app_set_view(app, 1);
-		}
+
+	svc_lcd_puts(4, svc_dow_to_string(PRIV(app)->day_current, SVC_LANG_EN));
+	if(al.days & (1<<(PRIV(app)->day_current))) {
+		svc_lcd_puts(2, "on");
 	}
 	else {
-		svc_lcd_puts(4, svc_dow_to_string(PRIV(app)->day_current, SVC_LANG_EN));
-		if(al.days & (1<<(PRIV(app)->day_current))) {
-			svc_lcd_puts(2, "on");
-		}
-		else {
-			svc_lcd_puts(2, "of");
-		}
-		if(event & SVC_MAIN_PROC_EVENT_KEY_ENTER) {
-			svc_alarm_set_day(PRIV(app_current)->alarm_current, PRIV(app_current)->day_current, !(al.days & (1<<(PRIV(app)->day_current))));
-		}
+		svc_lcd_puts(2, "of");
+	}
+	if(event & SVC_MAIN_PROC_EVENT_KEY_ENTER) {
+		svc_alarm_set_day(PRIV(app_current)->alarm_current, PRIV(app_current)->day_current, !(al.days & (1<<(PRIV(app)->day_current))));
 	}
 }

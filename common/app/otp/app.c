@@ -36,17 +36,11 @@ static const svc_menu_item_adj_t menu_item_unlock = {
 	.handler_draw = draw_lock
 };
 
-static void menu_exit(void *ud) {
+static void menu_exit(void) {
 	PRIV(app_current)->main_menu_state.item_current = 0;
 	//app_set_view(app_current, 0);
 	app_exit();
 }
-
-static const svc_menu_item_text_t menu_item_up = {
-	.type = SVC_MENU_ITEM_T_TEXT,
-	.text = "----up",
-	.handler = menu_exit
-};
 
 static void menu_lock(void *ud) {
 	svc_otp_lock();
@@ -75,13 +69,13 @@ static const svc_menu_item_text_t menu_item_items = {
 static const svc_menu_item_unknown_t *menu_items[] = {
 	(void*)&menu_item_unlock,
 	(void*)&menu_item_items,
-	(void*)&menu_item_lock,
-	(void*)&menu_item_up,
+	(void*)&menu_item_lock
 };
 
 static const svc_menu_t menu = {
 	.n_items = ARRAY_SIZE(menu_items),
 	.items = (void*)menu_items,
+	.handler_exit = menu_exit,
 	.header = "ot",
 	.header_pos = 8
 };
