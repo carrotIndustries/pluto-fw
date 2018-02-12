@@ -17,7 +17,6 @@ typedef struct {
 
 static svc_countdown_priv_t SECTION_INFOMEM svc_countdowns[N_COUNTDOWNS] = {
 	{.h=0, .m=0, .s=5}
-
 };
 
 #define NO_COUNTDOWN_PENDING 0xff
@@ -39,7 +38,6 @@ void svc_countdown_set_time(uint8_t index, uint8_t h, uint8_t m, uint8_t s) {
 	svc_countdowns[index].sm = m;
 	svc_countdowns[index].s = s;
 	svc_countdowns[index].ss = s;
-
 }
 
 static void _svc_countdown_stop(svc_countdown_priv_t *cd) {
