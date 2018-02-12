@@ -32,8 +32,13 @@ static void main(uint8_t view, const app_t *app, svc_main_proc_event_t event) {
 	}
 }
 
+static void main_enter(uint8_t view, const app_t *app) {
+	PRIV(app)->item_current = svc_default_melody_get();
+}
+
 static app_view_t view = {
-	.main = main
+	.main = main,
+	.enter = main_enter
 };
 
 static priv_t priv = {0, 0};

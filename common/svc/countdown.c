@@ -27,6 +27,12 @@ static uint8_t countdowns_running = 0;
 
 const uint8_t svc_countdowns_n = N_COUNTDOWNS;
 
+void svc_countdown_init(void) {
+	for(uint8_t i=0; i<svc_countdowns_n; i++) {
+		svc_countdowns[i].melody = svc_default_melody_get();
+	}
+}
+
 void svc_countdown_get(uint8_t index, svc_countdown_t *out) {
 	memcpy(out, &(svc_countdowns[index]), sizeof(svc_countdown_t));
 }

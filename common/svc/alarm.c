@@ -68,6 +68,7 @@ void svc_alarm_clear_pending(void) {
 void svc_alarm_init(void) {
 	alarm_flags &= ~AF_ENABLED;
 	for(uint8_t i=0; i<svc_alarms_n; i++) {
+		svc_alarms[i].melody = svc_default_melody_get();
 		if(svc_alarms[i].enable) {
 			alarm_flags |= AF_ENABLED;
 		}

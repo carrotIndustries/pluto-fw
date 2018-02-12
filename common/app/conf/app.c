@@ -303,6 +303,39 @@ static const svc_menu_item_adj_t menu_item_lcd_contrast = {
 };
 
 
+/* default melody (which will always be selected first) **********************/
+static uint8_t melody_default_get(void *ud) {
+	return svc_default_melody_get();
+}
+
+static void melody_default_set(uint8_t choice, void *ud) {
+	svc_default_melody_set(choice);
+
+	for(uint8_t i=0; i<svc_alarms_n; i++) {
+		svc_alarm_set_melody(i, choice);
+	}
+	for(uint8_t i=0; i<svc_countdowns_n; i++) {
+		svc_countdown_set_melody(i, choice);
+	}
+}
+
+static void melody_default_draw(svc_menu_state_t *state, svc_menu_item_unknown_t *item, void *user_data) {
+	svc_lcd_putsn(4, 2, svc_melodies[svc_default_melody_get()].title);
+	svc_lcd_puti(6, 2, svc_default_melody_get());
+}
+
+static svc_menu_item_choice_t menu_item_default_melody = {
+	.type = SVC_MENU_ITEM_T_CHOICE,
+	.text = " mel",
+	.choice_pos = 4,
+	.n_choices = 0,
+	.choices = {""},
+	.handler_set = melody_default_set,
+	.handler_get = melody_default_get,
+	.handler_draw = melody_default_draw
+};
+
+
 /* debug view ****************************************************************/
 static void debug_enter(void *ud) {
 	app_set_view(app_current, 1);
@@ -329,6 +362,7 @@ static const svc_menu_item_text_t *menu_items[] = {
 	(void*)&menu_item_backlight_timeout,
 	(void*)&menu_item_backlight_brightness,
 	(void*)&menu_item_lcd_contrast,
+	(void*)&menu_item_default_melody,
 	(void*)&menu_item_debug
 };
 
@@ -341,6 +375,7 @@ static const svc_menu_t menu = {
 };
 
 static void main(uint8_t view, const app_t *app, svc_main_proc_event_t event) {
+	menu_item_default_melody.n_choices = svc_melodies_n;
 	svc_menu_run(&menu, &(PRIV(app)->st), event);
 }
 

@@ -1,6 +1,7 @@
 #include "melody.h"
 #include "common/hal/hal.h"
 #include "aux_timer.h"
+#include "platform.h"
 
 static const svc_melody_note_t *note_cur = 0;
 static const svc_melody_note_t *note_start = 0;
@@ -8,6 +9,15 @@ static uint16_t note_timer;
 static uint8_t repeat;
 static uint8_t repeat_delay;
 
+static uint8_t SECTION_INFOMEM default_melody = 0;
+
+uint8_t svc_default_melody_get(void) {
+	return default_melody;
+}
+
+void svc_default_melody_set(uint8_t melody_idx) {
+	default_melody = melody_idx;
+}
 
 void svc_melody_play_repeat(uint8_t melody, uint8_t rep) {
 	note_cur = svc_melodies[melody].notes;
