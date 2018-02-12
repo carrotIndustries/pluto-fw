@@ -50,12 +50,12 @@ static void stream_request_cb(pa_stream *s, size_t length, void *userdata) {
   int neg;
   pa_stream_get_latency(s,&usec,&neg);
   //printf("  latency %8d us %d\n",(int)usec, length);
-  
+
   signed short *buf;
   size_t nb = length;
   pa_stream_begin_write(s, (void**)&buf, &nb);
   //printf("w %d %d\n", length, nb);
-  
+
   static unsigned short phase = 0;
   int i = 0;
   while(i < nb/2) {
@@ -67,11 +67,11 @@ static void stream_request_cb(pa_stream *s, size_t length, void *userdata) {
 		buf[i] = 0;
 		phase = 0;
 	}
-	  
+
 	  //printf("%d\n", buf[i]);
 	  i++;
   }
-  
+
   pa_stream_write(s, buf, nb, NULL, 0LL, PA_SEEK_RELATIVE);
 }
 
@@ -132,7 +132,7 @@ void beep_startup() {
   if (pa_ready == 2) {
     exit(-1);
   }
-  
+
   ss.rate = 48000;
   ss.channels = 1;
   ss.format = PA_SAMPLE_S16NE;

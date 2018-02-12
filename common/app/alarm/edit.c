@@ -14,7 +14,6 @@ static void menu_exit(void *ud) {
 	app_set_view(app_current, 0);
 }
 
-
 static int32_t time_get(void *ud) {
 	svc_alarm_t al;
 	svc_alarm_get(PRIV(app_current)->alarm_current, &al);
@@ -70,7 +69,6 @@ static const svc_menu_item_adj_t menu_item_time = {
 	.handler_set = time_set,
 	.handler_draw = time_draw,
 };
-
 
 static uint8_t enable_get(void *ud) {
 	svc_alarm_t al;

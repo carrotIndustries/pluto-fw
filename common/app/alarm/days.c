@@ -3,7 +3,7 @@
 void app_app_alarm_days_main(uint8_t view, const app_t *app, svc_main_proc_event_t event) {
 	svc_alarm_t al;
 	svc_alarm_get(PRIV(app_current)->alarm_current, &al);
-		
+
 	hal_lcd_clear();
 	if(event & SVC_MAIN_PROC_EVENT_KEY_UP) {
 		INC_MOD(PRIV(app)->day_current, 8);
@@ -32,5 +32,4 @@ void app_app_alarm_days_main(uint8_t view, const app_t *app, svc_main_proc_event
 			svc_alarm_set_day(PRIV(app_current)->alarm_current, PRIV(app_current)->day_current, !(al.days & (1<<(PRIV(app)->day_current))));
 		}
 	}
-	
 }

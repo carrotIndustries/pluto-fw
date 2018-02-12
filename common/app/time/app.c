@@ -134,6 +134,7 @@ static const svc_menu_item_adj_t menu_item_date = {
 	.handler_enter = adj_enter,
 	.handler_leave = adj_date_leave
 };
+
 static const svc_menu_item_choice_t menu_item_lang = {
 	.type = SVC_MENU_ITEM_T_CHOICE,
 	.text = "lang",
@@ -147,6 +148,7 @@ static const svc_menu_item_choice_t menu_item_lang = {
 	.handler_set = lang_set,
 	.handler_get = lang_get
 };
+
 static const svc_menu_item_choice_t menu_item_base = {
 	.type = SVC_MENU_ITEM_T_CHOICE,
 	.text = "base",

@@ -58,7 +58,6 @@ static void keybeep_freq_set(uint8_t dig, int8_t dir, void *user_data) {
 	svc_beep_key_set_freq(va);
 }
 
-
 static const svc_menu_item_adj_t menu_item_keybeep_freq = {
 	.type = SVC_MENU_ITEM_T_ADJ,
 	.header = "kf",
@@ -119,7 +118,6 @@ static void hourbeep_duration_set(uint8_t dig, int8_t dir, void *user_data) {
 	va = CLAMP(va+inc, 1, 100);
 	svc_beep_hour_set_duration(va);
 }
-
 
 static const svc_menu_item_adj_t menu_item_hourbeep_duration = {
 	.type = SVC_MENU_ITEM_T_ADJ,
@@ -259,7 +257,6 @@ static void backlight_brightness_set(uint8_t dig, int8_t dir, void *user_data) {
 	svc_backlight_brightness_set(va);
 }
 
-
 static const svc_menu_item_adj_t menu_item_backlight_brightness = {
 	.type = SVC_MENU_ITEM_T_ADJ,
 	.header = "bb",
@@ -280,7 +277,6 @@ static void lcd_contrast_set(uint8_t dig, int8_t dir, void *user_data) {
 	lcd_contrast = CLAMP(lcd_contrast+inc, 0, 15);
 	hal_lcd_set_contrast(lcd_contrast);
 }
-
 
 static const svc_menu_item_adj_t menu_item_lcd_contrast = {
 	.type = SVC_MENU_ITEM_T_ADJ,

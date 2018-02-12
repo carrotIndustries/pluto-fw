@@ -12,11 +12,11 @@ static void axis_draw(svc_menu_state_t *state, svc_menu_item_unknown_t *item, vo
 			case 0:
 				v = r.x;
 			break;
-			
+
 			case 1:
 				v = r.y;
 			break;
-			
+
 			case 2:
 				v = r.z;
 			break;
@@ -25,7 +25,6 @@ static void axis_draw(svc_menu_state_t *state, svc_menu_item_unknown_t *item, vo
 	}
 	svc_lcd_putc(7, 'x'+axis);
 };
-
 
 static const svc_menu_item_text_t menu_item_x = {
 	.type = SVC_MENU_ITEM_T_TEXT,
@@ -89,7 +88,6 @@ static const svc_menu_item_text_t menu_item_cal = {
 	.handler = menu_cal_enter
 };
 
-
 static const svc_menu_item_unknown_t *menu_items[] = {
 	(void*)&menu_item_heading,
 	(void*)&menu_item_x,
@@ -109,7 +107,6 @@ static const svc_menu_t menu = {
 static void main(uint8_t view, const app_t *app, svc_main_proc_event_t event) {
 	svc_menu_run(&menu, &(PRIV(app)->main_menu_state), event);
 }
-
 
 static priv_t priv = {0};
 

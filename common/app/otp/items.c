@@ -37,5 +37,4 @@ void app_app_otp_items_main(uint8_t view, const app_t *app, svc_main_proc_event_
 			}
 		}
 	}
-	
 }

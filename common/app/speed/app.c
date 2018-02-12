@@ -30,7 +30,6 @@ static void distance_draw(svc_menu_state_t *state, svc_menu_item_unknown_t *item
 	svc_lcd_puti(0, 4, PRIV(app_current)->distance);
 };
 
-
 static int32_t distance_get(void *ud) {
 	return PRIV(app_current)->distance;
 }
@@ -49,8 +48,6 @@ static const svc_menu_item_adj_t menu_item_distance = {
 	.handler_set =  distance_set,
 	.handler_draw = distance_draw,
 };
-
-
 
 static void time_draw(svc_menu_state_t *state, svc_menu_item_unknown_t *item, void *user_data) {
 	svc_lcd_puts(8, "ti");
@@ -82,7 +79,6 @@ static const svc_menu_item_text_t menu_item_time = {
 	.handler_draw = time_draw,
 	.handler = time_startstop,
 };
-
 
 static void speed_draw(svc_menu_state_t *state, svc_menu_item_unknown_t *item, void *user_data) {
 	svc_lcd_puts(8, "km");
@@ -118,7 +114,6 @@ static const svc_menu_t menu = {
 	.header = "s ",
 	.header_pos = 8
 };
-
 
 static void main(uint8_t view, const app_t *app, svc_main_proc_event_t event) {
 	svc_menu_run(&menu, &(PRIV(app)->st), event);

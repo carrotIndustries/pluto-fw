@@ -14,7 +14,6 @@ static void menu_exit(void *ud) {
 	app_set_view(app_current, 0);
 }
 
-
 static int32_t time_get(void *ud) {
 	svc_countdown_t cd;
 	svc_countdown_get(PRIV(app_current)->countdown_current, &cd);
