@@ -40,7 +40,11 @@ static void main(uint8_t view, const app_t *app, svc_main_proc_event_t event) {
 				break;
 		}
 	}
-	else if(event & SVC_MAIN_PROC_EVENT_KEY_UP) {
+	else if(event & SVC_MAIN_PROC_EVENT_KEY_DOWN_LONG) {
+		svc_chro_stop(0);
+		svc_chro_reset(0);
+	}
+	else if(event & (SVC_MAIN_PROC_EVENT_KEY_ENTER_LONG | SVC_MAIN_PROC_EVENT_KEY_UP)) {
 		app_exit();
 	}
 
