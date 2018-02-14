@@ -14,13 +14,8 @@ void svc_menu_run(const svc_menu_t *menu, svc_menu_state_t *state, svc_main_proc
 			DEC_MOD(*item_current, menu->n_items);
 		}
 		else if(event & SVC_MAIN_PROC_EVENT_KEY_ENTER_LONG) {
-			if(menu->item_up) {
-				svc_menu_item_text_t *it = (void*)menu->item_up;
-				if(it->type == SVC_MENU_ITEM_T_TEXT) {
-					if(it->handler) {
-						it->handler(it->user_data);
-					}
-				}
+			if(menu->handler_exit) {
+				menu->handler_exit();
 			}
 		}
 		else if(event & SVC_MAIN_PROC_EVENT_KEY_ENTER) {
@@ -90,22 +85,15 @@ void svc_menu_run(const svc_menu_t *menu, svc_menu_state_t *state, svc_main_proc
 			state->adj_mode = 0;
 			return;
 		}
+
 		svc_lcd_puts(8, it->header);
-		if(event & (SVC_MAIN_PROC_EVENT_KEY_DOWN | SVC_MAIN_PROC_EVENT_KEY_UP)) {
-			if(state->adj_digit == it->digits) {
-				state->adj_mode = 0;
-				if(it->handler_leave) {
-					it->handler_leave(it->user_data);
-				}
-			}
-			if(event & SVC_MAIN_PROC_EVENT_KEY_UP) {
-				svc_lcd_blink_disable();
-				it->handler_set(it->digits-state->adj_digit-1, 1, it->user_data);
-			}
-			else {
-				svc_lcd_blink_disable();
-				it->handler_set(it->digits-state->adj_digit-1, -1, it->user_data);
-			}
+		if(event & SVC_MAIN_PROC_EVENT_KEY_UP) {
+			svc_lcd_blink_disable();
+			it->handler_set(it->digits-state->adj_digit-1, 1, it->user_data);
+		}
+		else if(event & SVC_MAIN_PROC_EVENT_KEY_DOWN) {
+			svc_lcd_blink_disable();
+			it->handler_set(it->digits-state->adj_digit-1, -1, it->user_data);
 		}
 
 		if(event & SVC_MAIN_PROC_EVENT_KEY_ENTER_LONG) {
@@ -117,14 +105,10 @@ void svc_menu_run(const svc_menu_t *menu, svc_menu_state_t *state, svc_main_proc
 
 		svc_lcd_puti(0, it->digits, it->handler_get(it->user_data));
 		if(event & SVC_MAIN_PROC_EVENT_KEY_ENTER) {
-			INC_MOD(state->adj_digit, it->digits+1);
+			INC_MOD(state->adj_digit, it->digits);
 		}
 		if(state->adj_digit < it->digits) {
 			hal_lcd_dig_set_blink_mask(1<<state->adj_digit);
-		}
-		else {
-			hal_lcd_dig_set_blink_mask((1<<4) | (1<<5));
-			svc_lcd_puts(0, "----up");
 		}
 	}
 }

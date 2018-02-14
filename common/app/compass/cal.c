@@ -27,7 +27,6 @@ static int16_t minmax_get_span(minmax_t *mm) {
 	}
 }
 
-
 static void axis_draw(svc_menu_state_t *state, svc_menu_item_unknown_t *item, void *user_data) {
 	priv_t *p = PRIV(app_current);
 	intptr_t axis = ((intptr_t)user_data)&3;
@@ -45,11 +44,11 @@ static void axis_draw(svc_menu_state_t *state, svc_menu_item_unknown_t *item, vo
 		case 0:
 			v = fp(&(p->cal_x));
 		break;
-		
+
 		case 1:
 			v = fp(&(p->cal_y));
 		break;
-		
+
 		case 2:
 			v = fp(&(p->cal_z));
 		break;
@@ -57,7 +56,6 @@ static void axis_draw(svc_menu_state_t *state, svc_menu_item_unknown_t *item, vo
 	svc_lcd_puti_signed(0, 6, CLAMP_ABS(v, 99999));
 	svc_lcd_putc(7, 'x'+axis);
 };
-
 
 static const svc_menu_item_text_t menu_item_x_c = {
 	.type = SVC_MENU_ITEM_T_TEXT,
@@ -97,17 +95,10 @@ static const svc_menu_item_text_t menu_item_z_s = {
 	.user_data = (void*)(2|4)
 };
 
-
-static void menu_exit(void *ud) {
+static void menu_exit(void) {
 	PRIV(app_current)->cal_menu_state.item_current = 0;
 	app_set_view(app_current, 0);
 }
-
-static const svc_menu_item_text_t menu_item_up = {
-	.type = SVC_MENU_ITEM_T_TEXT,
-	.text = "----up",
-	.handler = menu_exit
-};
 
 static void menu_store(void *ud) {
 	priv_t *pr = PRIV(app_current);
@@ -115,7 +106,7 @@ static void menu_store(void *ud) {
 		.x0 = minmax_get_center(&(pr->cal_x)),
 		.y0 = minmax_get_center(&(pr->cal_y)),
 		.z0 = minmax_get_center(&(pr->cal_z)),
-		
+
 		.sx = minmax_get_span(&(pr->cal_x)),
 		.sy = minmax_get_span(&(pr->cal_y)),
 		.sz = minmax_get_span(&(pr->cal_z)),
@@ -137,13 +128,13 @@ static const svc_menu_item_unknown_t *menu_items[] = {
 	(void*)&menu_item_x_s,
 	(void*)&menu_item_y_s,
 	(void*)&menu_item_z_s,
-	(void*)&menu_item_store,
-	(void*)&menu_item_up,
+	(void*)&menu_item_store
 };
 
 static const svc_menu_t menu = {
 	.n_items = ARRAY_SIZE(menu_items),
 	.items = (void*)menu_items,
+	.handler_exit = menu_exit,
 	.header = "cc",
 	.header_pos = 8
 };

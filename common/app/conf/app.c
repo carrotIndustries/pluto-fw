@@ -1,6 +1,6 @@
 #include "app.h"
 
-static void conf_exit(void *ud) {
+static void conf_exit(void) {
 	PRIV(app_current)->st.item_current = 0;
 	app_exit();
 }
@@ -57,7 +57,6 @@ static void keybeep_freq_set(uint8_t dig, int8_t dir, void *user_data) {
 	va = CLAMP(va+inc, 400, 9999);
 	svc_beep_key_set_freq(va);
 }
-
 
 static const svc_menu_item_adj_t menu_item_keybeep_freq = {
 	.type = SVC_MENU_ITEM_T_ADJ,
@@ -119,7 +118,6 @@ static void hourbeep_duration_set(uint8_t dig, int8_t dir, void *user_data) {
 	va = CLAMP(va+inc, 1, 100);
 	svc_beep_hour_set_duration(va);
 }
-
 
 static const svc_menu_item_adj_t menu_item_hourbeep_duration = {
 	.type = SVC_MENU_ITEM_T_ADJ,
@@ -259,7 +257,6 @@ static void backlight_brightness_set(uint8_t dig, int8_t dir, void *user_data) {
 	svc_backlight_brightness_set(va);
 }
 
-
 static const svc_menu_item_adj_t menu_item_backlight_brightness = {
 	.type = SVC_MENU_ITEM_T_ADJ,
 	.header = "bb",
@@ -281,7 +278,6 @@ static void lcd_contrast_set(uint8_t dig, int8_t dir, void *user_data) {
 	hal_lcd_set_contrast(lcd_contrast);
 }
 
-
 static const svc_menu_item_adj_t menu_item_lcd_contrast = {
 	.type = SVC_MENU_ITEM_T_ADJ,
 	.header = "lc",
@@ -289,12 +285,6 @@ static const svc_menu_item_adj_t menu_item_lcd_contrast = {
 	.digits = 2,
 	.handler_get = lcd_contrast_get,
 	.handler_set = lcd_contrast_set,
-};
-
-static const svc_menu_item_text_t menu_item_up = {
-	.type = SVC_MENU_ITEM_T_TEXT,
-	.text = "----up",
-	.handler = conf_exit
 };
 
 static void debug_enter(void *ud) {
@@ -321,14 +311,13 @@ static const svc_menu_item_text_t *menu_items[] = {
 	(void*)&menu_item_backlight_timeout,
 	(void*)&menu_item_backlight_brightness,
 	(void*)&menu_item_lcd_contrast,
-	(void*)&menu_item_debug,
-	(void*)&menu_item_up,
+	(void*)&menu_item_debug
 };
 
 static const svc_menu_t menu = {
 	.n_items = ARRAY_SIZE(menu_items),
 	.items = (void*)menu_items,
-	.item_up = (void*)&menu_item_up,
+	.handler_exit = conf_exit,
 	.header = "cf",
 	.header_pos = 8
 };

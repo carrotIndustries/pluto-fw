@@ -1,19 +1,9 @@
 #include "app.h"
-/*
-static const svc_menu_item_adj_t menu_item_cal = {
-	.type = SVC_MENU_ITEM_T_ADJ,
-	.header = "ca",
-	.text = " cal",
-	.digits = 4,
-	.handler_get = cal_get,
-	.handler_set = cal_set,
-};*/
 
-static void menu_exit(void *ud) {
+static void menu_exit(void) {
 	PRIV(app_current)->edit_menu_state.item_current = 0;
 	app_set_view(app_current, 0);
 }
-
 
 static int32_t time_get(void *ud) {
 	svc_alarm_t al;
@@ -71,7 +61,6 @@ static const svc_menu_item_adj_t menu_item_time = {
 	.handler_draw = time_draw,
 };
 
-
 static uint8_t enable_get(void *ud) {
 	svc_alarm_t al;
 	svc_alarm_get(PRIV(app_current)->alarm_current, &al);
@@ -94,12 +83,6 @@ static const svc_menu_item_choice_t menu_item_enable = {
 	.handler_set = enable_set,
 	.handler_get = enable_get,
 	.handler_draw = draw_current,
-};
-
-static const svc_menu_item_text_t menu_item_up = {
-	.type = SVC_MENU_ITEM_T_TEXT,
-	.text = "----up",
-	.handler = menu_exit
 };
 
 static void days_draw(svc_menu_state_t *state, svc_menu_item_unknown_t *item, void *user_data) {
@@ -179,14 +162,13 @@ static const svc_menu_item_unknown_t *menu_items[] = {
 	(void*)&menu_item_time,
 	(void*)&menu_item_enable,
 	(void*)&menu_item_days,
-	(void*)&menu_item_melody,
-	(void*)&menu_item_up,
+	(void*)&menu_item_melody
 };
 
 static const svc_menu_t menu = {
 	.n_items = ARRAY_SIZE(menu_items),
 	.items = (void*)menu_items,
-	.item_up = (void*)&menu_item_up,
+	.handler_exit = menu_exit,
 	.header = "ae",
 	.header_pos = 8
 };

@@ -16,6 +16,11 @@ static void launch(void *papp) {
 	app_launch(app);
 }
 
+static void menu_time(void)
+{
+	launch((void *)&app_app_time);
+}
+
 static const svc_menu_item_text_t menu_item0 = {
 	.text = " time",
 	.handler = launch,
@@ -77,7 +82,7 @@ static const svc_menu_item_text_t *menu_items[] = {
 static const svc_menu_t menu = {
 	.n_items = ARRAY_SIZE(menu_items),
 	.items = (void*)menu_items,
-	.item_up = (void*)&menu_item0,
+	.handler_exit = menu_time,
 	.header = "la",
 	.header_pos = 8
 };

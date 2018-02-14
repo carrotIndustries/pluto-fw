@@ -1,7 +1,7 @@
 #include "app.h"
 #include "platform.h"
 
-static void menu_exit(void *ud) {
+static void menu_exit(void) {
 	app_set_view(app_current, 0);
 }
 
@@ -134,6 +134,7 @@ static const svc_menu_item_adj_t menu_item_date = {
 	.handler_enter = adj_enter,
 	.handler_leave = adj_date_leave
 };
+
 static const svc_menu_item_choice_t menu_item_lang = {
 	.type = SVC_MENU_ITEM_T_CHOICE,
 	.text = "lang",
@@ -147,6 +148,7 @@ static const svc_menu_item_choice_t menu_item_lang = {
 	.handler_set = lang_set,
 	.handler_get = lang_get
 };
+
 static const svc_menu_item_choice_t menu_item_base = {
 	.type = SVC_MENU_ITEM_T_CHOICE,
 	.text = "base",
@@ -159,13 +161,6 @@ static const svc_menu_item_choice_t menu_item_base = {
 	},
 	.handler_set = base_set,
 	.handler_get = base_get,
-};
-
-
-static const svc_menu_item_text_t menu_item_up = {
-	.type = SVC_MENU_ITEM_T_TEXT,
-	.text = "----up",
-	.handler = menu_exit
 };
 
 static int16_t cal_value = 0;
@@ -262,14 +257,13 @@ static const svc_menu_item_unknown_t *menu_items[] = {
 	(void*)&menu_item_lang,
 	(void*)&menu_item_adj,
 	(void*)&menu_item_cal,
-	(void*)&menu_item_cal_sign,
-	(void*)&menu_item_up,
+	(void*)&menu_item_cal_sign
 };
 
 static const svc_menu_t menu = {
 	.n_items = ARRAY_SIZE(menu_items),
 	.items = (void*)menu_items,
-	.item_up = (void*)&menu_item_up,
+	.handler_exit = menu_exit,
 	.header = "cf",
 	.header_pos = 8
 };
