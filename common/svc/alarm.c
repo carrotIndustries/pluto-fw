@@ -68,6 +68,7 @@ void svc_alarm_clear_pending(void) {
 void svc_alarm_init(void) {
 	alarm_flags &= ~AF_ENABLED;
 	for(uint8_t i=0; i<svc_alarms_n; i++) {
+		svc_alarms[i].melody = svc_default_melody_get();
 		if(svc_alarms[i].enable) {
 			alarm_flags |= AF_ENABLED;
 		}
@@ -87,7 +88,7 @@ void svc_alarm_process(void) {
 	if(td.m != min_last) {
 		for(uint8_t i=0; i<svc_alarms_n; i++) {
 			if(svc_alarm_match(&(svc_alarms[i]), &td)) {
-				svc_melody_play_repeat(svc_alarms[i].melody, 10);
+				svc_melody_play_repeat(svc_alarms[i].melody, svc_melody_alarm_repetitions_get());
 				alarm_flags |= AF_PENDING;
 				alarm_pending = i;
 			}

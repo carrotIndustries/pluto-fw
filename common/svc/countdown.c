@@ -17,7 +17,6 @@ typedef struct {
 
 static svc_countdown_priv_t SECTION_INFOMEM svc_countdowns[N_COUNTDOWNS] = {
 	{.h=0, .m=0, .s=5}
-
 };
 
 #define NO_COUNTDOWN_PENDING 0xff
@@ -27,6 +26,12 @@ static uint8_t countdown_pending = NO_COUNTDOWN_PENDING;
 static uint8_t countdowns_running = 0;
 
 const uint8_t svc_countdowns_n = N_COUNTDOWNS;
+
+void svc_countdown_init(void) {
+	for(uint8_t i=0; i<svc_countdowns_n; i++) {
+		svc_countdowns[i].melody = svc_default_melody_get();
+	}
+}
 
 void svc_countdown_get(uint8_t index, svc_countdown_t *out) {
 	memcpy(out, &(svc_countdowns[index]), sizeof(svc_countdown_t));
@@ -39,7 +44,6 @@ void svc_countdown_set_time(uint8_t index, uint8_t h, uint8_t m, uint8_t s) {
 	svc_countdowns[index].sm = m;
 	svc_countdowns[index].s = s;
 	svc_countdowns[index].ss = s;
-
 }
 
 static void _svc_countdown_stop(svc_countdown_priv_t *cd) {
@@ -87,7 +91,7 @@ void svc_countdown_process(void) {
 		if(countdowns_running > 0) {
 			for(uint8_t i=0; i<svc_countdowns_n; i++) {
 				if(svc_countdown_dec(&(svc_countdowns[i]))) {
-					svc_melody_play_repeat(svc_countdowns[i].melody, 10);
+					svc_melody_play_repeat(svc_countdowns[i].melody, svc_melody_alarm_repetitions_get());
 					countdown_pending = i;
 				}
 			}
