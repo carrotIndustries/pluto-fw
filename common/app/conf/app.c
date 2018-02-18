@@ -336,6 +336,27 @@ static svc_menu_item_choice_t menu_item_default_melody = {
 };
 
 
+/* repetitions for alarms ****************************************************/
+static int32_t alarm_repetitions_get(void *ud) {
+	return svc_melody_alarm_repetitions_get();
+}
+
+static void alarm_repetitions_set(uint8_t dig, int8_t dir, void *user_data) {
+	int16_t inc = dir*ipow(10, dig);
+	int16_t va = svc_melody_alarm_repetitions_get();
+	svc_melody_alarm_repetitions_set(CLAMP(va+inc, 0, 200));
+}
+
+static const svc_menu_item_adj_t menu_item_alarm_repetitions = {
+	.type = SVC_MENU_ITEM_T_ADJ,
+	.header = "ar",
+	.text = "arep",
+	.digits = 3,
+	.handler_get = alarm_repetitions_get,
+	.handler_set = alarm_repetitions_set
+};
+
+
 /* debug view ****************************************************************/
 static void debug_enter(void *ud) {
 	app_set_view(app_current, 1);
@@ -363,6 +384,7 @@ static const svc_menu_item_text_t *menu_items[] = {
 	(void*)&menu_item_backlight_brightness,
 	(void*)&menu_item_lcd_contrast,
 	(void*)&menu_item_default_melody,
+	(void*)&menu_item_alarm_repetitions,
 	(void*)&menu_item_debug
 };
 

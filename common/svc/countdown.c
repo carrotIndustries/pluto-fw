@@ -91,7 +91,7 @@ void svc_countdown_process(void) {
 		if(countdowns_running > 0) {
 			for(uint8_t i=0; i<svc_countdowns_n; i++) {
 				if(svc_countdown_dec(&(svc_countdowns[i]))) {
-					svc_melody_play_repeat(svc_countdowns[i].melody, 10);
+					svc_melody_play_repeat(svc_countdowns[i].melody, svc_melody_alarm_repetitions_get());
 					countdown_pending = i;
 				}
 			}
