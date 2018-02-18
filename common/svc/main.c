@@ -7,11 +7,13 @@
 #include <stdio.h>
 
 void svc_main_proc(svc_main_proc_event_t event) {
+	static uint8_t keypress;
 	if(event & (SVC_MAIN_PROC_EVENT_KEY_ANY | SVC_MAIN_PROC_EVENT_KEY_ANY_LONG)) {
 		if(svc_alarm_get_pending() || svc_countdown_get_pending()) /* eat event if alarm/countdown shall be disabled (omnomnom) */
 			event &= ~(SVC_MAIN_PROC_EVENT_KEY_ANY | SVC_MAIN_PROC_EVENT_KEY_ANY_LONG);
 		svc_alarm_clear_pending();
 		svc_countdown_clear_pending();
+		keypress = 1;
 		svc_beep_key();
 	}
 	if(event & SVC_MAIN_PROC_EVENT_AUX_TIMER) {
@@ -24,8 +26,11 @@ void svc_main_proc(svc_main_proc_event_t event) {
 			svc_countdown_process();
 			svc_otp_process();
 			svc_seconds_since_last_set_process();
+			svc_menu_process_timetohome(keypress);
+			keypress = 0;
 		}
 		div = (div+1)%4;
+
 		svc_compass_process();
 		svc_lcd_blink_process();
 		svc_rtc_adj_process();

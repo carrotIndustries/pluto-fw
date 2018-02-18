@@ -63,3 +63,7 @@ typedef struct {
 } svc_menu_t;
 
 void svc_menu_run(const svc_menu_t *menu, svc_menu_state_t *state, svc_main_proc_event_t event);
+uint8_t svc_menu_timetohome_get(void);
+void svc_menu_timetohome_set(uint8_t time);
+uint8_t svc_menu_timetohome_min_get(void);
+void svc_menu_process_timetohome(uint8_t keypress);

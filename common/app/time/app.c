@@ -276,6 +276,9 @@ static void menu_enter(uint8_t view, const app_t *app) {
 	PRIV(app)->conf_state.item_current = 0;
 }
 
+/* this is needed for automatically go back to display time - adapt, if changed! */
+const uint8_t app_time_display_view = 0;
+
 static app_view_t views[] = {
 	{
 		.main = app_app_time_display_main,

@@ -1,7 +1,13 @@
 #include "menu.h"
 #include "lcd.h"
-#include "common/hal/hal.h"
 #include "util.h"
+#include "common/app/apps.h"
+#include "common/hal/hal.h"
+#include "platform.h"
+
+extern const uint8_t app_time_display_view;
+static const uint8_t time_to_return_home_min = 5;
+static uint8_t SECTION_INFOMEM time_to_return_home = 10;
 
 void svc_menu_run(const svc_menu_t *menu, svc_menu_state_t *state, svc_main_proc_event_t event) {
 	uint8_t *item_current = &(state->item_current);
@@ -109,6 +115,46 @@ void svc_menu_run(const svc_menu_t *menu, svc_menu_state_t *state, svc_main_proc
 		}
 		if(state->adj_digit < it->digits) {
 			hal_lcd_dig_set_blink_mask(1<<state->adj_digit);
+		}
+	}
+}
+
+uint8_t svc_menu_timetohome_get(void) {
+	return time_to_return_home;
+}
+
+void svc_menu_timetohome_set(uint8_t time) {
+	if(time < time_to_return_home_min) {
+		time_to_return_home = 0; /* return to home is disabled */
+	}
+	else {
+		time_to_return_home = time;
+	}
+}
+
+uint8_t svc_menu_timetohome_min_get(void) {
+	return time_to_return_home_min;
+}
+
+static uint8_t time_idle;
+void svc_menu_process_timetohome(uint8_t keypress) {
+	if(!time_to_return_home) {
+		return; /* return to home is disabled */
+	}
+
+	if(keypress) {
+		time_idle = 0;
+	}
+	else {
+		time_idle += 1;
+	}
+
+	if(time_idle == time_to_return_home) {
+		if(app_current != &app_app_time) {
+			app_launch(&app_app_time);
+		}
+		else if(app_current->priv->view_current != app_time_display_view) {
+			app_set_view(app_current, app_time_display_view);
 		}
 	}
 }
