@@ -86,18 +86,14 @@ static uint8_t svc_countdown_dec(svc_countdown_priv_t *cd) {
 }
 
 void svc_countdown_process(void) {
-	static uint8_t div;
-	if(div == 0) {
-		if(countdowns_running > 0) {
-			for(uint8_t i=0; i<svc_countdowns_n; i++) {
-				if(svc_countdown_dec(&(svc_countdowns[i]))) {
-					svc_melody_play_repeat(svc_countdowns[i].melody, svc_melody_alarm_repetitions_get());
-					countdown_pending = i;
-				}
+	if(countdowns_running > 0) {
+		for(uint8_t i=0; i<svc_countdowns_n; i++) {
+			if(svc_countdown_dec(&(svc_countdowns[i]))) {
+				svc_melody_play_repeat(svc_countdowns[i].melody, svc_melody_alarm_repetitions_get());
+				countdown_pending = i;
 			}
 		}
 	}
-	div = (div+1)%4;
 }
 
 void svc_countdown_draw_popup(void) {

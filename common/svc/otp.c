@@ -74,15 +74,11 @@ uint8_t svc_otp_get_time_remaining(void) {
 }
 
 void svc_otp_process(void) {
-	static uint8_t div;
-	if(div == 0) {
-		time_counter++;
-		if(timeout) {
-			timeout--;
-		}
-		else {
-			svc_otp_lock();
-		}
+	time_counter++;
+	if(timeout) {
+		timeout--;
 	}
-	div = (div+1)%4;
+	else {
+		svc_otp_lock();
+	}
 }

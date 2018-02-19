@@ -357,6 +357,32 @@ static const svc_menu_item_adj_t menu_item_alarm_repetitions = {
 };
 
 
+/* idle time in seconds before going back to display time ********************/
+static int32_t time_to_return_home_get(void *ud) {
+	return svc_menu_timetohome_get();
+}
+
+static void time_to_return_home_set(uint8_t dig, int8_t dir, void *user_data) {
+	if(!svc_menu_timetohome_get()) {
+		svc_menu_timetohome_set(svc_menu_timetohome_min_get());
+	}
+	else {
+		int16_t inc = dir*ipow(10, dig);
+		int16_t va = svc_menu_timetohome_get();
+		svc_menu_timetohome_set(CLAMP(va+inc, svc_menu_timetohome_min_get()-1, 200));
+	}
+}
+
+static const svc_menu_item_adj_t menu_item_time_to_return_home = {
+	.type = SVC_MENU_ITEM_T_ADJ,
+	.header = "th",
+	.text = " t2ho",
+	.digits = 3,
+	.handler_get = time_to_return_home_get,
+	.handler_set = time_to_return_home_set
+};
+
+
 /* debug view ****************************************************************/
 static void debug_enter(void *ud) {
 	app_set_view(app_current, 1);
@@ -385,6 +411,7 @@ static const svc_menu_item_text_t *menu_items[] = {
 	(void*)&menu_item_lcd_contrast,
 	(void*)&menu_item_default_melody,
 	(void*)&menu_item_alarm_repetitions,
+	(void*)&menu_item_time_to_return_home,
 	(void*)&menu_item_debug
 };
 
