@@ -7,7 +7,7 @@
 
 extern const uint8_t app_time_display_view;
 static const uint8_t time_to_return_home_min = 5;
-static uint8_t SECTION_INFOMEM time_to_return_home = 10;
+static uint8_t SECTION_INFOMEM time_to_return_home = 42;
 
 void svc_menu_run(const svc_menu_t *menu, svc_menu_state_t *state, svc_main_proc_event_t event) {
 	uint8_t *item_current = &(state->item_current);
