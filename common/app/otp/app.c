@@ -8,7 +8,7 @@ static int32_t pin_get(void *ud) {
 
 static void pin_set(uint8_t dig, int8_t dir, void *user_data) {
 	int16_t inc = dir*ipow(10, dig);
-	pin = CLAMP(pin+inc, 0, 9999);
+	pin = CLAMP(((int16_t)pin)+inc, 0L, 9999L);
 }
 
 static void pin_leave(void *ud) {
