@@ -87,7 +87,7 @@ void svc_chro_convert(svc_chro_t *ch) {
 }
 
 uint16_t svc_chro_get_subsec_total(svc_chro_t *ch) {
-	return ch->subsec + ch->sec*100 + ch->min*60*100; 
+	return ch->subsec + ch->sec*100 + ch->min*60*100;
 }
 
 svc_chro_state_t svc_chro_get_state(uint8_t index) {

@@ -92,7 +92,7 @@ void svc_lcd_puti(uint8_t dig, uint8_t len, uint32_t value) {
 }
 
 void svc_lcd_puti_fast(uint8_t dig, uint8_t len, uint8_t value) {
-	if(value<60) {
+	if(value<100) {
 		switch(len) {
 			case 1:
 				svc_lcd_putc(dig, svc_itoa_tab[value][1]);

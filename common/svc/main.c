@@ -35,6 +35,7 @@ void svc_main_proc(svc_main_proc_event_t event) {
 		svc_lcd_blink_process();
 		svc_rtc_adj_process();
 	}
+	/* aux timer is active for e.g. chronograph in which case the mainloop doesn't have to be triggered all the time */
 	if(!(event & SVC_MAIN_PROC_EVENT_AUX_TIMER) || svc_aux_timer_get_call_main()) {
 		app_current_update();
 		hal_lcd_set_mode(HAL_LCD_MODE_BUFFERED);
