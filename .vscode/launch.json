@@ -17,17 +17,17 @@
         "group": "pluto"
       }
     },
-    {
-      "name": "Debug simulator",
-      "request": "launch",
-      "type": "python",
-      "cwd": "${workspaceFolder}/sim",
-      "presentation": {
-        "group": "simulator"
-      },
-      "internalConsoleOptions": "openOnFirstSessionStart",
-      "program": "emu.py",
-    }
+    // {
+    //   "name": "Debug simulator",
+    //   "request": "launch",
+    //   "type": "python",
+    //   "cwd": "${workspaceFolder}/sim",
+    //   "presentation": {
+    //     "group": "simulator"
+    //   },
+    //   "internalConsoleOptions": "openOnFirstSessionStart",
+    //   "program": "emu.py",
+    // },
   ],
   "compounds": [
     {
