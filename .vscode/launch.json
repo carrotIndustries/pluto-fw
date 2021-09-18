@@ -1,0 +1,45 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run without simulator",
+      "type": "by-gdb",
+      "request": "launch",
+      "program": "sim",
+      "cwd": "${workspaceRoot}/sim",
+      "internalConsoleOptions": "openOnFirstSessionStart",
+      "preLaunchTask": "build",
+      "presentation": {
+        "order": 2,
+        "group": "pluto"
+      }
+    },
+    {
+      "name": "Debug simulator",
+      "request": "launch",
+      "type": "python",
+      "cwd": "${workspaceFolder}/sim",
+      "presentation": {
+        "group": "simulator"
+      },
+      "internalConsoleOptions": "openOnFirstSessionStart",
+      "program": "emu.py",
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Run",
+      "configurations": [
+        "Run without simulator"
+      ],
+      "presentation": {
+        "order": 1,
+        "group": "pluto"
+      },
+      "preLaunchTask": "simulator",
+    }
+  ]
+}

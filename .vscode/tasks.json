@@ -1,0 +1,57 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "simulator",
+      "options": {
+        "cwd": "sim"
+      },
+      "type": "shell",
+      "detail": "Start the simulator",
+      "isBackground": true,
+      "command": "echo 'Simulator started' ; python3 emu.py",
+      "presentation": {
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": true,
+        "clear": false,
+        "echo": true,
+        "close": false
+      },
+      "problemMatcher": {
+        "pattern": [
+          {
+            "regexp": "",
+            "file": 1,
+            "location": 2,
+            "severity": 3,
+            "code": 4,
+            "message": 5
+          }
+        ],
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "(?!x)x",
+          "endsPattern": "Simulator started"
+        }
+      },
+      "runOptions": {
+        "instanceLimit": 1
+      },
+      "group": "build"
+    },
+    {
+      "label": "build",
+      "detail": "Build for the simulator",
+      "options": {
+        "cwd": "sim"
+      },
+      "group": "build",
+      "type": "shell",
+      "command": "make"
+    }
+  ]
+}
