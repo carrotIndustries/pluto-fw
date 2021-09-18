@@ -7,7 +7,8 @@ let
     pygobject3
     pyzmq
   ]);
-  vscode = vscode-with-extensions.override {
+  vscodium = vscode-with-extensions.override {
+    vscode = pkgs.vscodium;
     vscodeExtensions = with pkgs.vscode-extensions; [
       bbenoist.Nix
       ms-vscode.cpptools
@@ -21,5 +22,5 @@ let
   };
 in
 mkShell {
-    nativeBuildInputs = [ zeromq python gnumake mbedtls pulseaudio pkgconfig gobjectIntrospection gtk3 gdb vscode ];
+    nativeBuildInputs = [ zeromq python gnumake mbedtls pulseaudio pkgconfig gobjectIntrospection gtk3 gdb vscodium ];
 }
