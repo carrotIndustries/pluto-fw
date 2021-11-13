@@ -32,5 +32,6 @@ let
   };
 in
 pkgs.mkShell {
+    LD_LIBRARY_PATH = "${pkgs.mspds}/lib";
     nativeBuildInputs = with pkgs; [ crossPkgs.buildPackages.gcc crossPkgs.buildPackages.gdb mspds mspdebug zeromq python gnumake mbedtls pulseaudio pkgconfig gobjectIntrospection gtk3 gdb vscodium clang ];
 }
