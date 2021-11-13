@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}",
+                "${workspaceFolder}/target",
+                "${workspaceFolder}/common/svc/otp/mbedtls/include"
+            ],
+            "defines": [
+                "MBEDTLS_CONFIG_FILE=\\\"../common/svc/otp/mbedtls/mbedtls_config.h\\\""
+            ],
+            "compilerPath": "/nix/store/q76g028jz9hnpjlg2jwkr5zp35j9r5dh-msp430-elf-stage-final-gcc-debug-wrapper-10.3.0/bin/msp430-elf-gcc",
+            "cStandard": "gnu18",
+            "cppStandard": "c++20",
+            "intelliSenseMode": "gcc-x64",
+            "compilerArgs": [
+                "-mmcu=msp430fr6972"
+            ]
+        }
+    ],
+    "version": 4
+}
