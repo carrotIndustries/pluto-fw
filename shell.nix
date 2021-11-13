@@ -1,5 +1,13 @@
 let
-  pkgs = import <nixpkgs> {}; 
+  pkgs = import <nixpkgs> {};
+  crossPkgs = import <nixpkgs> {
+    # crossSystem = (import <nixpkgs/lib>).systems.examples.msp430;
+  crossSystem = {
+    config = "msp430-elf";
+    libc = "newlib";
+    gcc.float = " --enable-multilib --disable-libquadmath ";
+  };
+  };
   rtttl = ps: ps.callPackage ./rtttl.nix {};
   python = pkgs.python39.withPackages(ps: with ps; [
     (rtttl ps)
@@ -24,5 +32,5 @@ let
   };
 in
 pkgs.mkShell {
-    nativeBuildInputs = with pkgs; [ zeromq python gnumake mbedtls pulseaudio pkgconfig gobjectIntrospection gtk3 gdb vscodium clang ];
+    nativeBuildInputs = with pkgs; [ crossPkgs.buildPackages.gcc crossPkgs.buildPackages.gdb mspds mspdebug zeromq python gnumake mbedtls pulseaudio pkgconfig gobjectIntrospection gtk3 gdb vscodium clang ];
 }
