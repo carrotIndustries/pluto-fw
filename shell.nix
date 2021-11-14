@@ -2,19 +2,7 @@ let
   # unstable = import (fetchTarball https://nixos.org/channels/nixos-unstable/nixexprs.tar.xz) {};
   pkgs = import <nixpkgs> {};
 
-  overlayA = self: super: {
-    msp430GccSupport = super.msp430GccSupport.overrideAttrs (old: rec {
-      version = "1.212";
-      mspgccVersion = "9_3_1_2";
-      src = super.fetchzip {
-        url = "http://software-dl.ti.com/msp430/msp430_public_sw/mcu/msp430/MSPGCC/9_3_1_2/export/msp430-gcc-support-files-1.212.zip";
-        sha256 = "0v9b69q5p04jbxr5hrljyzrdqcxhfwm5hdd4zajnnwzy0gpy1kpw";
-      };
-    });
-  };
-
   crossPkgs = import <nixpkgs> {
-  overlays = [ overlayA];
   crossSystem = {
     config = "msp430-elf";
     libc = "newlib";
@@ -57,5 +45,5 @@ let
 in
 pkgs.mkShell {
     LD_LIBRARY_PATH = "${pkgs.mspds}/lib";
-    nativeBuildInputs = with pkgs; [ crossPkgs.newlib crossPkgs.buildPackages.gcc crossPkgs.buildPackages.gdb mspds mspdebug zeromq python gnumake mbedtls pulseaudio pkgconfig gobjectIntrospection gtk3 gdb vscode];
+    nativeBuildInputs = with pkgs; [ crossPkgs.buildPackages.gcc crossPkgs.buildPackages.gdb mspds mspdebug zeromq python gnumake mbedtls pulseaudio pkgconfig gobjectIntrospection gtk3 lsof gdb vscode];
 }
