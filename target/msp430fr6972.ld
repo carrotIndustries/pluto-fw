@@ -1,5 +1,5 @@
 /* ============================================================================ */
-/* Copyright (c) 2016, Texas Instruments Incorporated                           */
+/* Copyright (c) 2021, Texas Instruments Incorporated                           */
 /*  All rights reserved.                                                        */
 /*                                                                              */
 /*  Redistribution and use in source and binary forms, with or without          */
@@ -31,7 +31,7 @@
 /* ============================================================================ */
 
 /* This file supports MSP430FR6972 devices. */
-/* Version: 1.188 */
+/* Version: 1.212 */
 /* Default linker script, for normal executables */
 
 OUTPUT_ARCH(msp430)
@@ -46,8 +46,11 @@ MEMORY {
   INFOB            : ORIGIN = 0x1900, LENGTH = 0x0080 /* END=0x197F, size 128 */
   INFOC            : ORIGIN = 0x1880, LENGTH = 0x0080 /* END=0x18FF, size 128 */
   INFOD            : ORIGIN = 0x1800, LENGTH = 0x0080 /* END=0x187F, size 128 */
-  ROM (rx)         : ORIGIN = 0x4400, LENGTH = 0xBB80 /* END=0xFF7F, size 48000 */
-  HIFRAM           : ORIGIN = 0x10000, LENGTH = 0x00003FFF
+  FRAM (rx)        : ORIGIN = 0x4400, LENGTH = 0xBB80 /* END=0xFF7F, size 48000 */
+  HIFRAM (rxw)     : ORIGIN = 0x00010000, LENGTH = 0x00003FF7 /* Boundaries changed to fix CPU47 */
+  JTAGSIGNATURE    : ORIGIN = 0xFF80, LENGTH = 0x0004
+  BSLSIGNATURE     : ORIGIN = 0xFF84, LENGTH = 0x0004
+  IPESIGNATURE     : ORIGIN = 0xFF88, LENGTH = 0x0008
   VECT1            : ORIGIN = 0xFF90, LENGTH = 0x0002
   VECT2            : ORIGIN = 0xFF92, LENGTH = 0x0002
   VECT3            : ORIGIN = 0xFF94, LENGTH = 0x0002
@@ -108,6 +111,13 @@ MEMORY {
 
 SECTIONS
 {
+  .jtagsignature      : {} > JTAGSIGNATURE
+  .bslsignature       : {} > BSLSIGNATURE
+  .ipe :
+  {
+    KEEP (*(.ipesignature))
+    KEEP (*(.jtagpassword))
+  } > IPESIGNATURE
   __interrupt_vector_1   : { KEEP (*(__interrupt_vector_1 )) } > VECT1
   __interrupt_vector_2   : { KEEP (*(__interrupt_vector_2 )) } > VECT2
   __interrupt_vector_3   : { KEEP (*(__interrupt_vector_3 )) } > VECT3
@@ -170,32 +180,40 @@ SECTIONS
     KEEP (*(.resetvec))
   } > RESETVEC
 
+  .lower.rodata :
+  {
+    . = ALIGN(2);
+    *(.lower.rodata.* .lower.rodata)
+  } > FRAM
+
   .rodata :
   {
     . = ALIGN(2);
     *(.plt)
     *(.rodata .rodata.* .gnu.linkonce.r.* .const .const:*)
     *(.rodata1)
-    *(.lower.rodata.* .lower.rodata)
     KEEP (*(.gcc_except_table)) *(.gcc_except_table.*)
+    . = ALIGN(2);
     PROVIDE (__preinit_array_start = .);
     KEEP (*(.preinit_array))
     PROVIDE (__preinit_array_end = .);
+    . = ALIGN(2);
     PROVIDE (__init_array_start = .);
     KEEP (*(SORT(.init_array.*)))
     KEEP (*(.init_array))
     PROVIDE (__init_array_end = .);
+    . = ALIGN(2);
     PROVIDE (__fini_array_start = .);
     KEEP (*(.fini_array))
     KEEP (*(SORT(.fini_array.*)))
     PROVIDE (__fini_array_end = .);
-  } > ROM
+  } > FRAM
 
   /* Note: This is a separate .rodata section for sections which are
      read only but which older linkers treat as read-write.
      This prevents older linkers from marking the entire .rodata
      section as read-write.  */
-  .rodata2 : 
+  .rodata2 :
   {
     . = ALIGN(2);
     *(.eh_frame_hdr)
@@ -209,10 +227,10 @@ SECTIONS
        directory crtbegin.o is in.  */
     KEEP (*crtbegin*.o(.ctors))
 
-    /* We don't want to include the .ctor section from from the
-       crtend.o file until after the sorted ctors.  The .ctor section
-       from the crtend file contains the end of ctors marker and it
-       must be last */
+    /* We don't want to include the .ctor section from the crtend.o
+       file until after the sorted ctors.  The .ctor section from
+       the crtend file contains the end of ctors marker and it must
+       be last */
     KEEP (*(EXCLUDE_FILE (*crtend*.o ) .ctors))
     KEEP (*(SORT(.ctors.*)))
     KEEP (*(.ctors))
@@ -221,7 +239,7 @@ SECTIONS
     KEEP (*(EXCLUDE_FILE (*crtend*.o ) .dtors))
     KEEP (*(SORT(.dtors.*)))
     KEEP (*(.dtors))
-  } > ROM
+  } > FRAM
 
   .upper.rodata :
   {
@@ -229,7 +247,7 @@ SECTIONS
   } > HIFRAM
 
   /* This section contains data that is initialised during load
-     but not on application reset.  */  
+     but not on application reset.  */
   .persistent :
   {
     . = ALIGN(2);
@@ -237,12 +255,20 @@ SECTIONS
     *(.persistent)
     . = ALIGN(2);
     PROVIDE (__persistent_end = .);
-  } > HIFRAM
+  } > FRAM
+
+  .tinyram : {} > TINYRAM
+
+  .lower.data :
+  {
+    . = ALIGN(2);
+    PROVIDE (__datastart = .);
+    *(.lower.data.* .lower.data)
+  } > RAM AT> FRAM
 
   .data :
   {
     . = ALIGN(2);
-    PROVIDE (__datastart = .);
 
     KEEP (*(.jcr))
     *(.data.rel.ro.local) *(.data.rel.ro*)
@@ -261,18 +287,16 @@ SECTIONS
     *(.sdata .sdata.* .gnu.linkonce.s.* D_2 D_1)
 
     . = ALIGN(2);
-    *(.lower.data.* .lower.data)
-    . = ALIGN(2);
 
     _edata = .;
     PROVIDE (edata = .);
     PROVIDE (__dataend = .);
-  } > RAM AT> ROM
+  } > RAM AT> FRAM
 
   /* Note that crt0 assumes this is a multiple of two; all the
      start/stop symbols are also assumed word-aligned.  */
-  PROVIDE(__romdatastart = LOADADDR(.data));
-  PROVIDE (__romdatacopysize = SIZEOF(.data));
+  PROVIDE(__romdatastart = LOADADDR(.lower.data));
+  PROVIDE (__romdatacopysize = SIZEOF(.lower.data) + SIZEOF(.data));
 
   .upper.data :
   {
@@ -282,24 +306,29 @@ SECTIONS
     __high_datastart = .;
     *(.upper.data.* .upper.data)
     __high_dataend = .;
-  } > HIFRAM AT> ROM
+  } > HIFRAM AT> FRAM
 
   __rom_highdatacopysize = SIZEOF(.upper.data) - 2;
   __rom_highdatastart = LOADADDR(.upper.data) + 2;
 
-  .bss :
+  .lower.bss :
   {
     . = ALIGN(2);
     PROVIDE (__bssstart = .);
+    *(.lower.bss.* .lower.bss)
+  } > RAM
+
+  .bss :
+  {
+    . = ALIGN(2);
     *(.dynbss)
     *(.sbss .sbss.*)
     *(.bss .bss.* .gnu.linkonce.b.*)
-    *(.lower.bss.* .lower.bss)
     . = ALIGN(2);
     *(COMMON)
     PROVIDE (__bssend = .);
   } > RAM
-  PROVIDE (__bsssize = SIZEOF(.bss));
+  PROVIDE (__bsssize = SIZEOF(.lower.bss) + SIZEOF(.bss));
 
   .upper.bss :
   {
@@ -308,8 +337,8 @@ SECTIONS
     *(.upper.bss.* .upper.bss)
     . = ALIGN(2);
     __high_bssend = .;
-	__high_bsssize = SIZEOF(.upper.bss);
   } > HIFRAM
+  __high_bsssize = SIZEOF(.upper.bss);
 
   /* This section contains data that is not initialised during load
      or application reset.  */
@@ -330,7 +359,7 @@ SECTIONS
     . = ALIGN(2);
     __heap_start__ = .;
     _end = __heap_start__;
-    PROVIDE (end = .); 
+    PROVIDE (end = .);
     KEEP (*(.heap))
     _end = .;
     PROVIDE (end = .);
@@ -351,6 +380,12 @@ SECTIONS
     *(.stack)
   }
 
+  .lower.text :
+  {
+    . = ALIGN(2);
+    *(.lower.text.* .lower.text)
+  } > FRAM
+
   .text :
   {
     PROVIDE (_start = .);
@@ -360,9 +395,6 @@ SECTIONS
 
     . = ALIGN(2);
     KEEP (*(.lowtext))
-
-    . = ALIGN(2);
-    *(.lower.text.* .lower.text)
 
     . = ALIGN(2);
     *(.text .stub .text.* .gnu.linkonce.t.* .text:*)
@@ -378,7 +410,7 @@ SECTIONS
     KEEP (*(.init))
     KEEP (*(.fini))
     KEEP (*(.tm_clone_table))
-  } > ROM
+  } > FRAM
 
   .upper.text :
   {
@@ -386,15 +418,15 @@ SECTIONS
     *(.upper.text.* .upper.text)
   } > HIFRAM
 
-  .infoA     : {} > INFOA              /* MSP430 INFO FLASH MEMORY SEGMENTS */
-  .infoB     : {} > INFOB
-  .infoC     : {} > INFOC
-  .infoD     : {} > INFOD
+  .infoA (NOLOAD) : {} > INFOA              /* MSP430 INFO FLASH MEMORY SEGMENTS */
+  .infoB (NOLOAD) : {} > INFOB
+  .infoC (NOLOAD) : {} > INFOC
+  .infoD (NOLOAD) : {} > INFOD
   .infoMEM     : {} > INFOMEM
 
   /* The rest are all not normally part of the runtime image.  */
 
-  .MP430.attributes 0 :
+  .MSP430.attributes 0 :
   {
     KEEP (*(.MSP430.attributes))
     KEEP (*(.gnu.attributes))
@@ -448,5 +480,5 @@ SECTIONS
 /* Include peripherals memory map                                           */
 /****************************************************************************/
 
-INCLUDE "msp430fr6972_symbols.ld"
+INCLUDE msp430fr6972_symbols.ld
 
