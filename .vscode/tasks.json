@@ -4,6 +4,15 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "prepare simulator",
+      "dependsOn": [
+        "compile simulator",
+        "run simulator gui"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    },
+    {
       "label": "stop simulator",
       "detail": "Kill all old simulator debugger processes",
       "type": "shell",

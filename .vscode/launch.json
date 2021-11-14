@@ -93,13 +93,13 @@
     {
       "name": "Compile & Debug simulator",
       "configurations": [
-        "Debug simulator"
+        "Debug simulator_"
       ],
       "presentation": {
         "order": 1,
         "group": "simulator"
       },
-      "preLaunchTask": "run simulator gui",
+      "preLaunchTask": "prepare simulator",
     }
   ]
 }
