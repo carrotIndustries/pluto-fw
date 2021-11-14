@@ -4,7 +4,22 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "simulator",
+      "label": "stop simulator",
+      "detail": "Kill all old simulator debugger processes",
+      "type": "shell",
+      "options": {
+        "shell": {
+          "executable": "sh",
+          "args": [
+            "-c"
+          ]
+        }
+      },
+      "command": "kill $(lsof -t -i:37512) || true ; sleep 0.5",
+      "problemMatcher": []
+    },
+    {
+      "label": "run simulator gui",
       "options": {
         "cwd": "sim"
       },
@@ -40,18 +55,34 @@
       },
       "runOptions": {
         "instanceLimit": 1
-      },
-      "group": "build"
+      }
     },
     {
-      "label": "build",
+      "label": "compile simulator",
       "detail": "Build for the simulator",
       "options": {
         "cwd": "sim"
       },
       "group": "build",
       "type": "shell",
-      "command": "make"
+      "command": "make",
+      "problemMatcher": [
+        {
+          "owner": "cpp",
+          "fileLocation": [
+            "relative",
+            "${workspaceFolder}/target"
+          ],
+          "pattern": {
+            "regexp": "^(.*):(\\d+):(\\d+):\\s+(error|warning):\\s+(.*)$",
+            "file": 1,
+            "line": 2,
+            "column": 3,
+            "severity": 4,
+            "message": 5
+          }
+        }
+      ]
     },
     {
       "label": "clean",
@@ -81,22 +112,7 @@
             "${workspaceFolder}/target"
           ],
           "pattern": {
-            "regexp": "^(.*):(\\d+):(\\d+):\\s+(error):\\s+(.*)$",
-            "file": 1,
-            "line": 2,
-            "column": 3,
-            "severity": 4,
-            "message": 5
-          }
-        },
-        {
-          "owner": "cpp",
-          "fileLocation": [
-            "relative",
-            "${workspaceFolder}/target"
-          ],
-          "pattern": {
-            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning):\\s+(.*)$",
+            "regexp": "^(.*):(\\d+):(\\d+):\\s+(error|warning):\\s+(.*)$",
             "file": 1,
             "line": 2,
             "column": 3,

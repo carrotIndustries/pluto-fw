@@ -5,30 +5,33 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Run without simulator",
-      "type": "by-gdb",
+      "name": "Debug simulator_",
+      "type": "cppdbg",
       "request": "launch",
-      "program": "sim",
+      "program": "${workspaceRoot}/sim/sim",
+      "debugServerPath": "sh", //gdbserver, because otherwise for some reason the process does not reliably exit when finished
+      "debugServerArgs": "-c \"cd ${workspaceRoot}/sim ; kill $(lsof -t -i:37512) || true ; gdbserver --once 0.0.0.0:37512 ${workspaceRoot}/sim/sim\"",
+      "filterStderr": true,
+      "serverStarted": "Listening on port 37512",
+      "miDebuggerServerAddress": "localhost:37512",
       "cwd": "${workspaceRoot}/sim",
-      "internalConsoleOptions": "openOnFirstSessionStart",
-      "preLaunchTask": "build",
+      "preLaunchTask": "stop simulator",
       "presentation": {
-        "order": 2,
-        "group": "pluto"
-      }
-    },
-    {
-      "name": "Run simm",
-      "type": "by-gdb",
-      "request": "launch",
-      "program": "simm",
-      "cwd": "${workspaceRoot}",
-      "internalConsoleOptions": "openOnFirstSessionStart",
-      "preLaunchTask": "build",
-      "presentation": {
-        "order": 2,
-        "group": "pluto"
-      }
+        "order": 3,
+        "group": "simulator",
+        "hidden": true
+      },
+      "logging": {
+        "exceptions": true,
+        "moduleLoad": true,
+        "programOutput": true,
+        "engineLogging": true,
+      },
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "externalConsole": false,
+      "avoidWindowsConsoleRedirection": false,
+      "serverLaunchTimeout": 20000,
     },
     {
       "name": "Debug",
@@ -63,17 +66,6 @@
         "group": "msp430"
       }
     }
-    // {
-    //   "name": "Debug simulator",
-    //   "request": "launch",
-    //   "type": "python",
-    //   "cwd": "${workspaceFolder}/sim",
-    //   "presentation": {
-    //     "group": "simulator"
-    //   },
-    //   "internalConsoleOptions": "openOnFirstSessionStart",
-    //   "program": "emu.py",
-    // },
   ],
   "compounds": [
     {
@@ -88,15 +80,26 @@
       "preLaunchTask": "program",
     },
     {
-      "name": "Run",
+      "name": "Debug simulator",
       "configurations": [
-        "Run without simulator"
+        "Debug simulator_"
+      ],
+      "presentation": {
+        "order": 2,
+        "group": "simulator"
+      },
+      "preLaunchTask": "run simulator gui",
+    },
+    {
+      "name": "Compile & Debug simulator",
+      "configurations": [
+        "Debug simulator"
       ],
       "presentation": {
         "order": 1,
-        "group": "pluto"
+        "group": "simulator"
       },
-      "preLaunchTask": "simulator",
+      "preLaunchTask": "run simulator gui",
     }
   ]
 }
