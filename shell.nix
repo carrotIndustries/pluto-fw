@@ -1,14 +1,28 @@
 let
-  unstable = import (fetchTarball https://nixos.org/channels/nixos-unstable/nixexprs.tar.xz) {};
+  # unstable = import (fetchTarball https://nixos.org/channels/nixos-unstable/nixexprs.tar.xz) {};
   pkgs = import <nixpkgs> {};
+
+  overlayA = self: super: {
+    msp430GccSupport = super.msp430GccSupport.overrideAttrs (old: rec {
+      version = "1.212";
+      mspgccVersion = "9_3_1_2";
+      src = super.fetchzip {
+        url = "http://software-dl.ti.com/msp430/msp430_public_sw/mcu/msp430/MSPGCC/9_3_1_2/export/msp430-gcc-support-files-1.212.zip";
+        sha256 = "0v9b69q5p04jbxr5hrljyzrdqcxhfwm5hdd4zajnnwzy0gpy1kpw";
+      };
+    });
+  };
+
   crossPkgs = import <nixpkgs> {
-    # crossSystem = (import <nixpkgs/lib>).systems.examples.msp430;
+  overlays = [ overlayA];
   crossSystem = {
     config = "msp430-elf";
     libc = "newlib";
     gcc.float = " --enable-multilib --disable-libquadmath ";
   };
+
   };
+
   rtttl = ps: ps.callPackage ./rtttl.nix {};
   python = pkgs.python39.withPackages(ps: with ps; [
     (rtttl ps)
@@ -16,7 +30,7 @@ let
     pyzmq
   ]);
   vscode = pkgs.vscode-with-extensions.override {
-    vscode = unstable.vscode;
+    vscode = pkgs.vscode;
     vscodeExtensions = [
       pkgs.vscode-extensions.bbenoist.Nix
       pkgs.vscode-extensions.ms-vscode.cpptools
@@ -38,30 +52,10 @@ let
       version = "1.1.0";
       sha256 = "0416qprq9rnzl9na3fxhs9wnmws9zfm473qxnvji2vy752l4wxr4";
     }
-    # {
-    #   name = "debug";
-    #   publisher = "webfreak";
-    #   version = "0.25.1";
-    #   sha256 = "1l01sv6kwh8dlv3kygkkd0z9m37hahflzd5bx1wwij5p61jg7np9";
-    # }
-    # {
-    #   name = "vgdb";
-    #   publisher = "penagos";
-    #   version = "1.0.0";
-    #   sha256 = "0hbl21p0clcwfb5jrrdijsw6z58sddvsy6hyl8p39sq76mga4kj1";
-    # }
-    {
-      name = "beyond-debug";
-      publisher = "coolchyni";
-      version = "0.9.6";
-      sha256 = "1g5qcblnz67786aaqzszrxx6qc80bylyb87aqlgk6423zv4aksq4";
-      sha256 = "0qjllvg2wwy3w8gg7q9dkbs0mccxxdq8cg59pbvw0vd8rxn71jpw";
-    }
     ];
   };
 in
 pkgs.mkShell {
     LD_LIBRARY_PATH = "${pkgs.mspds}/lib";
-    nativeBuildInputs = with pkgs; [ crossPkgs.buildPackages.gcc crossPkgs.buildPackages.gdb mspds mspdebug zeromq python gnumake mbedtls pulseaudio pkgconfig gobjectIntrospection gtk3 gdb vscodium clang ];
     nativeBuildInputs = with pkgs; [ crossPkgs.newlib crossPkgs.buildPackages.gcc crossPkgs.buildPackages.gdb mspds mspdebug zeromq python gnumake mbedtls pulseaudio pkgconfig gobjectIntrospection gtk3 gdb vscode];
 }
