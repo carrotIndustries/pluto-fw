@@ -186,7 +186,7 @@ With these dependencies satisfied, the pluto firmware should build on
 any reasonably up-to-date Linux distribution. 
 
 ## Building and running simulator
-```
+```sh
 $ cd sim
 $ make
 $ ./emu.py&
@@ -194,12 +194,20 @@ $ ./sim
 ```
 
 ## Building for target
-```
+```sh
 $ cd target
 $ make
 $ make program
 ```
 You may have to modify the Makefile to suit your particular programmer.
+
+## Develop with nix
+The easiest way to get started is to use [nix](https://nixos.org/) to get a development environment with all necessary dependencies and tools (including an IDE configured for developing & debugging). The environment should work on all linux distributions.
+```sh
+$ export NIXPKGS_ALLOW_UNFREE=1
+$ nix-shell
+```
+You then can open vscode using (```code .```) and use the launch configurations in the Run and Debug tab to build, program and debug the simulator or a real Pluto. Running nix-shell for the first time will take a while, because gcc for msp430 will get build from source. Programming and debugging the watch with a launchpad should work out of the box, but you probably need to give yourself permissions on the debugger device (`sudo chmod a+rw /dev/ACM0` or something similar).
 
 # Credits
 Thanks go to [sh-ow](https://github.com/sh-ow) for implementing parts 
