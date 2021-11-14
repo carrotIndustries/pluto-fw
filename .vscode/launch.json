@@ -17,6 +17,52 @@
         "group": "pluto"
       }
     },
+    {
+      "name": "Run simm",
+      "type": "by-gdb",
+      "request": "launch",
+      "program": "simm",
+      "cwd": "${workspaceRoot}",
+      "internalConsoleOptions": "openOnFirstSessionStart",
+      "preLaunchTask": "build",
+      "presentation": {
+        "order": 2,
+        "group": "pluto"
+      }
+    },
+    {
+      "name": "Debug",
+      "type": "cppdbg",
+      "request": "launch",
+      "miDebuggerServerAddress": "localhost:2000",
+      "debugServerPath": "/nix/store/a9b545kihrawg49xxaa5bs8qzqfccf31-mspdebug-0.25/bin/mspdebug",
+      "debugServerArgs": "tilib \"opt color true\" \"sym import+ ${workspaceRoot}/target/output/target/main.elf\" \"reset\" \"gdb\"",
+      "serverStarted": "Bound to port 2000. Now waiting for connection...",
+      "program": "${workspaceRoot}/target/output/target/main.elf",
+      "cwd": "${workspaceRoot}/target",
+      "logging": {
+        "exceptions": true,
+        "moduleLoad": true,
+        "programOutput": true,
+        "engineLogging": false,
+      },
+      "launchCompleteCommand": "None",
+      "MIMode": "gdb",
+      "miDebuggerPath": "/nix/store/zydzcb2588b000hg63qndixa85l5skgc-msp430-elf-gdb-10.2/bin/msp430-elf-gdb",
+      // "sourceFileMap": {
+      //   "/build/newlib-3.3.0": "${workspaceRoot}/../newlib",
+      // },
+      "serverLaunchTimeout": 15000,
+      "hardwareBreakpoint": {
+        "require": true,
+        "limit": 3
+      },
+      "stopAtEntry": false,
+      "presentation": {
+        "order": 2,
+        "group": "msp430"
+      }
+    }
     // {
     //   "name": "Debug simulator",
     //   "request": "launch",
@@ -30,6 +76,17 @@
     // },
   ],
   "compounds": [
+    {
+      "name": "Program & Debug",
+      "configurations": [
+        "Debug"
+      ],
+      "presentation": {
+        "order": 1,
+        "group": "msp430"
+      },
+      "preLaunchTask": "program",
+    },
     {
       "name": "Run",
       "configurations": [

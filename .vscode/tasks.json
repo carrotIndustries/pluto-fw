@@ -52,6 +52,74 @@
       "group": "build",
       "type": "shell",
       "command": "make"
+    },
+    {
+      "label": "clean",
+      "detail": "Remove temporary files",
+      "options": {
+        "cwd": "target"
+      },
+      "group": "build",
+      "type": "shell",
+      "command": "make clean",
+      "problemMatcher": []
+    },
+    {
+      "label": "compile",
+      "detail": "Build the msp430 binary",
+      "options": {
+        "cwd": "target"
+      },
+      "group": "build",
+      "type": "shell",
+      "command": "make",
+      "problemMatcher": [
+        {
+          "owner": "cpp",
+          "fileLocation": [
+            "relative",
+            "${workspaceFolder}/target"
+          ],
+          "pattern": {
+            "regexp": "^(.*):(\\d+):(\\d+):\\s+(error):\\s+(.*)$",
+            "file": 1,
+            "line": 2,
+            "column": 3,
+            "severity": 4,
+            "message": 5
+          }
+        },
+        {
+          "owner": "cpp",
+          "fileLocation": [
+            "relative",
+            "${workspaceFolder}/target"
+          ],
+          "pattern": {
+            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning):\\s+(.*)$",
+            "file": 1,
+            "line": 2,
+            "column": 3,
+            "severity": 4,
+            "message": 5
+          }
+        }
+      ]
+    },
+    {
+      "label": "program",
+      "detail": "Program the target",
+      "options": {
+        "cwd": "target"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "type": "shell",
+      "command": "make program",
+      "dependsOn": "compile",
+      "problemMatcher": []
     }
   ]
 }
