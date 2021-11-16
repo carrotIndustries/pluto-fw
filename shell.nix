@@ -1,26 +1,36 @@
 let
-  # unstable = import (fetchTarball https://nixos.org/channels/nixos-unstable/nixexprs.tar.xz) {};
-  pkgs = import <nixpkgs> {};
+  pinnedPkgs = import (builtins.fetchTarball {
+    name = "nixos-unstable-2021-11-15";
+    url = "https://github.com/nixos/nixpkgs/archive/2fa862644fc15ecb525eb8cd0a60276f1c340c7c.tar.gz";
+    sha256 = "00l884zydbrww2jxjvf62sm1y96jvys22jg9vb3fsznz2mbz41jb";
+  });
+  
+  pkgs = pinnedPkgs {};
 
-  crossPkgs = import <nixpkgs> {
-  crossSystem = {
-    config = "msp430-elf";
-    libc = "newlib";
-    gcc.float = " --enable-multilib --disable-libquadmath ";
+  crossPkgs = pinnedPkgs {
+    crossSystem = {
+      config = "msp430-elf";
+      libc = "newlib";
+      gcc.float = " --enable-multilib --disable-libquadmath ";
+    };
   };
 
-  };
-
-  rtttl = ps: ps.callPackage ./rtttl.nix {};
   python = pkgs.python39.withPackages(ps: with ps; [
-    (rtttl ps)
+    (buildPythonPackage rec {
+       pname = "rtttl";
+       version = "0.2";
+       src = fetchPypi {
+         inherit pname version;
+         sha256 = "02h23mp9mvd9d7hsvj280k3drms9b1dbla4kar6m2fjdnhd9i9jq";
+      };
+    })
     pygobject3
     pyzmq
   ]);
   vscode = pkgs.vscode-with-extensions.override {
     vscode = pkgs.vscode;
     vscodeExtensions = [
-      pkgs.vscode-extensions.bbenoist.Nix
+      pkgs.vscode-extensions.bbenoist.nix
       pkgs.vscode-extensions.ms-vscode.cpptools
     ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [{
       name = "msp430-assembly";
