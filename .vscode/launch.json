@@ -13,7 +13,7 @@
       "debugServerArgs": "-c \"cd ${workspaceRoot}/sim ; kill $(lsof -t -i:37512) || true ; gdbserver --once 0.0.0.0:37512 ${workspaceRoot}/sim/sim\"",
       "filterStderr": true,
       "serverStarted": "Listening on port 37512",
-      "miDebuggerServerAddress": "localhost:37512",
+      "miDebuggerServerAddress": "0.0.0.0:37512",
       "cwd": "${workspaceRoot}/sim",
       "preLaunchTask": "stop simulator",
       "presentation": {
@@ -38,7 +38,7 @@
       "type": "cppdbg",
       "request": "launch",
       "miDebuggerServerAddress": "localhost:2000",
-      "debugServerPath": "/nix/store/a9b545kihrawg49xxaa5bs8qzqfccf31-mspdebug-0.25/bin/mspdebug",
+      "debugServerPath": "mspdebug",
       "debugServerArgs": "tilib \"opt color true\" \"sym import+ ${workspaceRoot}/target/output/target/main.elf\" \"reset\" \"gdb\"",
       "serverStarted": "Bound to port 2000. Now waiting for connection...",
       "program": "${workspaceRoot}/target/output/target/main.elf",
@@ -51,10 +51,7 @@
       },
       "launchCompleteCommand": "None",
       "MIMode": "gdb",
-      "miDebuggerPath": "/nix/store/zydzcb2588b000hg63qndixa85l5skgc-msp430-elf-gdb-10.2/bin/msp430-elf-gdb",
-      // "sourceFileMap": {
-      //   "/build/newlib-3.3.0": "${workspaceRoot}/../newlib",
-      // },
+      "miDebuggerPath": "msp430-elf-gdb",
       "serverLaunchTimeout": 15000,
       "hardwareBreakpoint": {
         "require": true,

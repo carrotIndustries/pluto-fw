@@ -1,8 +1,8 @@
 let
   pinnedPkgs = import (builtins.fetchTarball {
-    name = "nixos-unstable-2021-11-15";
-    url = "https://github.com/nixos/nixpkgs/archive/2fa862644fc15ecb525eb8cd0a60276f1c340c7c.tar.gz";
-    sha256 = "00l884zydbrww2jxjvf62sm1y96jvys22jg9vb3fsznz2mbz41jb";
+    name = "nixos-21.05";
+    url = "https://github.com/nixos/nixpkgs/archive/46251a79f752ae1d46ef733e8e9760b6d3429da4.tar.gz";
+    sha256 = "1xsp0xyrf8arjkf4wi09n96kbg0r8igsmzx8bhc1nj4nr078p0pg";
   });
   
   pkgs = pinnedPkgs {};
@@ -30,7 +30,7 @@ let
   vscode = pkgs.vscode-with-extensions.override {
     vscode = pkgs.vscode;
     vscodeExtensions = [
-      pkgs.vscode-extensions.bbenoist.nix
+      pkgs.vscode-extensions.bbenoist.Nix
       pkgs.vscode-extensions.ms-vscode.cpptools
     ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [{
       name = "msp430-assembly";
@@ -54,6 +54,9 @@ let
   };
 in
 pkgs.mkShell {
-    LD_LIBRARY_PATH = "${pkgs.mspds}/lib";
-    nativeBuildInputs = with pkgs; [ crossPkgs.buildPackages.gcc crossPkgs.buildPackages.gdb mspds mspdebug zeromq python gnumake mbedtls pulseaudio pkgconfig gobjectIntrospection gtk3 lsof gdb vscode];
+  LD_LIBRARY_PATH = "${pkgs.mspds}/lib";
+  shellHook = ''
+    export LD_LIBRARY_PATH="${pkgs.mspds}/lib";
+  '';
+  nativeBuildInputs = with pkgs; [ crossPkgs.buildPackages.gcc crossPkgs.buildPackages.gdb mspds mspdebug zeromq python gnumake mbedtls pulseaudio pkgconfig gobjectIntrospection gtk3 lsof gdb vscode];
 }
