@@ -149,12 +149,12 @@ void svc_menu_process_timetohome(uint8_t keypress) {
 		time_idle += 1;
 	}
 
-	if(time_idle == time_to_return_home) {
-		if(app_current != &app_app_time) {
-			app_launch(&app_app_time);
-		}
-		else if(app_current->priv->view_current != app_time_display_view) {
-			app_set_view(app_current, app_time_display_view);
-		}
-	}
+// if(time_idle == time_to_return_home) {
+// 	if(app_current != &app_app_time) {
+// 		app_launch(&app_app_time);
+// 	}
+// 	else if(app_current->priv->view_current != app_time_display_view) {
+// 		app_set_view(app_current, app_time_display_view);
+// 	}
+// }
 }

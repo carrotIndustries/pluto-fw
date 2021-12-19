@@ -2,6 +2,7 @@
 #include <stdint.h>
 
 typedef enum {
+	SVC_MAIN_PROC_NO_EVENT             = 0,
 	SVC_MAIN_PROC_EVENT_TICK           = 1<<0,
 	SVC_MAIN_PROC_EVENT_KEY_UP         = 1<<1,
 	SVC_MAIN_PROC_EVENT_KEY_DOWN       = 1<<2,

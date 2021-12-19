@@ -26,57 +26,69 @@ static const svc_menu_item_text_t menu_item0 = {
 	.handler = launch,
 	.user_data = (void *)&app_app_time,
 };
-static const svc_menu_item_text_t menu_item1 = {
-	.text = "ctdn",
-	.handler = launch,
-	.user_data = (void *)&app_app_countdown,
-};
-static const svc_menu_item_text_t menu_item2 = {
-	.text = " alarm",
-	.handler = launch,
-	.user_data = (void *)&app_app_alarm,
-};
-static const svc_menu_item_text_t menu_item3 = {
-	.text = "chro",
-	.handler = launch,
-	.user_data = (void *)&app_app_chro,
-};
-static const svc_menu_item_text_t menu_item4 = {
-	.text = " play",
-	.handler = launch,
-	.user_data = (void *)&app_app_play,
-};
-static const svc_menu_item_text_t menu_item5 = {
-	.text = " compa",
-	.handler = launch,
-	.user_data = (void *)&app_app_compass,
-};
-static const svc_menu_item_text_t menu_item6 = {
-	.text = "speed",
-	.handler = launch,
-	.user_data = (void *)&app_app_speed,
-};
-static const svc_menu_item_text_t menu_item7 = {
-	.text = "conf",
-	.handler = launch,
-	.user_data = (void *)&app_app_conf,
-};
-static const svc_menu_item_text_t menu_item8 = {
-	.text = "   otp",
-	.handler = launch,
-	.user_data = (void *)&app_app_otp,
+// static const svc_menu_item_text_t menu_item1 = {
+// 	.text = "ctdn",
+// 	.handler = launch,
+// 	.user_data = (void *)&app_app_countdown,
+// };
+// static const svc_menu_item_text_t menu_item2 = {
+// 	.text = " alarm",
+// 	.handler = launch,
+// 	.user_data = (void *)&app_app_alarm,
+// };
+// static const svc_menu_item_text_t menu_item3 = {
+// 	.text = "chro",
+// 	.handler = launch,
+// 	.user_data = (void *)&app_app_chro,
+// };
+// static const svc_menu_item_text_t menu_item4 = {
+// 	.text = " play",
+// 	.handler = launch,
+// 	.user_data = (void *)&app_app_play,
+// };
+// static const svc_menu_item_text_t menu_item5 = {
+// 	.text = " compa",
+// 	.handler = launch,
+// 	.user_data = (void *)&app_app_compass,
+// };
+// static const svc_menu_item_text_t menu_item6 = {
+// 	.text = "speed",
+// 	.handler = launch,
+// 	.user_data = (void *)&app_app_speed,
+// };
+// static const svc_menu_item_text_t menu_item7 = {
+// 	.text = "conf",
+// 	.handler = launch,
+// 	.user_data = (void *)&app_app_conf,
+// };
+// static const svc_menu_item_text_t menu_item8 = {
+// 	.text = "   otp",
+// 	.handler = launch,
+// 	.user_data = (void *)&app_app_otp,
+// };
+// static const svc_menu_item_text_t menu_item9 = {
+//         .text = "cool",
+//         .handler = launch,
+//         .user_data = (void *)&app_app_cool,
+// };
+static const svc_menu_item_text_t menu_item10 = {
+        .text = "cpp",
+        .handler = launch,
+        .user_data = (void *)&app_app_cpp,
 };
 
 static const svc_menu_item_text_t *menu_items[] = {
 	(void*)&menu_item0,
-	(void*)&menu_item1,
-	(void*)&menu_item2,
-	(void*)&menu_item3,
-	(void*)&menu_item4,
-	(void*)&menu_item5,
-	(void*)&menu_item6,
-	(void*)&menu_item7,
-	(void*)&menu_item8,
+	// (void*)&menu_item1,
+	// (void*)&menu_item2,
+	// (void*)&menu_item3,
+	// (void*)&menu_item4,
+	// (void*)&menu_item5,
+	// (void*)&menu_item6,
+	// (void*)&menu_item7,
+	// (void*)&menu_item8,
+    // (void*)&menu_item9,
+    (void*)&menu_item10,
 };
 
 static const svc_menu_t menu = {

@@ -5,5 +5,6 @@
 
 void wdt_clear(void)
 {
+	//WDTCTL = WDTPW | WDTHOLD; 
 	WDTCTL = WDT_ARST_1000;
 }
