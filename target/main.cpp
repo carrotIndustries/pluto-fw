@@ -1,3 +1,4 @@
+extern "C" {
 #include <msp430.h>
 #include "hal/wdt.h"
 #include "hal/io.h"
@@ -12,13 +13,16 @@
 #include "common/hal/hal.h"
 #include "common/svc/svc.h"
 #include "common/svc/otp/oath.h"
+}
 
-void clk_init(void) {
+extern "C" void clk_init(void) {
 	CSCTL0 = CSKEY; /* password */
 
 	PCONF(J, 4, (FUNC1 | IN)); /* LFXT pin */
 	PCONF(J, 5, (FUNC1 | IN)); /* LFXT pin */
 
+	//XTS = 0; // turn xt1 in lf mode (default)
+	
 	CSCTL4 |= HFXTOFF; /* turn off HFXT */
 	CSCTL1 = DCORSEL | DCOFSEL_4; /* DCO: 16 Mhz */
 	CSCTL3 = DIVA__1 | DIVS__4 | DIVM__2; //SMCLK = 16MHz/4=4MHz, MCLK=16MHz/2=8MHz
@@ -30,10 +34,13 @@ void clk_init(void) {
 	CSCTL0_H = 0; /* lock access */
 }
 
-/* insert events with debugger by manipulating this variable */
-static volatile uint8_t fake_event = 0;
+inline svc_main_proc_event_t operator|=(svc_main_proc_event_t& a, const svc_main_proc_event_t& b)
+{
+    a = static_cast<svc_main_proc_event_t>(static_cast<unsigned char>(a) | static_cast<int>(b));
+	return a;
+}
 
-int main(void)
+extern "C" int main(void)
 {
 	PM5CTL0 &= ~LOCKLPM5;
 	wdt_clear();
@@ -52,26 +59,38 @@ int main(void)
 		beep_init(1);
 	}
 
-	hal_compass_init();
-	hal_backlight_set(0);
+	//hal_compass_init();
+	hal_backlight_set(1);
 	svc_init();
 
 	__nop();
 	__eint();
 
 	/* print reset reason on screen if there is some */
-	if(reset_reason) {
-		svc_lcd_puts(8, "RE");
-		svc_lcd_putix(4, 2, reset_reason&0xFF);
-		hal_lcd_update();
-		while(!(get_button_short(BTN_ALARM))) {
-			wdt_clear();
-			LPM3;
-		}
-	}
+	// if(reset_reason) {
+	// 	svc_lcd_puts(8, "RE");
+	// 	svc_lcd_putix(4, 2, reset_reason&0xFF);
+	// 	hal_lcd_update();
+	// 	while(!(get_button_short(BTN_ALARM))) {
+	// 		wdt_clear();
+	// 		LPM3;
+	// 	}
+	// }
 
+	int counter = 0;
 	while(1) {
-		svc_main_proc_event_t ev = 0;
+
+		svc_main_proc_event_t ev = SVC_MAIN_PROC_NO_EVENT;
+
+		// counter = ++counter % 60;
+		// unsigned char value = counter / 1;
+		// svc_lcd_puts(8, "RE");
+		// svc_lcd_putix(4, 2, value&0xFF);
+		// hal_lcd_update();
+		// while(1) {
+		// 	int v = 1;
+		// 	int t = v+1;
+		// }
 		if(get_button_short(BTN_LIGHT)) {
 			ev |= SVC_MAIN_PROC_EVENT_KEY_UP;
 		}
@@ -95,10 +114,6 @@ int main(void)
 		}
 		if(aux_timer_event) {
 			ev |= SVC_MAIN_PROC_EVENT_AUX_TIMER;
-		}
-		if(fake_event) {
-			ev |= fake_event;
-			fake_event = 0;
 		}
 		if(ev) {
 			P9OUT |= BIT5;

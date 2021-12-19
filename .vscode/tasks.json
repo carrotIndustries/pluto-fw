@@ -72,7 +72,10 @@
       "options": {
         "cwd": "sim"
       },
-      "group": "build",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
       "type": "shell",
       "command": "make",
       "problemMatcher": [
@@ -137,10 +140,7 @@
       "options": {
         "cwd": "target"
       },
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
+      "group": "build",
       "type": "shell",
       "command": "make program",
       "dependsOn": "compile",

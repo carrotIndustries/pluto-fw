@@ -422,7 +422,7 @@ SECTIONS
   .infoB (NOLOAD) : {} > INFOB
   .infoC (NOLOAD) : {} > INFOC
   .infoD (NOLOAD) : {} > INFOD
-  .infoMEM     : {} > INFOMEM
+  .infoMEM  (NOLOAD)   : {} > INFOMEM
 
   /* The rest are all not normally part of the runtime image.  */
 
